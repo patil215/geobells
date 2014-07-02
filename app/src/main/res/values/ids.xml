@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="hint_reminder_address" type="id">e.g. "1020 Main Street"</item>
+</resources>

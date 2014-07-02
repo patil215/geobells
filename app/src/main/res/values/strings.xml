@@ -11,5 +11,27 @@
     <string name="action_settings">Settings</string>
     <string name="title_complete">Completed</string>
     <string name="title_upcoming">Upcoming</string>
+    <string name="action_create">Create a reminder</string>
+    <string name="title_activity_create_reminder">Create Reminder</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="prompt_reminder_title">Reminder Title</string>
+    <string name="hint_reminder_title">e.g. \"Get Milk\" or \"Pick up Groceries\"</string>
+    <string name="prompt_reminder_type">Remind at</string>
+    <string name="reminder_type_specific">One specific place</string>
+    <string name="reminder_type_dynamic">Any place of a type I specify</string>
+    <string name="prompt_reminder_address">Address of the place</string>
+    <string name="hint_reminder_address">e.g. \"1020 Main Street\"</string>
+    <string name="prompt_reminder_business">Type of Place</string>
+    <string name="hint_reminder_business">e.g. \"Grocery store\" or \"Costco\"</string>
+    <string name="button_advanced_options">Advanced...</string>
+    <string name="prompt_reminder_transition">Remind When</string>
+    <string name="reminder_transition_enter">Entering (getting near) the place</string>
+    <string name="reminder_transition_exit">Exiting (getting far away from) the place</string>
+    <string name="prompt_reminder_proximity">Trigger when closer than</string>
+    <string name="prompt_reminder_days">Remind only on these days</string>
+    <string name="button_choose_days">Choose days...</string>
+    <string name="checkbox_reminder_airplane">Toggle airplane mode upon reminder</string>
+    <string name="checkbox_reminder_silence">Silence phone upon reminder</string>
+    <string name="checkbox_reminder_repeat">Repeat</string>
 
 </resources>

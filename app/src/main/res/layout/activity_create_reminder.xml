@@ -1,0 +1,232 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.patil.geobells.lite.CreateReminderActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin">
+
+        <RelativeLayout
+            android:id="@+id/layout_basic_options"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/prompt_reminder_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="6dp"
+                android:text="@string/prompt_reminder_title"
+                android:textAllCaps="true"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/reminder_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/prompt_reminder_title"
+                android:capitalize="words"
+                android:hint="@string/hint_reminder_title" />
+
+            <TextView
+                android:id="@+id/prompt_reminder_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/reminder_title"
+                android:paddingBottom="6dp"
+                android:paddingTop="12dp"
+                android:text="@string/prompt_reminder_type"
+                android:textAllCaps="true"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <RadioGroup
+                android:id="@+id/radiobutton_group_reminder_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/prompt_reminder_type">
+
+                <RadioButton
+                    android:id="@+id/radiobutton_reminder_type_specific"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/reminder_type_specific" />
+
+                <RadioButton
+                    android:id="@+id/radiobutton_reminder_type_dynamic"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/reminder_type_dynamic" />
+            </RadioGroup>
+
+            <RelativeLayout
+                android:id="@+id/layout_reminder_specific"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/radiobutton_group_reminder_type"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/prompt_reminder_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="6dp"
+                    android:paddingTop="12dp"
+                    android:text="@string/prompt_reminder_address"
+                    android:textAllCaps="true"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/reminder_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/prompt_reminder_address"
+                    android:capitalize="words"
+                    android:hint="@string/hint_reminder_address" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/layout_reminder_dynamic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/radiobutton_group_reminder_type">
+
+                <TextView
+                    android:id="@+id/prompt_reminder_business"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="6dp"
+                    android:paddingTop="12dp"
+                    android:text="@string/prompt_reminder_business"
+                    android:textAllCaps="true"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/reminder_business"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/prompt_reminder_business"
+                    android:capitalize="sentences"
+                    android:hint="@string/hint_reminder_business" />
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/button_advanced_options"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_below="@id/layout_basic_options"
+            android:onClick="onAdvancedOptionsClick"
+            android:text="@string/button_advanced_options" />
+
+        <RelativeLayout
+            android:id="@+id/layout_advanced_options"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/button_advanced_options">
+
+            <TextView
+                android:id="@+id/prompt_reminder_transition"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="6dp"
+                android:paddingTop="12dp"
+                android:text="@string/prompt_reminder_transition"
+                android:textAllCaps="true"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <RadioGroup
+                android:id="@+id/radiobutton_group_reminder_transition"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/prompt_reminder_transition">
+
+                <RadioButton
+                    android:id="@+id/radiobutton_reminder_transition_enter"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/reminder_transition_enter" />
+
+                <RadioButton
+                    android:id="@+id/radiobutton_reminder_transition_exit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/reminder_transition_exit" />
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/prompt_reminder_proximity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/radiobutton_group_reminder_transition"
+                android:paddingBottom="6dp"
+                android:paddingTop="12dp"
+                android:text="@string/prompt_reminder_proximity"
+                android:textAllCaps="true"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/spinner_reminder_proximity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/prompt_reminder_proximity"
+                android:minHeight="48dp" />
+
+            <TextView
+                android:id="@+id/prompt_reminder_days"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/spinner_reminder_proximity"
+                android:paddingBottom="6dp"
+                android:paddingTop="12dp"
+                android:text="@string/prompt_reminder_days"
+                android:textAllCaps="true"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/button_reminder_days"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/prompt_reminder_days"
+                android:onClick="onChooseDaysClick"
+                android:text="@string/button_choose_days" />
+
+            <CheckBox
+                android:id="@+id/checkbox_reminder_repeat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_below="@id/button_reminder_days"
+                android:text="@string/checkbox_reminder_repeat" />
+
+            <CheckBox
+                android:id="@+id/checkbox_reminder_airplane"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/checkbox_reminder_repeat"
+                android:text="@string/checkbox_reminder_airplane" />
+
+            <CheckBox
+                android:id="@+id/checkbox_reminder_silence"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/checkbox_reminder_airplane"
+                android:text="@string/checkbox_reminder_silence" />
+        </RelativeLayout>
+    </RelativeLayout>
+</ScrollView>
