@@ -1,4 +1,4 @@
-package com.patil.geobells.lite;
+package com.patil.geobells.lite.views;
 
 
 import android.app.Activity;
@@ -21,6 +21,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.patil.geobells.lite.R;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
