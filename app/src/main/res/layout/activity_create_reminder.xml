@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/reminder_title"
                 android:paddingBottom="6dp"
-                android:paddingTop="12dp"
+                android:paddingTop="18dp"
                 android:text="@string/prompt_reminder_type"
                 android:textAllCaps="true"
                 android:textSize="14sp"
@@ -58,12 +58,14 @@
                     android:id="@+id/radiobutton_reminder_type_specific"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:onClick="onTypeSpecificClick"
                     android:text="@string/reminder_type_specific" />
 
                 <RadioButton
                     android:id="@+id/radiobutton_reminder_type_dynamic"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:onClick="onTypeDynamicClick"
                     android:text="@string/reminder_type_dynamic" />
             </RadioGroup>
 
@@ -79,7 +81,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingBottom="6dp"
-                    android:paddingTop="12dp"
+                    android:paddingTop="18dp"
                     android:text="@string/prompt_reminder_address"
                     android:textAllCaps="true"
                     android:textSize="14sp"
@@ -98,6 +100,7 @@
                 android:id="@+id/layout_reminder_dynamic"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:layout_below="@id/radiobutton_group_reminder_type">
 
                 <TextView
@@ -129,11 +132,13 @@
             android:layout_marginTop="12dp"
             android:layout_below="@id/layout_basic_options"
             android:onClick="onAdvancedOptionsClick"
+            android:visibility="gone"
             android:text="@string/button_advanced_options" />
 
         <RelativeLayout
             android:id="@+id/layout_advanced_options"
             android:layout_width="match_parent"
+            android:visibility="gone"
             android:layout_height="match_parent"
             android:layout_below="@id/button_advanced_options">
 
