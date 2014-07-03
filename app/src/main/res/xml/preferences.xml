@@ -37,7 +37,7 @@
 
     <PreferenceCategory
         android:title="@string/preference_category_other"
-        android:key="preference_category_saveddata" >
+        android:key="preference_category_other" >
         <CheckBoxPreference
             android:title="@string/preference_low_power"
             android:summary="@string/preference_low_power_summary"
@@ -50,10 +50,5 @@
             android:title="@string/preferencescreen_advanced">
 
         </PreferenceScreen>
-    </PreferenceCategory>
-    <PreferenceCategory
-        android:title="@string/preference_category_other"
-        android:key="preference_category_other" >
-
     </PreferenceCategory>
 </PreferenceScreen>

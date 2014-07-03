@@ -4,6 +4,7 @@ package com.patil.geobells.lite.views;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.graphics.Typeface;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -19,8 +20,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.patil.geobells.lite.R;
 
@@ -55,6 +58,7 @@ public class NavigationDrawerFragment extends Fragment {
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerListView;
     private View mFragmentContainerView;
+    private LinearLayout mDrawerLinearLayout;
 
     private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
@@ -91,25 +95,26 @@ public class NavigationDrawerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        mDrawerListView = (ListView) inflater.inflate(
+
+        mDrawerLinearLayout = (LinearLayout) inflater.inflate(
                 R.layout.fragment_navigation_drawer, container, false);
+        mDrawerListView = (ListView) mDrawerLinearLayout.findViewById(R.id.navigation_listview);
+
+        ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(getActivity(),
+                R.layout.drawer_list_item, R.id.drawer_text, new String[] {getString(R.string.title_upcoming), getString(R.string.title_complete)});
+        mDrawerListView.setAdapter(listAdapter);
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selectItem(position);
             }
         });
-        mDrawerListView.setAdapter(new ArrayAdapter<String>(
-                getActionBar().getThemedContext(),
-                android.R.layout.simple_list_item_activated_1,
-                android.R.id.text1,
-                new String[]{
-                        getString(R.string.title_upcoming),
-                        getString(R.string.title_complete)
-                }));
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
-        return mDrawerListView;
+
+        return mDrawerLinearLayout;
     }
+
+
 
     public boolean isDrawerOpen() {
         return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mFragmentContainerView);

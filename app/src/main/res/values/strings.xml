@@ -51,5 +51,8 @@
     <string name="preference_low_power_summary">Use network location instead of GPS. Accuracy will be reduced</string>
     <string name="preference_metric">Use metric units</string>
     <string name="preferencescreen_advanced">Advanced</string>
+    <string name="navigation_settings_title">Settings</string>
+    <string name="navigation_about_title">About</string>
+    <string name="navigation_help_title">Help</string>
 
 </resources>
