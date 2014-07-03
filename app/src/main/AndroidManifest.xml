@@ -20,6 +20,10 @@
             android:name=".CreateReminderActivity"
             android:label="@string/title_activity_create_reminder" >
         </activity>
+        <activity
+            android:name=".views.SettingsFragment"
+            android:label="@string/title_activity_settings" >
+        </activity>
     </application>
 
 </manifest>

@@ -33,5 +33,23 @@
     <string name="checkbox_reminder_airplane">Toggle airplane mode upon reminder</string>
     <string name="checkbox_reminder_silence">Silence phone upon reminder</string>
     <string name="checkbox_reminder_repeat">Repeat</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="preference_category_notifications">Notifications</string>
+    <string name="preference_category_saveddata">Saved Data</string>
+    <string name="preference_category_other">Other</string>
+    <string name="preference_voice">Enable voice reminders</string>
+    <string name="preference_voice_summary">Read reminder details out loud in addition to sending a notification</string>
+    <string name="preference_popup">Enable popup reminders</string>
+    <string name="preference_popup_summary">Show a screen popup with notification</string>
+    <string name="preference_notification">Show notification</string>
+    <string name="preference_notification_summary">Show notification when Geobells can remind you. It\'s recommended to leave this on. Setting takes effect the next time you create or edit a reminder</string>
+    <string name="title_ringtone_dialog">Choose notification sound</string>
+    <string name="preference_notification_sound">Choose notification sound</string>
+    <string name="preference_clear_autocomplete">Clear autocomplete data</string>
+    <string name="preference_clear_reminders">Clear all reminders</string>
+    <string name="preference_low_power">Use low power mode</string>
+    <string name="preference_low_power_summary">Use network location instead of GPS. Accuracy will be reduced</string>
+    <string name="preference_metric">Use metric units</string>
+    <string name="preferencescreen_advanced">Advanced</string>
 
 </resources>

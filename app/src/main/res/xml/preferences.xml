@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="@string/preference_category_notifications"
+        android:key="preference_category_notifications" >
+        <CheckBoxPreference
+            android:title="@string/preference_voice"
+            android:summary="@string/preference_voice_summary"
+            android:key="preference_voice"/>
+
+        <CheckBoxPreference
+            android:title="@string/preference_popup"
+            android:summary="@string/preference_popup_summary"
+            android:key="preference_popup"/>
+
+        <CheckBoxPreference
+            android:title="@string/preference_notification"
+            android:summary="@string/preference_notification_summary"
+            android:key="preference_notification"/>
+
+        <Preference
+            android:title="@string/preference_notification_sound"
+            android:key="preference_notification_sound" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/preference_category_saveddata"
+        android:key="preference_category_saveddata" >
+        <Preference
+            android:title="@string/preference_clear_autocomplete"
+            android:key="preference_clear_autocomplete"/>
+        <Preference
+            android:title="@string/preference_clear_reminders"
+            android:key="preference_clear_reminders"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/preference_category_other"
+        android:key="preference_category_saveddata" >
+        <CheckBoxPreference
+            android:title="@string/preference_low_power"
+            android:summary="@string/preference_low_power_summary"
+            android:key="preference_low_power"/>
+        <CheckBoxPreference
+            android:title="@string/preference_metric"
+            android:key="preference_metric"/>
+        <PreferenceScreen
+            android:key="preferencescreen_advanced"
+            android:title="@string/preferencescreen_advanced">
+
+        </PreferenceScreen>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/preference_category_other"
+        android:key="preference_category_other" >
+
+    </PreferenceCategory>
+</PreferenceScreen>
