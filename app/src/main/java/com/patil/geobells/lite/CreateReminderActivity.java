@@ -83,6 +83,18 @@ public class CreateReminderActivity extends Activity {
 
     }
 
+    public void onBusinessViewPlacesClick(View v) {
+
+    }
+
+    public void onAddressSearchClick(View v) {
+
+    }
+
+    public void onAddressMapClick(View v) {
+
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

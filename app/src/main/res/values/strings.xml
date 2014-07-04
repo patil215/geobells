@@ -54,5 +54,8 @@
     <string name="navigation_settings_title">Settings</string>
     <string name="navigation_about_title">About</string>
     <string name="navigation_help_title">Help</string>
+    <string name="button_business_view_places">View places</string>
+    <string name="button_address_map">View/Pick from map</string>
+    <string name="button_address_search">Search</string>
 
 </resources>

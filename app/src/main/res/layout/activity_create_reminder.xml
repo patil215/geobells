@@ -87,13 +87,44 @@
                     android:textSize="14sp"
                     android:textStyle="bold" />
 
-                <EditText
-                    android:id="@+id/reminder_address"
+
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/prompt_reminder_address"
-                    android:capitalize="words"
-                    android:hint="@string/hint_reminder_address" />
+                    android:layout_below="@id/prompt_reminder_address">
+
+
+
+                <ImageButton
+                    android:id="@+id/button_address_search"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="6dp"
+                    android:onClick="onAddressSearchClick"
+                    android:layout_alignParentRight="true"
+                    android:contentDescription="@string/button_address_search"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:src="@drawable/ic_action_search"/>
+                <ImageButton
+                    android:id="@+id/button_address_map"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toLeftOf="@id/button_address_search"
+                    android:padding="6dp"
+                    android:onClick="onAddressMapClick"
+                    android:contentDescription="@string/button_address_map"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:src="@drawable/ic_action_map"/>
+
+                    <EditText
+                        android:id="@+id/reminder_address"
+                        android:layout_toLeftOf="@id/button_address_map"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:capitalize="words"
+                        android:hint="@string/hint_reminder_address" />
+
+                </RelativeLayout>
             </RelativeLayout>
 
             <RelativeLayout
@@ -114,13 +145,28 @@
                     android:textSize="14sp"
                     android:textStyle="bold" />
 
-                <EditText
-                    android:id="@+id/reminder_business"
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/prompt_reminder_business"
-                    android:capitalize="sentences"
-                    android:hint="@string/hint_reminder_business" />
+                    android:layout_below="@id/prompt_reminder_business">
+                    <ImageButton
+                        android:id="@+id/button_business_view_places"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:padding="6dp"
+                        android:contentDescription="@string/button_business_view_places"
+                        android:onClick="onBusinessViewPlacesClick"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:src="@drawable/ic_action_view_as_list"/>
+                    <EditText
+                        android:id="@+id/reminder_business"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:capitalize="sentences"
+                        android:layout_toLeftOf="@id/button_business_view_places"
+                        android:hint="@string/hint_reminder_business" />
+                </RelativeLayout>
             </RelativeLayout>
 
         </RelativeLayout>
