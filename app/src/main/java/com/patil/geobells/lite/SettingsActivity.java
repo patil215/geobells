@@ -1,4 +1,4 @@
-package com.patil.geobells.lite.views;
+package com.patil.geobells.lite;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -7,14 +7,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.preference.PreferenceFragment;
 import android.view.Menu;
 import android.view.MenuItem;
-
 import com.patil.geobells.lite.R;
 import com.patil.geobells.lite.utils.GeobellsPreferenceManager;
 
-public class SettingsFragment extends PreferenceFragment {
+public class SettingsActivity extends PreferenceActivity {
 
     Preference notificationSoundPreference;
     GeobellsPreferenceManager preferenceManager;
@@ -24,7 +22,7 @@ public class SettingsFragment extends PreferenceFragment {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
 
-        preferenceManager = new GeobellsPreferenceManager(getActivity());
+        preferenceManager = new GeobellsPreferenceManager(this);
 
         notificationSoundPreference = (Preference) findPreference("preference_notification_sound");
         notificationSoundPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {

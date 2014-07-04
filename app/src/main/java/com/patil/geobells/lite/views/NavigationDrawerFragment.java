@@ -1,17 +1,16 @@
 package com.patil.geobells.lite.views;
 
 
-import android.app.Activity;
 import android.app.ActionBar;
+import android.app.Activity;
 import android.app.Fragment;
-import android.graphics.Typeface;
-import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,8 +21,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ScrollView;
-import android.widget.TextView;
 
 import com.patil.geobells.lite.R;
 
@@ -55,9 +52,9 @@ public class NavigationDrawerFragment extends Fragment {
      */
     private ActionBarDrawerToggle mDrawerToggle;
 
-    private DrawerLayout mDrawerLayout;
+    public DrawerLayout mDrawerLayout;
     private ListView mDrawerListView;
-    private View mFragmentContainerView;
+    public View mFragmentContainerView;
     private LinearLayout mDrawerLinearLayout;
 
     private int mCurrentSelectedPosition = 0;
@@ -86,7 +83,7 @@ public class NavigationDrawerFragment extends Fragment {
     }
 
     @Override
-    public void onActivityCreated (Bundle savedInstanceState) {
+    public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         // Indicate that this fragment would like to influence the set of actions in the action bar.
         setHasOptionsMenu(true);
@@ -94,14 +91,14 @@ public class NavigationDrawerFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
 
         mDrawerLinearLayout = (LinearLayout) inflater.inflate(
                 R.layout.fragment_navigation_drawer, container, false);
         mDrawerListView = (ListView) mDrawerLinearLayout.findViewById(R.id.navigation_listview);
 
         ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(getActivity(),
-                R.layout.drawer_list_item, R.id.drawer_text, new String[] {getString(R.string.title_upcoming), getString(R.string.title_complete)});
+                R.layout.drawer_list_item, R.id.drawer_text, new String[]{getString(R.string.title_upcoming), getString(R.string.title_complete)});
         mDrawerListView.setAdapter(listAdapter);
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -113,7 +110,6 @@ public class NavigationDrawerFragment extends Fragment {
 
         return mDrawerLinearLayout;
     }
-
 
 
     public boolean isDrawerOpen() {
@@ -194,17 +190,26 @@ public class NavigationDrawerFragment extends Fragment {
         mDrawerLayout.setDrawerListener(mDrawerToggle);
     }
 
-    private void selectItem(int position) {
+    public void selectItem(int position) {
+        // Upcoming and completed items
         mCurrentSelectedPosition = position;
         if (mDrawerListView != null) {
             mDrawerListView.setItemChecked(position, true);
         }
-        if (mDrawerLayout != null) {
-            mDrawerLayout.closeDrawer(mFragmentContainerView);
-        }
         if (mCallbacks != null) {
             mCallbacks.onNavigationDrawerItemSelected(position);
         }
+        if (mDrawerLayout != null) {
+            mDrawerLayout.closeDrawer(mFragmentContainerView);
+        }
+    }
+
+    public void onAboutClick(View v) {
+
+    }
+
+    public void onHelpClick(View v) {
+
     }
 
     @Override

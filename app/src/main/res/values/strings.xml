@@ -33,7 +33,7 @@
     <string name="checkbox_reminder_airplane">Toggle airplane mode upon reminder</string>
     <string name="checkbox_reminder_silence">Silence phone upon reminder</string>
     <string name="checkbox_reminder_repeat">Repeat</string>
-    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="title_activity_settings">Settings</string>
     <string name="preference_category_notifications">Notifications</string>
     <string name="preference_category_saveddata">Saved Data</string>
     <string name="preference_category_other">Other</string>

@@ -22,31 +22,20 @@
         android:background="@color/navigation_deactivated"
         />
 
-    <LinearLayout
+    <Button
         android:id="@+id/navigation_about"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:padding="6dp"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:id="@+id/navigation_about_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_action_about" />
-
-        <TextView
-            android:id="@+id/navigation_about_title"
-            android:layout_width="match_parent"
-            android:layout_gravity="center_vertical"
-            android:textAllCaps="true"
-            android:gravity="center_vertical"
-            android:paddingLeft="6dp"
-            android:textColor="@color/navigation_deactivated"
-            android:textSize="14sp"
-            android:layout_height="wrap_content"
-            android:text="@string/navigation_about_title" />
-    </LinearLayout>
+        android:text="@string/navigation_about_title"
+        android:onClick="onAboutClick"
+        android:drawablePadding="12dp"
+        android:paddingLeft="12dp"
+        android:textColor="@color/navigation_deactivated"
+        android:textSize="13sp"
+        android:textAllCaps="true"
+        android:drawableLeft="@drawable/ic_action_about"
+        android:background="?android:attr/selectableItemBackground"
+        android:gravity="left|center_vertical" />
 
     <View
         android:layout_height="1px"
@@ -54,31 +43,20 @@
         android:background="@color/navigation_deactivated"
         />
 
-    <LinearLayout
+    <Button
         android:id="@+id/navigation_settings"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:padding="6dp"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:id="@+id/navigation_settings_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_action_settings" />
-
-        <TextView
-            android:id="@+id/navigation_settings_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:textAllCaps="true"
-            android:paddingLeft="6dp"
-            android:textColor="@color/navigation_deactivated"
-            android:gravity="center_vertical"
-            android:textSize="14sp"
-            android:text="@string/navigation_settings_title" />
-    </LinearLayout>
+        android:text="@string/navigation_settings_title"
+        android:onClick="onSettingsClick"
+        android:drawableLeft="@drawable/ic_action_settings"
+        android:drawablePadding="12dp"
+        android:textColor="@color/navigation_deactivated"
+        android:textSize="13sp"
+        android:paddingLeft="12dp"
+        android:textAllCaps="true"
+        android:background="?android:attr/selectableItemBackground"
+        android:gravity="left|center_vertical" />
 
     <View
         android:layout_height="1px"
@@ -86,31 +64,20 @@
         android:background="@color/navigation_deactivated"
         />
 
-    <LinearLayout
+    <Button
         android:id="@+id/navigation_help"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:padding="6dp"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:id="@+id/navigation_help_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_action_help" />
-
-        <TextView
-            android:id="@+id/navigation_help_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:textAllCaps="true"
-            android:paddingLeft="6dp"
-            android:textColor="@color/navigation_deactivated"
-            android:gravity="center_vertical"
-            android:textSize="14sp"
-            android:text="@string/navigation_help_title" />
-    </LinearLayout>
+        android:text="@string/navigation_help_title"
+        android:textColor="@color/navigation_deactivated"
+        android:textSize="13sp"
+        android:textAllCaps="true"
+        android:paddingLeft="12dp"
+        android:onClick="onHelpClick"
+        android:drawablePadding="12dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:drawableLeft="@drawable/ic_action_help"
+        android:gravity="left|center_vertical" />
 
     <View
         android:layout_height="1px"
