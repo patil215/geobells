@@ -24,27 +24,23 @@ public class GeobellsPreferenceManager {
         return preferences.getString("notification_sound", "");
     }
 
-    public void saveDays(ArrayList<Boolean> days) {
-        SharedPreferences.Editor edit = preferences.edit();
-        edit.putBoolean("pref_sunday", days.get(0));
-        edit.putBoolean("pref_monday", days.get(1));
-        edit.putBoolean("pref_tuesday", days.get(2));
-        edit.putBoolean("pref_wednesday", days.get(3));
-        edit.putBoolean("pref_thursday", days.get(4));
-        edit.putBoolean("pref_friday", days.get(5));
-        edit.putBoolean("pref_saturday", days.get(6));
-        edit.commit();
+    public boolean isVoiceReminderEnabled() {
+        return preferences.getBoolean("preference_voice", false);
     }
 
-    public ArrayList<Boolean> getDays() {
-        ArrayList<Boolean> days = new ArrayList<Boolean>();
-        days.add(preferences.getBoolean("pref_sunday", true));
-        days.add(preferences.getBoolean("pref_monday", true));
-        days.add(preferences.getBoolean("pref_tuesday", true));
-        days.add(preferences.getBoolean("pref_wednesday", true));
-        days.add(preferences.getBoolean("pref_thursday", true));
-        days.add(preferences.getBoolean("pref_friday", true));
-        days.add(preferences.getBoolean("pref_saturday", true));
-        return days;
+    public boolean isPopupReminderEnabled() {
+        return preferences.getBoolean("preference_popup", false);
+    }
+
+    public boolean isShowBackgroundNotificationEnabled() {
+        return preferences.getBoolean("preference_notification", true);
+    }
+
+    public boolean isLowPowerEnabled() {
+        return preferences.getBoolean("preference_low_power", false);
+    }
+
+    public boolean isMetricEnabled() {
+        return preferences.getBoolean("preference_metric", false);
     }
 }

@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -15,11 +17,12 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.patil.geobells.lite.utils.Constants;
 import com.patil.geobells.lite.utils.GeobellsPreferenceManager;
 
 import java.util.ArrayList;
 
-public class CreateReminderActivity extends Activity {
+public class CreateReminderActivity extends Activity implements AdapterView.OnItemSelectedListener {
 
     EditText titleBox;
     RadioButton specificRadioButton;
@@ -28,7 +31,6 @@ public class CreateReminderActivity extends Activity {
     EditText addressBox;
     RadioButton enterRadioButton;
     RadioButton exitRadioButton;
-    Spinner proximitySpinner;
     CheckBox repeatCheckBox;
     CheckBox airplaneCheckBox;
     CheckBox silenceCheckBox;
@@ -37,21 +39,37 @@ public class CreateReminderActivity extends Activity {
     RelativeLayout dynamicLayout;
     RelativeLayout advancedLayout;
     Button advancedButton;
+    Spinner proximitySpinner;
 
     GeobellsPreferenceManager preferenceManager;
 
     boolean[] days = new boolean[7];
+    int proximity;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_reminder);
+        setupViews();
         for(int i = 0; i < 7; i++) {
             days[i] = true;
         }
         preferenceManager = new GeobellsPreferenceManager(this);
-        setupViews();
+        setupSpinner();
+    }
+
+    public void setupSpinner() {
+        ArrayAdapter<CharSequence> adapter;
+        if(preferenceManager.isMetricEnabled()) {
+            adapter = ArrayAdapter.createFromResource(this,
+                    R.array.spinner_proximity_metric, android.R.layout.simple_spinner_dropdown_item);
+        } else {
+            adapter = ArrayAdapter.createFromResource(this, R.array.spinner_proximity, android.R.layout.simple_spinner_dropdown_item);
+        }
+        proximitySpinner.setAdapter(adapter);
+        proximitySpinner.setSelection(Constants.PROXIMITY_DISTANCES_DEFAULT_INDEX);
+        proximity = Constants.PROXIMITY_DISTANCES[Constants.PROXIMITY_DISTANCES_DEFAULT_INDEX];
     }
 
     public void setupViews() {
@@ -152,5 +170,15 @@ public class CreateReminderActivity extends Activity {
 
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long id) {
+        proximity = Constants.PROXIMITY_DISTANCES[pos];
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+        proximity = Constants.PROXIMITY_DISTANCES[Constants.PROXIMITY_DISTANCES_DEFAULT_INDEX];
     }
 }
