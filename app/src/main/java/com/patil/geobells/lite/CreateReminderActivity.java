@@ -1,6 +1,8 @@
 package com.patil.geobells.lite;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,6 +14,10 @@ import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import com.patil.geobells.lite.utils.GeobellsPreferenceManager;
+
+import java.util.ArrayList;
 
 public class CreateReminderActivity extends Activity {
 
@@ -32,11 +38,19 @@ public class CreateReminderActivity extends Activity {
     RelativeLayout advancedLayout;
     Button advancedButton;
 
+    GeobellsPreferenceManager preferenceManager;
+
+    boolean[] days = new boolean[7];
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_reminder);
+        for(int i = 0; i < 7; i++) {
+            days[i] = true;
+        }
+        preferenceManager = new GeobellsPreferenceManager(this);
         setupViews();
     }
 
@@ -81,6 +95,36 @@ public class CreateReminderActivity extends Activity {
 
     public void onChooseDaysClick(View v) {
 
+        final CharSequence[] displayDays = {getString(R.string.sunday), getString(R.string.monday), getString(R.string.tuesday), getString(R.string.wednesday), getString(R.string.thursday), getString(R.string.friday), getString(R.string.saturday)};
+        // arraylist to keep the selected items
+        final boolean[] selectedItems = days;
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.prompt_reminder_days));
+        builder.setMultiChoiceItems(displayDays, selectedItems,
+                new DialogInterface.OnMultiChoiceClickListener() {
+                    // indexSelected contains the index of item (of which checkbox checked)
+                    @Override
+                    public void onClick(DialogInterface dialog, int indexSelected,
+                                        boolean isChecked) {
+                        selectedItems[indexSelected] = isChecked;
+                    }
+                })
+                // Set the action buttons
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        CreateReminderActivity.this.days = selectedItems;
+                        dialog.dismiss();
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+
+        builder.create().show();//AlertDialog dialog; create like this outside onClick
     }
 
     public void onBusinessViewPlacesClick(View v) {
