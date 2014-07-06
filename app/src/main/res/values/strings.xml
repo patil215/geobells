@@ -64,5 +64,10 @@
     <string name="thursday">Thursday</string>
     <string name="friday">Friday</string>
     <string name="saturday">Saturday</string>
+    <string name="action_done">Create reminder</string>
+    <string name="prompt_fill_info">Please fill all info.</string>
+    <string name="text_title_default">Get Milk</string>
+    <string name="text_location_default">At 1102 Main Street</string>
+    <string name="text_date_default">Created 7 hours ago</string>
 
 </resources>

@@ -209,6 +209,7 @@
                     android:id="@+id/radiobutton_reminder_transition_enter"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:checked="true"
                     android:text="@string/reminder_transition_enter" />
 
                 <RadioButton
