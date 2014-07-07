@@ -76,97 +76,112 @@
                 android:layout_below="@id/radiobutton_group_reminder_type"
                 android:visibility="gone">
 
-                <TextView
-                    android:id="@+id/prompt_reminder_address"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="6dp"
-                    android:paddingTop="18dp"
-                    android:text="@string/prompt_reminder_address"
-                    android:textAllCaps="true"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/prompt_reminder_address">
+                    android:id="@+id/layout_address_options">
 
 
+                    <ImageButton
+                        android:id="@+id/button_address_search"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:contentDescription="@string/button_address_search"
+                        android:onClick="onAddressSearchClick"
+                        android:paddingLeft="6dp"
+                        android:paddingRight="6dp"
+                        android:paddingTop="12dp"
+                        android:src="@drawable/ic_action_search" />
 
-                <ImageButton
-                    android:id="@+id/button_address_search"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="6dp"
-                    android:onClick="onAddressSearchClick"
-                    android:layout_alignParentRight="true"
-                    android:contentDescription="@string/button_address_search"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:src="@drawable/ic_action_search"/>
-                <ImageButton
-                    android:id="@+id/button_address_map"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toLeftOf="@id/button_address_search"
-                    android:padding="6dp"
-                    android:onClick="onAddressMapClick"
-                    android:contentDescription="@string/button_address_map"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:src="@drawable/ic_action_map"/>
+                    <ImageButton
+                        android:id="@+id/button_address_map"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toLeftOf="@id/button_address_search"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:contentDescription="@string/button_address_map"
+                        android:onClick="onAddressMapClick"
+                        android:paddingLeft="6dp"
+                        android:paddingRight="6dp"
+                        android:paddingTop="12dp"
+                        android:src="@drawable/ic_action_map" />
 
-                    <AutoCompleteTextView
-                        android:id="@+id/reminder_address"
-                        android:layout_toLeftOf="@id/button_address_map"
+                    <TextView
+                        android:id="@+id/prompt_reminder_address"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:capitalize="words"
-                        android:hint="@string/hint_reminder_address" />
+                        android:paddingBottom="6dp"
+                        android:layout_toLeftOf="@id/button_address_map"
+                        android:paddingTop="18dp"
+                        android:text="@string/prompt_reminder_address"
+                        android:textAllCaps="true"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
 
                 </RelativeLayout>
+
+
+                <AutoCompleteTextView
+                    android:id="@+id/reminder_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/layout_address_options"
+                    android:capitalize="words"
+                    android:hint="@string/hint_reminder_address" />
+
             </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/layout_reminder_dynamic"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:layout_below="@id/radiobutton_group_reminder_type">
+                android:layout_below="@id/radiobutton_group_reminder_type"
+                android:visibility="gone">
 
-                <TextView
-                    android:id="@+id/prompt_reminder_business"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="6dp"
-                    android:paddingTop="18dp"
-                    android:text="@string/prompt_reminder_business"
-                    android:textAllCaps="true"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
 
                 <RelativeLayout
+                    android:id="@+id/layout_business_options"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/prompt_reminder_business">
+                    android:layout_height="wrap_content">
+
                     <ImageButton
                         android:id="@+id/button_business_view_places"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
-                        android:padding="6dp"
+                        android:paddingTop="12dp"
+                        android:background="?android:attr/selectableItemBackground"
                         android:contentDescription="@string/button_business_view_places"
                         android:onClick="onBusinessViewPlacesClick"
-                        android:background="?android:attr/selectableItemBackground"
-                        android:src="@drawable/ic_action_view_as_list"/>
-                    <AutoCompleteTextView
-                        android:id="@+id/reminder_business"
+                        android:paddingLeft="6dp"
+                        android:paddingRight="6dp"
+                        android:src="@drawable/ic_action_view_as_list" />
+
+
+                    <TextView
+                        android:id="@+id/prompt_reminder_business"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:capitalize="sentences"
+                        android:paddingBottom="6dp"
+                        android:paddingTop="18dp"
+                        android:text="@string/prompt_reminder_business"
                         android:layout_toLeftOf="@id/button_business_view_places"
-                        android:hint="@string/hint_reminder_business" />
+                        android:textAllCaps="true"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
                 </RelativeLayout>
+
+                <AutoCompleteTextView
+                    android:id="@+id/reminder_business"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/layout_business_options"
+                    android:capitalize="sentences"
+                    android:hint="@string/hint_reminder_business" />
             </RelativeLayout>
 
         </RelativeLayout>
@@ -175,18 +190,18 @@
             android:id="@+id/button_advanced_options"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
             android:layout_below="@id/layout_basic_options"
+            android:layout_marginTop="12dp"
             android:onClick="onAdvancedOptionsClick"
-            android:visibility="gone"
-            android:text="@string/button_advanced_options" />
+            android:text="@string/button_advanced_options"
+            android:visibility="gone" />
 
         <RelativeLayout
             android:id="@+id/layout_advanced_options"
             android:layout_width="match_parent"
-            android:visibility="gone"
             android:layout_height="match_parent"
-            android:layout_below="@id/button_advanced_options">
+            android:layout_below="@id/button_advanced_options"
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/prompt_reminder_transition"
@@ -262,8 +277,8 @@
                 android:id="@+id/checkbox_reminder_repeat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
                 android:layout_below="@id/button_reminder_days"
+                android:layout_marginTop="12dp"
                 android:text="@string/checkbox_reminder_repeat" />
 
             <CheckBox

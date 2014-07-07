@@ -146,7 +146,6 @@ public class CreateReminderActivity extends Activity implements AdapterView.OnIt
                 String str = (String) adapterView.getItemAtPosition(position);
             }
         });
-
         if(Config.AUTOCOMPLETE_BUSINESSES) {
             businessBox.setAdapter(new PlacesAutoCompleteBusinessAdapter(this, R.layout.list_item_autocomplete));
             businessBox.setOnItemClickListener(new AdapterView.OnItemClickListener() {

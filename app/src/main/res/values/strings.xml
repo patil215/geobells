@@ -18,7 +18,7 @@
     <string name="hint_reminder_title">e.g. \"Get Milk\" or \"Pick up Groceries\"</string>
     <string name="prompt_reminder_type">Remind at</string>
     <string name="reminder_type_specific">One specific place</string>
-    <string name="reminder_type_dynamic">Any place of a type I specify</string>
+    <string name="reminder_type_dynamic">A type of place</string>
     <string name="prompt_reminder_address">Address of the place</string>
     <string name="hint_reminder_address">e.g. \"1020 Main Street\"</string>
     <string name="prompt_reminder_business">Type of Place</string>
