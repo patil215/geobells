@@ -11,5 +11,6 @@ public class Constants {
     public static final long TIME_COMPLETED_DEFAULT = -1;
     public static final int TYPE_FIXED = 0;
     public static final int TYPE_DYNAMIC = 1;
-    public static final String[] COLORS = new String[] {"#0091ea", "#12c700", "#e65100", "#3e2723", "#6200ea", "#b0120a", "#0d5302"};
+    // red, blue, orange, brown, green, yellow, purple
+    public static final String[] COLORS = new String[] {"#b0120a", "#2a36b1", "#e65100", "#3e2723", "#0d5302", "#f57f17", "#4a148c"};
 }
