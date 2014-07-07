@@ -1,15 +1,16 @@
 package com.patil.geobells.lite.views;
 
 import android.content.Context;
-import android.util.Log;
+import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.patil.geobells.lite.R;
-import com.patil.geobells.lite.data.DynamicReminder;
-import com.patil.geobells.lite.data.FixedReminder;
 import com.patil.geobells.lite.data.Reminder;
+import com.patil.geobells.lite.utils.Constants;
+import com.patil.geobells.lite.utils.GeobellsUtils;
 
 import java.util.ArrayList;
 
@@ -19,28 +20,32 @@ public class ReminderCard extends Card {
     TextView titleBox;
     TextView locationBox;
     TextView dateBox;
+    ImageView colorStripe;
     String title;
     String location;
     String date;
+    boolean completed;
+    int positionInList;
     ArrayList<String> additionalInfo; // Days to trigger on, settings to change, etc
 
-    public ReminderCard(Context context, int innerLayout, Reminder reminder) {
+    public ReminderCard(Context context, int innerLayout, Reminder reminder, int positionInList) {
         super(context, innerLayout);
         getTextFromReminder(reminder);
+        this.positionInList = positionInList;
     }
 
     public void getTextFromReminder(Reminder reminder) {
         title = reminder.title;
-        date = String.valueOf(reminder.timeCreated); // TODO make relative time
-
-        if(reminder instanceof FixedReminder) {
-            FixedReminder castedReminder = (FixedReminder) reminder;
-            location = castedReminder.address;
-            Log.d("GeobellsCards", "creating fixed reminder");
-        } else if(reminder instanceof DynamicReminder) {
-            DynamicReminder castedReminder = (DynamicReminder) reminder;
-            location = ((DynamicReminder) castedReminder).business;
-            Log.d("GeobellsCards", "creating dynamic reminder");
+        completed = reminder.completed;
+        if(completed) {
+            date = GeobellsUtils.getRelativeTime(reminder.timeCompleted);
+        } else {
+            date = GeobellsUtils.getRelativeTime(reminder.timeCreated); // TODO make relative time
+        }
+        if(reminder.type == Constants.TYPE_FIXED) {
+            location = reminder.address;
+        } else if(reminder.type == Constants.TYPE_DYNAMIC) {
+            location = reminder.business;
         }
     }
 
@@ -50,7 +55,14 @@ public class ReminderCard extends Card {
         locationBox = (TextView) view.findViewById(R.id.text_location);
         dateBox = (TextView) view.findViewById(R.id.text_date);
         titleBox.setText(title);
-        locationBox.setText(location);
-        dateBox.setText(date);
+        locationBox.setText("At " + location);
+        if(completed) {
+            dateBox.setText("Completed " + date);
+        } else {
+            dateBox.setText("Created " + date);
+        }
+        colorStripe = (ImageView) view.findViewById(R.id.view_colorbar);
+        String color = Constants.COLORS[positionInList % Constants.COLORS.length];
+        colorStripe.setBackgroundColor(Color.parseColor(color));
     }
 }

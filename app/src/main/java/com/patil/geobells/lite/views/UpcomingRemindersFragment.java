@@ -30,7 +30,7 @@ public class UpcomingRemindersFragment extends Fragment {
         ArrayList<Reminder> reminders = dataManager.getSavedReminders();
         ArrayList<Card> cards = new ArrayList<Card>();
         for(int i = 0; i < reminders.size(); i++) {
-            ReminderCard card = new ReminderCard(rootView.getContext(), R.layout.card_upcoming, reminders.get(i));
+            ReminderCard card = new ReminderCard(rootView.getContext(), R.layout.card_reminder, reminders.get(i), i);
             cards.add(card);
         }
         CardArrayAdapter cardArrayAdapter = new CardArrayAdapter(rootView.getContext(), cards);

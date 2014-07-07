@@ -19,8 +19,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.patil.geobells.lite.data.DynamicReminder;
-import com.patil.geobells.lite.data.FixedReminder;
 import com.patil.geobells.lite.data.Place;
 import com.patil.geobells.lite.data.Reminder;
 import com.patil.geobells.lite.utils.Constants;
@@ -224,7 +222,7 @@ public class CreateReminderActivity extends Activity implements AdapterView.OnIt
             toggleAirplane = airplaneCheckBox.isChecked();
             silencePhone = silenceCheckBox.isChecked();
             timeCreated = System.currentTimeMillis();
-            timeCompleted = -1;
+            timeCompleted = Constants.TIME_COMPLETED_DEFAULT;
             if (enterRadioButton.isChecked()) {
                 transition = Constants.TRANSITION_ENTER;
             } else {
@@ -233,44 +231,34 @@ public class CreateReminderActivity extends Activity implements AdapterView.OnIt
 
             Log.d("GeobellsCards", "Saving reminder with title " + title);
             ArrayList<Reminder> reminders = dataManager.getSavedReminders();
+            Reminder reminder = new Reminder();
+            reminder.title = title;
+            reminder.completed = completed;
+            reminder.repeat = repeat;
+            reminder.days = days;
+            reminder.proximity = proximity;
+            reminder.toggleAirplane = toggleAirplane;
+            reminder.silencePhone = silencePhone;
+            reminder.timeCreated = timeCreated;
+            reminder.timeCompleted = timeCompleted;
+            reminder.transition = transition;
             if (specificRadioButton.isChecked()) {
                 address = addressBox.getText().toString();
                 double[] coords = getCoordsFromAddress(address);
                 latitude = coords[0];
                 longitude = coords[1];
-                FixedReminder reminder = new FixedReminder();
-                reminder.title = title;
-                reminder.completed = completed;
-                reminder.repeat = repeat;
-                reminder.days = days;
-                reminder.proximity = proximity;
-                reminder.toggleAirplane = toggleAirplane;
-                reminder.silencePhone = silencePhone;
-                reminder.timeCreated = timeCreated;
-                reminder.timeCompleted = timeCompleted;
-                reminder.transition = transition;
+                reminder.type = Constants.TYPE_FIXED;
                 reminder.address = address;
                 reminder.latitude = latitude;
                 reminder.longitude = longitude;
-                reminders.add(reminder);
             } else if (dynamicRadioButton.isChecked()) {
                 business = businessBox.getText().toString();
                 places = getPlacesFromBusiness(business);
-                DynamicReminder reminder = new DynamicReminder();
-                reminder.title = title;
-                reminder.completed = completed;
-                reminder.repeat = repeat;
-                reminder.days = days;
-                reminder.proximity = proximity;
-                reminder.toggleAirplane = toggleAirplane;
-                reminder.silencePhone = silencePhone;
-                reminder.timeCreated = timeCreated;
-                reminder.timeCompleted = timeCompleted;
-                reminder.transition = transition;
+                reminder.type = Constants.TYPE_DYNAMIC;
                 reminder.business = business;
                 reminder.places = places;
-                reminders.add(reminder);
             }
+            reminders.add(reminder);
             dataManager.saveReminders(reminders);
             finish();
         } else {
