@@ -2,7 +2,11 @@ package com.patil.geobells.lite;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.IntentSender;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -10,30 +14,46 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesClient;
+import com.google.android.gms.location.LocationClient;
 import com.patil.geobells.lite.data.Place;
 import com.patil.geobells.lite.data.Reminder;
 import com.patil.geobells.lite.utils.Constants;
 import com.patil.geobells.lite.utils.GeobellsDataManager;
 import com.patil.geobells.lite.utils.GeobellsPreferenceManager;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
-public class CreateReminderActivity extends Activity implements AdapterView.OnItemSelectedListener {
+public class CreateReminderActivity extends Activity implements AdapterView.OnItemSelectedListener, GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener {
 
     EditText titleBox;
     RadioButton specificRadioButton;
     RadioButton dynamicRadioButton;
     EditText businessBox;
-    EditText addressBox;
+    AutoCompleteTextView addressBox;
     RadioButton enterRadioButton;
     RadioButton exitRadioButton;
     CheckBox repeatCheckBox;
@@ -71,6 +91,14 @@ public class CreateReminderActivity extends Activity implements AdapterView.OnIt
     String business;
     ArrayList<Place> places;
 
+    LocationClient locationClient;
+
+    // Places API stuff
+    final String PLACES_API_BASE = "https://maps.googleapis.com/maps/api/place";
+    final String TYPE_AUTOCOMPLETE = "/autocomplete";
+    final String OUT_JSON = "/json";
+    final String API_KEY = "AIzaSyCzEMbwj8vbLH8i1_QegjVd6B-3oFUFyp8";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,9 +107,23 @@ public class CreateReminderActivity extends Activity implements AdapterView.OnIt
         for(int i = 0; i < 7; i++) {
             days[i] = true;
         }
+        locationClient = new LocationClient(this, this, this);
         preferenceManager = new GeobellsPreferenceManager(this);
         dataManager = new GeobellsDataManager(this);
         setupSpinner();
+        setupAutocomplete();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        locationClient.connect();
+    }
+
+    @Override
+    protected void onStop() {
+        locationClient.disconnect();
+        super.onStop();
     }
 
     public void setupSpinner() {
@@ -97,12 +139,22 @@ public class CreateReminderActivity extends Activity implements AdapterView.OnIt
         proximity = Constants.PROXIMITY_DISTANCES[Constants.PROXIMITY_DISTANCES_DEFAULT_INDEX];
     }
 
+    public void setupAutocomplete() {
+        addressBox.setAdapter(new PlacesAutoCompleteAddressAdapter(this, R.layout.list_item_autocomplete));
+        addressBox.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                String str = (String) adapterView.getItemAtPosition(position);
+            }
+        });
+    }
+
     public void setupViews() {
         titleBox = (EditText) findViewById(R.id.reminder_title);
         specificRadioButton = (RadioButton) findViewById(R.id.radiobutton_reminder_type_specific);
         dynamicRadioButton = (RadioButton) findViewById(R.id.radiobutton_reminder_type_dynamic);
         businessBox = (EditText) findViewById(R.id.reminder_business);
-        addressBox = (EditText) findViewById(R.id.reminder_address);
+        addressBox = (AutoCompleteTextView) findViewById(R.id.reminder_address);
         enterRadioButton = (RadioButton) findViewById(R.id.radiobutton_reminder_transition_enter);
         exitRadioButton = (RadioButton) findViewById(R.id.radiobutton_reminder_transition_exit);
         proximitySpinner = (Spinner) findViewById(R.id.spinner_reminder_proximity);
@@ -266,6 +318,104 @@ public class CreateReminderActivity extends Activity implements AdapterView.OnIt
         }
     }
 
+    public ArrayList<String> autocomplete(String input, String type) {
+        ArrayList<String> resultList = null;
+        HttpURLConnection conn = null;
+        StringBuilder jsonResults = new StringBuilder();
+        try {
+            Location currentLocation = locationClient.getLastLocation();
+            StringBuilder sb = new StringBuilder(PLACES_API_BASE + TYPE_AUTOCOMPLETE + OUT_JSON);
+            sb.append("?key=" + API_KEY);
+            sb.append("&location=" +  currentLocation.getLatitude() + "," + currentLocation.getLongitude());
+            sb.append("&input=" + URLEncoder.encode(input, "utf8"));
+            sb.append("&type=" + type);
+
+            URL url = new URL(sb.toString());
+            conn = (HttpURLConnection) url.openConnection();
+            InputStreamReader in = new InputStreamReader(conn.getInputStream());
+
+            // Load the results into a StringBuilder
+            int read;
+            char[] buff = new char[1024];
+            while ((read = in.read(buff)) != -1) {
+                jsonResults.append(buff, 0, read);
+            }
+        } catch (MalformedURLException e) {
+            Log.e("Autocomplete", "Error processing Places API URL", e);
+            return resultList;
+        } catch (IOException e) {
+            Log.e("Autocomplete", "Error connecting to Places API", e);
+            return resultList;
+        } finally {
+            if (conn != null) {
+                conn.disconnect();
+            }
+        }
+
+        try {
+            // Create a JSON object hierarchy from the results
+            JSONObject jsonObj = new JSONObject(jsonResults.toString());
+            JSONArray predsJsonArray = jsonObj.getJSONArray("predictions");
+
+            // Extract the Place descriptions from the results
+            resultList = new ArrayList<String>(predsJsonArray.length());
+            for (int i = 0; i < predsJsonArray.length(); i++) {
+                resultList.add(predsJsonArray.getJSONObject(i).getString("description"));
+            }
+        } catch (JSONException e) {
+            Log.e("Autocomplete", "Cannot process JSON results", e);
+        }
+
+        return resultList;
+    }
+
+    private class PlacesAutoCompleteAddressAdapter extends ArrayAdapter<String> implements Filterable {
+        private ArrayList<String> resultList;
+
+        public PlacesAutoCompleteAddressAdapter(Context context, int textViewResourceId) {
+            super(context, textViewResourceId);
+        }
+
+        @Override
+        public int getCount() {
+            return resultList.size();
+        }
+
+        @Override
+        public String getItem(int index) {
+            return resultList.get(index);
+        }
+
+        @Override
+        public Filter getFilter() {
+            Filter filter = new Filter() {
+                @Override
+                protected FilterResults performFiltering(CharSequence constraint) {
+                    FilterResults filterResults = new FilterResults();
+                    if (constraint != null) {
+                        // Retrieve the autocomplete results.
+                        resultList = autocomplete(constraint.toString(), Constants.AUTOCOMPLETE_TYPE_ADDRESS);
+
+                        // Assign the data to the FilterResults
+                        filterResults.values = resultList;
+                        filterResults.count = resultList.size();
+                    }
+                    return filterResults;
+                }
+
+                @Override
+                protected void publishResults(CharSequence constraint, FilterResults results) {
+                    if (results != null && results.count > 0) {
+                        notifyDataSetChanged();
+                    }
+                    else {
+                        notifyDataSetInvalidated();
+                    }
+                }};
+            return filter;
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -291,5 +441,21 @@ public class CreateReminderActivity extends Activity implements AdapterView.OnIt
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
         proximity = Constants.PROXIMITY_DISTANCES[Constants.PROXIMITY_DISTANCES_DEFAULT_INDEX];
+    }
+
+
+    @Override
+    public void onConnected(Bundle dataBundle) {
+
+    }
+
+    @Override
+    public void onDisconnected() {
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
     }
 }

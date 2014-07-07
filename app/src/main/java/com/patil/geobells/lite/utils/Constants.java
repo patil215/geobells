@@ -13,4 +13,6 @@ public class Constants {
     public static final int TYPE_DYNAMIC = 1;
     // red, blue, orange, brown, green, yellow, purple
     public static final String[] COLORS = new String[] {"#b0120a", "#2a36b1", "#e65100", "#3e2723", "#0d5302", "#f57f17", "#4a148c"};
+    public static final String AUTOCOMPLETE_TYPE_ADDRESS = "geocode";
+    public static final String AUTOCOMPLETE_TYPE_BUSINESS = "establishment";
 }
