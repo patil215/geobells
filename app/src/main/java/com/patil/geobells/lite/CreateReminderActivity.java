@@ -4,9 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.IntentSender;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -31,6 +29,7 @@ import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.location.LocationClient;
 import com.patil.geobells.lite.data.Place;
 import com.patil.geobells.lite.data.Reminder;
+import com.patil.geobells.lite.utils.Config;
 import com.patil.geobells.lite.utils.Constants;
 import com.patil.geobells.lite.utils.GeobellsDataManager;
 import com.patil.geobells.lite.utils.GeobellsPreferenceManager;
@@ -52,7 +51,7 @@ public class CreateReminderActivity extends Activity implements AdapterView.OnIt
     EditText titleBox;
     RadioButton specificRadioButton;
     RadioButton dynamicRadioButton;
-    EditText businessBox;
+    AutoCompleteTextView businessBox;
     AutoCompleteTextView addressBox;
     RadioButton enterRadioButton;
     RadioButton exitRadioButton;
@@ -147,13 +146,23 @@ public class CreateReminderActivity extends Activity implements AdapterView.OnIt
                 String str = (String) adapterView.getItemAtPosition(position);
             }
         });
+
+        if(Config.AUTOCOMPLETE_BUSINESSES) {
+            businessBox.setAdapter(new PlacesAutoCompleteBusinessAdapter(this, R.layout.list_item_autocomplete));
+            businessBox.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                    String str = (String) adapterView.getItemAtPosition(position);
+                }
+            });
+        }
     }
 
     public void setupViews() {
         titleBox = (EditText) findViewById(R.id.reminder_title);
         specificRadioButton = (RadioButton) findViewById(R.id.radiobutton_reminder_type_specific);
         dynamicRadioButton = (RadioButton) findViewById(R.id.radiobutton_reminder_type_dynamic);
-        businessBox = (EditText) findViewById(R.id.reminder_business);
+        businessBox = (AutoCompleteTextView) findViewById(R.id.reminder_business);
         addressBox = (AutoCompleteTextView) findViewById(R.id.reminder_address);
         enterRadioButton = (RadioButton) findViewById(R.id.radiobutton_reminder_transition_enter);
         exitRadioButton = (RadioButton) findViewById(R.id.radiobutton_reminder_transition_exit);
@@ -395,6 +404,53 @@ public class CreateReminderActivity extends Activity implements AdapterView.OnIt
                     if (constraint != null) {
                         // Retrieve the autocomplete results.
                         resultList = autocomplete(constraint.toString(), Constants.AUTOCOMPLETE_TYPE_ADDRESS);
+
+                        // Assign the data to the FilterResults
+                        filterResults.values = resultList;
+                        filterResults.count = resultList.size();
+                    }
+                    return filterResults;
+                }
+
+                @Override
+                protected void publishResults(CharSequence constraint, FilterResults results) {
+                    if (results != null && results.count > 0) {
+                        notifyDataSetChanged();
+                    }
+                    else {
+                        notifyDataSetInvalidated();
+                    }
+                }};
+            return filter;
+        }
+    }
+
+    private class PlacesAutoCompleteBusinessAdapter extends ArrayAdapter<String> implements Filterable {
+        private ArrayList<String> resultList;
+
+        public PlacesAutoCompleteBusinessAdapter(Context context, int textViewResourceId) {
+            super(context, textViewResourceId);
+        }
+
+        @Override
+        public int getCount() {
+            return resultList.size();
+        }
+
+        @Override
+        public String getItem(int index) {
+            return resultList.get(index);
+        }
+
+        @Override
+        public Filter getFilter() {
+            Filter filter = new Filter() {
+                @Override
+                protected FilterResults performFiltering(CharSequence constraint) {
+                    FilterResults filterResults = new FilterResults();
+                    if (constraint != null) {
+                        // Retrieve the autocomplete results.
+                        resultList = autocomplete(constraint.toString(), Constants.AUTOCOMPLETE_TYPE_BUSINESS);
 
                         // Assign the data to the FilterResults
                         filterResults.values = resultList;
