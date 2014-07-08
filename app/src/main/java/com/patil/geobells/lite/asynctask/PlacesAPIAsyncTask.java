@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.patil.geobells.lite.CreateReminderActivity;
 import com.patil.geobells.lite.R;
 import com.patil.geobells.lite.data.Photo;
 import com.patil.geobells.lite.data.Place;
@@ -28,13 +27,12 @@ public class PlacesAPIAsyncTask extends AsyncTask<String, String, ArrayList<Plac
     private PlacesAsyncTaskCompleteListener<String> callback;
     private ProgressDialog dialog;
     private Context context;
+    private String method;
 
-    // Places API stuff
-
-
-    public PlacesAPIAsyncTask(PlacesAsyncTaskCompleteListener<String> callback, Context context) {
+    public PlacesAPIAsyncTask(PlacesAsyncTaskCompleteListener<String> callback, Context context, String method) {
         this.callback = callback;
         this.context = context;
+        this.method = method;
     }
 
     @Override
@@ -88,7 +86,7 @@ public class PlacesAPIAsyncTask extends AsyncTask<String, String, ArrayList<Plac
                 places.add(place);
             }
         } catch (JSONException e) {
-            Log.e("Autocomplete", "Cannot process JSON results", e);
+            Log.e("PlacesAPIAsyncTask", "Cannot process JSON results", e);
         }
         return places;
     }
@@ -116,10 +114,10 @@ public class PlacesAPIAsyncTask extends AsyncTask<String, String, ArrayList<Plac
                 jsonResults.append(buff, 0, read);
             }
         } catch (MalformedURLException e) {
-            Log.e("Autocomplete", "Error processing Places API URL", e);
+            Log.e("PlacesAPIAsyncTask", "Error processing Places API URL", e);
             return "{}";
         } catch (IOException e) {
-            Log.e("Autocomplete", "Error connecting to Places API", e);
+            Log.e("PlacesAPIAsyncTask", "Error connecting to Places API", e);
             return "{}";
         } finally {
             if (conn != null) {
@@ -134,13 +132,19 @@ public class PlacesAPIAsyncTask extends AsyncTask<String, String, ArrayList<Plac
         super.onPreExecute();
         dialog = new ProgressDialog(context);
         dialog.setCancelable(false);
-        dialog.setMessage(context.getString(R.string.message_searching));
+        if(method.equals(Constants.METHOD_DIALOG_ADDRESS)) {
+            dialog.setMessage(context.getString(R.string.message_searching));
+        } else if(method.equals(Constants.METHOD_CREATE)) {
+            dialog.setMessage(context.getString(R.string.message_creating));
+        } else if (method.equals(Constants.METHOD_DIALOG_VIEW)) {
+            dialog.setMessage(context.getString(R.string.message_viewing));
+        }
         dialog.show();
     }
 
     @Override
     protected void onPostExecute(ArrayList<Place> places) {
         dialog.dismiss();
-        callback.onTaskComplete(places);
+        callback.onTaskComplete(places, method);
     }
 }

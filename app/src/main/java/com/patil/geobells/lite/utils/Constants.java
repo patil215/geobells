@@ -23,4 +23,8 @@ public class Constants {
     public static final String PLACES_TYPE_TEXTSEARCH = "/textsearch";
     public static final String PLACES_OUT_JSON = "/json";
     public static final String PLACES_API_KEY = "AIzaSyCzEMbwj8vbLH8i1_QegjVd6B-3oFUFyp8";
+
+    public static final String METHOD_DIALOG_ADDRESS = "address";
+    public static final String METHOD_CREATE = "create";
+    public static final String METHOD_DIALOG_VIEW = "view";
 }

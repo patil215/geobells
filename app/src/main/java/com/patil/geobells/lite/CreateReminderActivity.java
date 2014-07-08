@@ -50,7 +50,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
-public class CreateReminderActivity extends Activity implements AdapterView.OnItemSelectedListener, GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener, PlacesAsyncTaskCompleteListener<String> {
+public class CreateReminderActivity extends Activity implements GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener, PlacesAsyncTaskCompleteListener<String> {
 
     EditText titleBox;
     RadioButton specificRadioButton;
@@ -71,7 +71,6 @@ public class CreateReminderActivity extends Activity implements AdapterView.OnIt
 
     GeobellsPreferenceManager preferenceManager;
     GeobellsDataManager dataManager;
-
 
     // Generic Reminder data
     String title;
@@ -123,6 +122,11 @@ public class CreateReminderActivity extends Activity implements AdapterView.OnIt
         super.onStop();
     }
 
+    public double[] getLatLong() {
+        Location lastLocation = locationClient.getLastLocation();
+        return new double[] {lastLocation.getLatitude(), lastLocation.getLongitude()};
+    }
+
     public void setupSpinner() {
         ArrayAdapter<CharSequence> adapter;
         if(preferenceManager.isMetricEnabled()) {
@@ -133,6 +137,17 @@ public class CreateReminderActivity extends Activity implements AdapterView.OnIt
         }
         proximitySpinner.setAdapter(adapter);
         proximitySpinner.setSelection(Constants.PROXIMITY_DISTANCES_DEFAULT_INDEX);
+        proximitySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long id) {
+                proximity = Constants.PROXIMITY_DISTANCES[pos];
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                proximity = Constants.PROXIMITY_DISTANCES[Constants.PROXIMITY_DISTANCES_DEFAULT_INDEX];
+            }
+        });
         proximity = Constants.PROXIMITY_DISTANCES[Constants.PROXIMITY_DISTANCES_DEFAULT_INDEX];
     }
 
@@ -228,7 +243,12 @@ public class CreateReminderActivity extends Activity implements AdapterView.OnIt
     }
 
     public void onBusinessViewPlacesClick(View v) {
-
+        if(businessBox.getText() != null && businessBox.getText().length() > 0) {
+            double[] latLong = getLatLong();
+            new PlacesAPIAsyncTask(this, this, Constants.METHOD_DIALOG_VIEW).execute(businessBox.getText().toString(), String.valueOf(latLong[0]), String.valueOf(latLong[1]));
+        } else {
+            Toast.makeText(this, getString(R.string.toast_fill_business), Toast.LENGTH_SHORT).show();
+        }
     }
 
 
@@ -241,15 +261,15 @@ public class CreateReminderActivity extends Activity implements AdapterView.OnIt
         final EditText input = new EditText(this);
         alert.setView(input);
 
-        alert.setPositiveButton("Search", new DialogInterface.OnClickListener() {
+        alert.setPositiveButton(getString(R.string.dialog_button_search), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 String value = input.getText().toString();
-                Location lastLocation = locationClient.getLastLocation();
-                new PlacesAPIAsyncTask(CreateReminderActivity.this, CreateReminderActivity.this).execute(value, String.valueOf(lastLocation.getLatitude()), String.valueOf(lastLocation.getLongitude()));
+                double[] latLong = getLatLong();
+                new PlacesAPIAsyncTask(CreateReminderActivity.this, CreateReminderActivity.this, Constants.METHOD_DIALOG_ADDRESS).execute(value, String.valueOf(latLong[0]), String.valueOf(latLong[1]));
             }
         });
 
-        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        alert.setNegativeButton(getString(R.string.dialog_button_cancel), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 dialog.dismiss();
             }
@@ -343,7 +363,7 @@ public class CreateReminderActivity extends Activity implements AdapterView.OnIt
             dataManager.saveReminders(reminders);
             finish();
         } else {
-            Toast.makeText(this, getString(R.string.prompt_fill_info), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.toast_fill_info), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -353,10 +373,9 @@ public class CreateReminderActivity extends Activity implements AdapterView.OnIt
         HttpURLConnection conn = null;
         StringBuilder jsonResults = new StringBuilder();
         try {
-            Location currentLocation = locationClient.getLastLocation();
             StringBuilder sb = new StringBuilder(Constants.PLACES_API_BASE + Constants.PLACES_TYPE_AUTOCOMPLETE + Constants.PLACES_OUT_JSON);
             sb.append("?key=" + Constants.PLACES_API_KEY);
-            sb.append("&location=" +  currentLocation.getLatitude() + "," + currentLocation.getLongitude());
+            sb.append("&location=" +  getLatLong()[0] + "," + getLatLong()[1]);
             sb.append("&input=" + URLEncoder.encode(input, "utf8"));
             sb.append("&type=" + type);
 
@@ -400,8 +419,14 @@ public class CreateReminderActivity extends Activity implements AdapterView.OnIt
     }
 
     @Override
-    public void onTaskComplete(ArrayList<Place> places) {
-        createAddressPlaceSearchDialog(places);
+    public void onTaskComplete(ArrayList<Place> places, String method) {
+        if(method.equals(Constants.METHOD_DIALOG_ADDRESS)){
+            createAddressPlaceSearchDialog(places);
+        } else if (method.equals(Constants.METHOD_CREATE)) {
+
+        } else if (method.equals(Constants.METHOD_DIALOG_VIEW)) {
+            createViewPlaceSearchDialog(places);
+        }
     }
 
     private class PlacesAutoCompleteAddressAdapter extends ArrayAdapter<String> implements Filterable {
@@ -527,6 +552,26 @@ public class CreateReminderActivity extends Activity implements AdapterView.OnIt
         dialog.show();
     }
 
+    public void createViewPlaceSearchDialog(ArrayList<Place> places) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.dialog_title_view_places));
+
+        ListView modeList = new ListView(this);
+
+        final String[] stringArray = new String[places.size()];
+        for(int i = 0; i < places.size(); i++) {
+            stringArray[i] = places.get(i).title + " - " + places.get(i).address;
+        }
+        ArrayAdapter<String> modeAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, stringArray);
+        modeList.setAdapter(modeAdapter);
+
+        builder.setView(modeList);
+        final Dialog dialog = builder.create();
+
+        dialog.show();
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -542,16 +587,6 @@ public class CreateReminderActivity extends Activity implements AdapterView.OnIt
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long id) {
-        proximity = Constants.PROXIMITY_DISTANCES[pos];
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-        proximity = Constants.PROXIMITY_DISTANCES[Constants.PROXIMITY_DISTANCES_DEFAULT_INDEX];
     }
 
 

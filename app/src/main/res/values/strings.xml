@@ -13,7 +13,6 @@
     <string name="title_upcoming">Upcoming</string>
     <string name="action_create">Create a reminder</string>
     <string name="title_activity_create_reminder">Create Reminder</string>
-    <string name="hello_world">Hello world!</string>
     <string name="prompt_reminder_title">Reminder Title</string>
     <string name="hint_reminder_title">e.g. \"Get Milk\" or \"Pick up Groceries\"</string>
     <string name="prompt_reminder_type">Remind at</string>
@@ -65,12 +64,18 @@
     <string name="friday">Friday</string>
     <string name="saturday">Saturday</string>
     <string name="action_done">Create reminder</string>
-    <string name="prompt_fill_info">Please fill all info.</string>
+    <string name="toast_fill_info">Please fill all info.</string>
+    <string name="toast_fill_business">Enter a type of place to view places that Geobells will remind you at.</string>
     <string name="text_title_default">Get Milk</string>
     <string name="text_location_default">At 1102 Main Street</string>
     <string name="text_date_default">Created 7 hours ago</string>
     <string name="dialog_title_address_search">Search for address</string>
     <string name="dialog_title_results">Results</string>
     <string name="message_searching">Searching...</string>
+    <string name="dialog_button_search">Search</string>
+    <string name="dialog_button_cancel">Cancel</string>
+    <string name="dialog_title_view_places">View places</string>
+    <string name="message_creating">Creating reminder...</string>
+    <string name="message_viewing">Loading places...</string>
 
 </resources>
