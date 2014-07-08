@@ -11,8 +11,16 @@ public class Constants {
     public static final long TIME_COMPLETED_DEFAULT = -1;
     public static final int TYPE_FIXED = 0;
     public static final int TYPE_DYNAMIC = 1;
+
     // red, blue, orange, brown, green, yellow, purple
     public static final String[] COLORS = new String[] {"#b0120a", "#2a36b1", "#e65100", "#3e2723", "#0d5302", "#f57f17", "#4a148c"};
-    public static final String AUTOCOMPLETE_TYPE_ADDRESS = "geocode";
-    public static final String AUTOCOMPLETE_TYPE_BUSINESS = "establishment";
+
+    public static final String PLACES_API_BASE = "https://maps.googleapis.com/maps/api/place";
+    public static final String PLACES_AUTOCOMPLETE_TYPE_ADDRESS = "geocode";
+    public static final String PLACES_AUTOCOMPLETE_TYPE_BUSINESS = "establishment";
+    public static final String PLACES_TYPE_AUTOCOMPLETE = "/autocomplete";
+    public static final String PLACES_TYPE_NEARBYSEARCH = "/nearbysearch";
+    public static final String PLACES_TYPE_TEXTSEARCH = "/textsearch";
+    public static final String PLACES_OUT_JSON = "/json";
+    public static final String PLACES_API_KEY = "AIzaSyCzEMbwj8vbLH8i1_QegjVd6B-3oFUFyp8";
 }

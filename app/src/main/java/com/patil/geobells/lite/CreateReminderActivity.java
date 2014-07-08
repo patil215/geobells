@@ -97,14 +97,6 @@ public class CreateReminderActivity extends Activity implements AdapterView.OnIt
 
     LocationClient locationClient;
 
-    // Places API stuff
-    final String PLACES_API_BASE = "https://maps.googleapis.com/maps/api/place";
-    final String TYPE_AUTOCOMPLETE = "/autocomplete";
-    final String TYPE_NEARBYSEARCH = "/nearbysearch";
-    final String TYPE_TEXTSEARCH = "/textsearch";
-    final String OUT_JSON = "/json";
-    final String API_KEY = "AIzaSyCzEMbwj8vbLH8i1_QegjVd6B-3oFUFyp8";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -363,8 +355,8 @@ public class CreateReminderActivity extends Activity implements AdapterView.OnIt
         StringBuilder jsonResults = new StringBuilder();
         try {
             Location currentLocation = locationClient.getLastLocation();
-            StringBuilder sb = new StringBuilder(PLACES_API_BASE + TYPE_AUTOCOMPLETE + OUT_JSON);
-            sb.append("?key=" + API_KEY);
+            StringBuilder sb = new StringBuilder(Constants.PLACES_API_BASE + Constants.PLACES_TYPE_AUTOCOMPLETE + Constants.PLACES_OUT_JSON);
+            sb.append("?key=" + Constants.PLACES_API_KEY);
             sb.append("&location=" +  currentLocation.getLatitude() + "," + currentLocation.getLongitude());
             sb.append("&input=" + URLEncoder.encode(input, "utf8"));
             sb.append("&type=" + type);
@@ -433,7 +425,7 @@ public class CreateReminderActivity extends Activity implements AdapterView.OnIt
                     FilterResults filterResults = new FilterResults();
                     if (constraint != null) {
                         // Retrieve the autocomplete results.
-                        resultList = autocomplete(constraint.toString(), Constants.AUTOCOMPLETE_TYPE_ADDRESS);
+                        resultList = autocomplete(constraint.toString(), Constants.PLACES_AUTOCOMPLETE_TYPE_ADDRESS);
 
                         // Assign the data to the FilterResults
                         filterResults.values = resultList;
@@ -480,7 +472,7 @@ public class CreateReminderActivity extends Activity implements AdapterView.OnIt
                     FilterResults filterResults = new FilterResults();
                     if (constraint != null) {
                         // Retrieve the autocomplete results.
-                        resultList = autocomplete(constraint.toString(), Constants.AUTOCOMPLETE_TYPE_BUSINESS);
+                        resultList = autocomplete(constraint.toString(), Constants.PLACES_AUTOCOMPLETE_TYPE_BUSINESS);
 
                         // Assign the data to the FilterResults
                         filterResults.values = resultList;
