@@ -5,4 +5,9 @@ public class Place {
     public String address;
     public double latitude;
     public double longitude;
+    public String iconURL;
+    public String id;
+    public String placeID;
+    public String reference;
+    public Photo[] photos;
 }

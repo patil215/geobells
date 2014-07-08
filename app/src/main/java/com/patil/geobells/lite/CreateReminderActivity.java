@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,8 +29,8 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.location.LocationClient;
-import com.google.gson.Gson;
-import com.patil.geobells.lite.asynctask.PlacesAPIDialogAsyncTask;
+import com.patil.geobells.lite.asynctask.PlacesAPIAsyncTask;
+import com.patil.geobells.lite.asynctask.PlacesAsyncTaskCompleteListener;
 import com.patil.geobells.lite.data.Place;
 import com.patil.geobells.lite.data.Reminder;
 import com.patil.geobells.lite.utils.Config;
@@ -51,7 +50,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
-public class CreateReminderActivity extends Activity implements AdapterView.OnItemSelectedListener, GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener {
+public class CreateReminderActivity extends Activity implements AdapterView.OnItemSelectedListener, GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener, PlacesAsyncTaskCompleteListener<String> {
 
     EditText titleBox;
     RadioButton specificRadioButton;
@@ -246,7 +245,7 @@ public class CreateReminderActivity extends Activity implements AdapterView.OnIt
             public void onClick(DialogInterface dialog, int whichButton) {
                 String value = input.getText().toString();
                 Location lastLocation = locationClient.getLastLocation();
-                new PlacesAPIDialogAsyncTask(CreateReminderActivity.this, CreateReminderActivity.this).execute(value, String.valueOf(lastLocation.getLatitude()), String.valueOf(lastLocation.getLongitude()));
+                new PlacesAPIAsyncTask(CreateReminderActivity.this, CreateReminderActivity.this).execute(value, String.valueOf(lastLocation.getLatitude()), String.valueOf(lastLocation.getLongitude()));
             }
         });
 
@@ -400,6 +399,11 @@ public class CreateReminderActivity extends Activity implements AdapterView.OnIt
         return resultList;
     }
 
+    @Override
+    public void onTaskComplete(ArrayList<Place> places) {
+        createAddressPlaceSearchDialog(places);
+    }
+
     private class PlacesAutoCompleteAddressAdapter extends ArrayAdapter<String> implements Filterable {
         private ArrayList<String> resultList;
 
@@ -495,22 +499,7 @@ public class CreateReminderActivity extends Activity implements AdapterView.OnIt
     }
 
 
-    public void handleResponseJsonForDialog(String json) {
-        Log.d("Gooby", json);
-        ArrayList<String> places = new ArrayList<String>();
-        try {
-            // Create a JSON object hierarchy from the results
-            JSONObject jsonObj = new JSONObject(json);
-            JSONArray resultsJsonArray = jsonObj.getJSONArray("results");
-
-            // Extract the Place descriptions from the results
-            for (int i = 0; i < resultsJsonArray.length(); i++) {
-                places.add(resultsJsonArray.getJSONObject(i).getString("name") + " - " + resultsJsonArray.getJSONObject(i).getString("formatted_address"));
-            }
-        } catch (JSONException e) {
-            Log.e("Autocomplete", "Cannot process JSON results", e);
-        }
-
+    public void createAddressPlaceSearchDialog(ArrayList<Place> places) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.dialog_title_results));
@@ -519,7 +508,7 @@ public class CreateReminderActivity extends Activity implements AdapterView.OnIt
 
         final String[] stringArray = new String[places.size()];
         for(int i = 0; i < places.size(); i++) {
-            stringArray[i] = places.get(i);
+            stringArray[i] = places.get(i).title + " - " + places.get(i).address;
         }
         ArrayAdapter<String> modeAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, stringArray);
         modeList.setAdapter(modeAdapter);
