@@ -2,8 +2,10 @@ package com.patil.geobells.lite;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,6 +20,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -27,6 +30,8 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.location.LocationClient;
+import com.google.gson.Gson;
+import com.patil.geobells.lite.asynctask.PlacesAPIDialogAsyncTask;
 import com.patil.geobells.lite.data.Place;
 import com.patil.geobells.lite.data.Reminder;
 import com.patil.geobells.lite.utils.Config;
@@ -95,6 +100,8 @@ public class CreateReminderActivity extends Activity implements AdapterView.OnIt
     // Places API stuff
     final String PLACES_API_BASE = "https://maps.googleapis.com/maps/api/place";
     final String TYPE_AUTOCOMPLETE = "/autocomplete";
+    final String TYPE_NEARBYSEARCH = "/nearbysearch";
+    final String TYPE_TEXTSEARCH = "/textsearch";
     final String OUT_JSON = "/json";
     final String API_KEY = "AIzaSyCzEMbwj8vbLH8i1_QegjVd6B-3oFUFyp8";
 
@@ -233,8 +240,31 @@ public class CreateReminderActivity extends Activity implements AdapterView.OnIt
 
     }
 
-    public void onAddressSearchClick(View v) {
 
+    public void onAddressSearchClick(View v) {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+        alert.setTitle(getString(R.string.dialog_title_address_search));
+
+        // Set an EditText view to get user input
+        final EditText input = new EditText(this);
+        alert.setView(input);
+
+        alert.setPositiveButton("Search", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                String value = input.getText().toString();
+                Location lastLocation = locationClient.getLastLocation();
+                new PlacesAPIDialogAsyncTask(CreateReminderActivity.this, CreateReminderActivity.this).execute(value, String.valueOf(lastLocation.getLatitude()), String.valueOf(lastLocation.getLongitude()));
+            }
+        });
+
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                dialog.dismiss();
+            }
+        });
+
+        alert.show();
     }
 
     public void onAddressMapClick(View v) {
@@ -325,6 +355,7 @@ public class CreateReminderActivity extends Activity implements AdapterView.OnIt
             Toast.makeText(this, getString(R.string.prompt_fill_info), Toast.LENGTH_SHORT).show();
         }
     }
+
 
     public ArrayList<String> autocomplete(String input, String type) {
         ArrayList<String> resultList = null;
@@ -469,6 +500,50 @@ public class CreateReminderActivity extends Activity implements AdapterView.OnIt
                 }};
             return filter;
         }
+    }
+
+
+    public void handleResponseJsonForDialog(String json) {
+        Log.d("Gooby", json);
+        ArrayList<String> places = new ArrayList<String>();
+        try {
+            // Create a JSON object hierarchy from the results
+            JSONObject jsonObj = new JSONObject(json);
+            JSONArray resultsJsonArray = jsonObj.getJSONArray("results");
+
+            // Extract the Place descriptions from the results
+            for (int i = 0; i < resultsJsonArray.length(); i++) {
+                places.add(resultsJsonArray.getJSONObject(i).getString("name") + " - " + resultsJsonArray.getJSONObject(i).getString("formatted_address"));
+            }
+        } catch (JSONException e) {
+            Log.e("Autocomplete", "Cannot process JSON results", e);
+        }
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.dialog_title_results));
+
+        ListView modeList = new ListView(this);
+
+        final String[] stringArray = new String[places.size()];
+        for(int i = 0; i < places.size(); i++) {
+            stringArray[i] = places.get(i);
+        }
+        ArrayAdapter<String> modeAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, stringArray);
+        modeList.setAdapter(modeAdapter);
+
+        builder.setView(modeList);
+        final Dialog dialog = builder.create();
+
+        modeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                addressBox.setText(stringArray[position]);
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 
     @Override

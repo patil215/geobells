@@ -69,5 +69,8 @@
     <string name="text_title_default">Get Milk</string>
     <string name="text_location_default">At 1102 Main Street</string>
     <string name="text_date_default">Created 7 hours ago</string>
+    <string name="dialog_title_address_search">Search for address</string>
+    <string name="dialog_title_results">Results</string>
+    <string name="message_searching">Searching...</string>
 
 </resources>
