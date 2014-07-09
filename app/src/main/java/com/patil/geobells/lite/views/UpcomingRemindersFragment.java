@@ -39,6 +39,7 @@ public class UpcomingRemindersFragment extends Fragment {
                         Toast.makeText(rootView.getContext(), rootView.getContext().getString(R.string.toast_reminder_swipe_completed), Toast.LENGTH_SHORT).show();
                         Reminder reminder = reminders.get(index);
                         reminder.completed = true;
+                        reminder.timeCompleted = System.currentTimeMillis();
                         dataManager.saveReminders(reminders);
                     }
                 });
