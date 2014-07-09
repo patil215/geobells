@@ -12,7 +12,7 @@ public class Constants {
     public static final int TYPE_FIXED = 0;
     public static final int TYPE_DYNAMIC = 1;
 
-    // red, blue, orange, brown, green, yellow, purple
+    // red, blue, orange, brown, green, yellow, purple primary colors
     public static final String[] COLORS = new String[] {"#b0120a", "#2a36b1", "#e65100", "#3e2723", "#0d5302", "#f57f17", "#4a148c"};
 
     public static final String PLACES_API_BASE = "https://maps.googleapis.com/maps/api/place";
@@ -22,7 +22,10 @@ public class Constants {
     public static final String PLACES_TYPE_NEARBYSEARCH = "/nearbysearch";
     public static final String PLACES_TYPE_TEXTSEARCH = "/textsearch";
     public static final String PLACES_OUT_JSON = "/json";
-    public static final String PLACES_API_KEY = "AIzaSyCzEMbwj8vbLH8i1_QegjVd6B-3oFUFyp8";
+    public static final String PLACES_API_KEY_AUTOCOMPLEE_LITE = "AIzaSyCzEMbwj8vbLH8i1_QegjVd6B-3oFUFyp8";
+    public static final String PLACES_API_KEY_AUTOCOMPLETE_PRO = "AIzaSyCTNKrFcWPsBGe-g-hIxhmPTH6i1H3FaAs";
+    public static final String PLACES_API_KEY_SEARCH_PRO = "AIzaSyBvvP27YFCUWApMSQGLaaDMWwwTYLW81_U";
+    public static final String PLACES_API_KEY_SEARCH_LITE = "AIzaSyBvX3peWY0KFaB0t67KFdeLK7KtprOgPwE";
 
     public static final String METHOD_DIALOG_ADDRESS = "address";
     public static final String METHOD_CREATE = "create";

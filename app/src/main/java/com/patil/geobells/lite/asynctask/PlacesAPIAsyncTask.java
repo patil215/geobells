@@ -8,6 +8,7 @@ import android.util.Log;
 import com.patil.geobells.lite.R;
 import com.patil.geobells.lite.data.Photo;
 import com.patil.geobells.lite.data.Place;
+import com.patil.geobells.lite.utils.Config;
 import com.patil.geobells.lite.utils.Constants;
 
 import org.json.JSONArray;
@@ -98,7 +99,11 @@ public class PlacesAPIAsyncTask extends AsyncTask<String, String, ArrayList<Plac
         StringBuilder jsonResults = new StringBuilder();
         try {
             StringBuilder sb = new StringBuilder(Constants.PLACES_API_BASE + Constants.PLACES_TYPE_TEXTSEARCH + Constants.PLACES_OUT_JSON);
-            sb.append("?key=" + Constants.PLACES_API_KEY);
+            if(Config.IS_LITE_VERSION) {
+                sb.append("?key=" + Constants.PLACES_API_KEY_SEARCH_LITE);
+            } else {
+                sb.append("?key=" + Constants.PLACES_API_KEY_SEARCH_PRO);
+            }
             sb.append("&location=" + latitude + "," + longitude);
             sb.append("&radius=50000");
             sb.append("&query=" + URLEncoder.encode(query, "utf8"));

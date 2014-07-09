@@ -282,7 +282,6 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
 
     }
 
-    // TODO
     public boolean isNecessaryFieldsCompleted() {
         if(titleBox.getText().toString() != null && titleBox.getText().toString().length() > 0) {
             if(enterRadioButton.isChecked() || exitRadioButton.isChecked()) {
@@ -374,7 +373,11 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
         StringBuilder jsonResults = new StringBuilder();
         try {
             StringBuilder sb = new StringBuilder(Constants.PLACES_API_BASE + Constants.PLACES_TYPE_AUTOCOMPLETE + Constants.PLACES_OUT_JSON);
-            sb.append("?key=" + Constants.PLACES_API_KEY);
+            if(Config.IS_LITE_VERSION) {
+                sb.append("?key=" + Constants.PLACES_API_KEY_AUTOCOMPLEE_LITE);
+            } else {
+                sb.append("?key=" + Constants.PLACES_API_KEY_AUTOCOMPLETE_PRO);
+            }
             sb.append("&location=" +  getLatLong()[0] + "," + getLatLong()[1]);
             sb.append("&input=" + URLEncoder.encode(input, "utf8"));
             sb.append("&type=" + type);
