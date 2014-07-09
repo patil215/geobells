@@ -85,5 +85,6 @@
     <string name="toast_no_geocode_results">No location found for address. Make sure the address entered is correct.</string>
     <string name="toast_reminder_created">Reminder created.</string>
     <string name="toast_reminder_swipe_completed">Reminder set as completed.</string>
+    <string name="toast_reminder_swipe_uncompleted">Reminder set as upcoming.</string>
 
 </resources>
