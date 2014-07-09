@@ -21,6 +21,7 @@ public class SettingsActivity extends PreferenceActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
 
         preferenceManager = new GeobellsPreferenceManager(this);
 
@@ -36,6 +37,16 @@ public class SettingsActivity extends PreferenceActivity {
                 return false;
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

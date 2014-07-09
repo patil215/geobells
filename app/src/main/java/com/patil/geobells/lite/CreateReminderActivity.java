@@ -107,6 +107,7 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
         locationClient = new LocationClient(this, this, this);
         preferenceManager = new GeobellsPreferenceManager(this);
         dataManager = new GeobellsDataManager(this);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
         setupSpinner();
         setupAutocomplete();
     }
@@ -637,6 +638,9 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
         switch(item.getItemId()) {
             case R.id.action_done:
                 createReminder();
+                break;
+            case android.R.id.home:
+                finish();
                 break;
         }
         return super.onOptionsItemSelected(item);
