@@ -14,6 +14,7 @@ public class Constants {
 
     // primary colors: blue, deep orange, purple, amber, brown, green, red
     public static final String[] COLORS = new String[] {"#5677fc", "#ff5722", "#9c27b0", "#ffc107", "#795548", "#259b24", "#e51c23"};
+    public static final String COLOR_ACTION_BAR = "#0a7e07";
 
     public static final String PLACES_API_BASE = "https://maps.googleapis.com/maps/api/place";
     public static final String PLACES_AUTOCOMPLETE_TYPE_ADDRESS = "geocode";
