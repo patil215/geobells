@@ -152,7 +152,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
-                        android:paddingTop="12dp"
+                        android:layout_marginTop="12dp"
                         android:background="?android:attr/selectableItemBackground"
                         android:contentDescription="@string/button_business_view_places"
                         android:onClick="onBusinessViewPlacesClick"

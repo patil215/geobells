@@ -77,5 +77,10 @@
     <string name="dialog_title_view_places">View places</string>
     <string name="message_creating">Creating reminder...</string>
     <string name="message_viewing">Loading places...</string>
+    <string name="dialog_title_view_no_results">View places</string>
+    <string name="dialog_message_view_no_results">No results found.</string>
+    <string name="dialog_title_search_no_results">Search for address</string>
+    <string name="dialog_message_search_no_results">No results found.</string>
+    <string name="dialog_button_ok">OK</string>
 
 </resources>

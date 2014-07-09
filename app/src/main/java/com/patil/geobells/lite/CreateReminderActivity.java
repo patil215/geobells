@@ -366,6 +366,15 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
         }
     }
 
+    public void showSimpleDialog(String title, String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this).setMessage(message).setTitle(title).setPositiveButton(getString(R.string.dialog_button_ok), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                dialog.dismiss();
+            }
+        });
+        builder.create().show();
+    }
+
 
     public ArrayList<String> autocomplete(String input, String type) {
         ArrayList<String> resultList = null;
@@ -424,11 +433,19 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
     @Override
     public void onTaskComplete(ArrayList<Place> places, String method) {
         if(method.equals(Constants.METHOD_DIALOG_ADDRESS)){
+            if(places.size() > 0) {
             createAddressPlaceSearchDialog(places);
+            } else {
+                showSimpleDialog(getString(R.string.dialog_title_search_no_results), getString(R.string.dialog_message_search_no_results));
+            }
         } else if (method.equals(Constants.METHOD_CREATE)) {
 
         } else if (method.equals(Constants.METHOD_DIALOG_VIEW)) {
+            if(places.size() > 0) {
             createViewPlaceSearchDialog(places);
+            } else {
+                showSimpleDialog(getString(R.string.dialog_title_view_no_results), getString(R.string.dialog_message_view_no_results));
+            }
         }
     }
 
