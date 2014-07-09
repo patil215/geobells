@@ -82,5 +82,7 @@
     <string name="dialog_title_search_no_results">Search for address</string>
     <string name="dialog_message_search_no_results">No results found.</string>
     <string name="dialog_button_ok">OK</string>
+    <string name="toast_no_geocode_results">No location found for address. Make sure the address entered is correct.</string>
+    <string name="toast_reminder_created">Reminder created.</string>
 
 </resources>

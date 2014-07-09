@@ -25,12 +25,12 @@ import java.util.ArrayList;
 
 
 public class PlacesAPIAsyncTask extends AsyncTask<String, String, ArrayList<Place>> {
-    private PlacesAsyncTaskCompleteListener<String> callback;
+    private AsyncTaskCompleteListener<String> callback;
     private ProgressDialog dialog;
     private Context context;
     private String method;
 
-    public PlacesAPIAsyncTask(PlacesAsyncTaskCompleteListener<String> callback, Context context, String method) {
+    public PlacesAPIAsyncTask(AsyncTaskCompleteListener<String> callback, Context context, String method) {
         this.callback = callback;
         this.context = context;
         this.method = method;
@@ -137,11 +137,11 @@ public class PlacesAPIAsyncTask extends AsyncTask<String, String, ArrayList<Plac
         super.onPreExecute();
         dialog = new ProgressDialog(context);
         dialog.setCancelable(false);
-        if(method.equals(Constants.METHOD_DIALOG_ADDRESS)) {
+        if(method.equals(Constants.METHOD_PLACES_DIALOG_ADDRESS)) {
             dialog.setMessage(context.getString(R.string.message_searching));
-        } else if(method.equals(Constants.METHOD_CREATE)) {
+        } else if(method.equals(Constants.METHOD_PLACES_CREATE)) {
             dialog.setMessage(context.getString(R.string.message_creating));
-        } else if (method.equals(Constants.METHOD_DIALOG_VIEW)) {
+        } else if (method.equals(Constants.METHOD_PLACES_DIALOG_VIEW)) {
             dialog.setMessage(context.getString(R.string.message_viewing));
         }
         dialog.show();
@@ -150,6 +150,6 @@ public class PlacesAPIAsyncTask extends AsyncTask<String, String, ArrayList<Plac
     @Override
     protected void onPostExecute(ArrayList<Place> places) {
         dialog.dismiss();
-        callback.onTaskComplete(places, method);
+        callback.onPlacesTaskComplete(places, method);
     }
 }

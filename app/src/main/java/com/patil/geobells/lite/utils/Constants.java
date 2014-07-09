@@ -27,7 +27,17 @@ public class Constants {
     public static final String PLACES_API_KEY_SEARCH_PRO = "AIzaSyBvvP27YFCUWApMSQGLaaDMWwwTYLW81_U";
     public static final String PLACES_API_KEY_SEARCH_LITE = "AIzaSyBvX3peWY0KFaB0t67KFdeLK7KtprOgPwE";
 
-    public static final String METHOD_DIALOG_ADDRESS = "address";
-    public static final String METHOD_CREATE = "create";
-    public static final String METHOD_DIALOG_VIEW = "view";
+    public static final String GEOCODE_API_BASE=  "http://maps.googleapis.com/maps/api/geocode";
+    public static final String GEOCODE_OUT_JSON =  "/json";
+
+
+    public static final String METHOD_PLACES_DIALOG_ADDRESS = "address";
+    public static final String METHOD_PLACES_CREATE = "create";
+    public static final String METHOD_PLACES_DIALOG_VIEW = "view";
+
+    public static final String METHOD_GEOCODE_CREATE = "create";
+    public static final String GEOCODE_STATUS_OK = "OK";
+    public static final String GEOCODE_STATUS_NORESULTS = "ZERO_RESULTS";
+    public static final Double GEOCODE_RESPONSE_NORESULTS = -1.0;
+    public static final Double GEOCODE_RESPONSE_ERROR = -2.0;
 }

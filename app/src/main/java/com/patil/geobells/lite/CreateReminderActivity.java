@@ -29,8 +29,9 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.location.LocationClient;
+import com.patil.geobells.lite.asynctask.GeocoderAPIAsyncTask;
 import com.patil.geobells.lite.asynctask.PlacesAPIAsyncTask;
-import com.patil.geobells.lite.asynctask.PlacesAsyncTaskCompleteListener;
+import com.patil.geobells.lite.asynctask.AsyncTaskCompleteListener;
 import com.patil.geobells.lite.data.Place;
 import com.patil.geobells.lite.data.Reminder;
 import com.patil.geobells.lite.utils.Config;
@@ -50,7 +51,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
-public class CreateReminderActivity extends Activity implements GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener, PlacesAsyncTaskCompleteListener<String> {
+public class CreateReminderActivity extends Activity implements GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener, AsyncTaskCompleteListener<String> {
 
     EditText titleBox;
     RadioButton specificRadioButton;
@@ -91,7 +92,7 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
 
     // Dynamic reminder
     String business;
-    ArrayList<Place> places;
+    // Places omitted because it is generated after asynctask
 
     LocationClient locationClient;
 
@@ -245,7 +246,7 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
     public void onBusinessViewPlacesClick(View v) {
         if(businessBox.getText() != null && businessBox.getText().length() > 0) {
             double[] latLong = getLatLong();
-            new PlacesAPIAsyncTask(this, this, Constants.METHOD_DIALOG_VIEW).execute(businessBox.getText().toString(), String.valueOf(latLong[0]), String.valueOf(latLong[1]));
+            new PlacesAPIAsyncTask(this, this, Constants.METHOD_PLACES_DIALOG_VIEW).execute(businessBox.getText().toString(), String.valueOf(latLong[0]), String.valueOf(latLong[1]));
         } else {
             Toast.makeText(this, getString(R.string.toast_fill_business), Toast.LENGTH_SHORT).show();
         }
@@ -265,7 +266,7 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
             public void onClick(DialogInterface dialog, int whichButton) {
                 String value = input.getText().toString();
                 double[] latLong = getLatLong();
-                new PlacesAPIAsyncTask(CreateReminderActivity.this, CreateReminderActivity.this, Constants.METHOD_DIALOG_ADDRESS).execute(value, String.valueOf(latLong[0]), String.valueOf(latLong[1]));
+                new PlacesAPIAsyncTask(CreateReminderActivity.this, CreateReminderActivity.this, Constants.METHOD_PLACES_DIALOG_ADDRESS).execute(value, String.valueOf(latLong[0]), String.valueOf(latLong[1]));
             }
         });
 
@@ -299,17 +300,64 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
         return false;
     }
 
-    // TODO
-    public double[] getCoordsFromAddress(String address) {
-        return new double[] {0, 0};
+
+    public void createSpecificReminder() {
+        address = addressBox.getText().toString();
+        new GeocoderAPIAsyncTask(this, this, Constants.METHOD_GEOCODE_CREATE).execute(address);
     }
 
-    // TODO
-    public ArrayList<Place> getPlacesFromBusiness(String business) {
-        Place place = new Place();
-        ArrayList<Place> places = new ArrayList<Place>();
-        places.add(place);
-        return places;
+    public void finishCreatingFixedReminder(Double[] coords) {
+        ArrayList<Reminder> reminders = dataManager.getSavedReminders();
+        Reminder reminder = new Reminder();
+        reminder.title = title;
+        reminder.completed = completed;
+        reminder.repeat = repeat;
+        reminder.days = days;
+        reminder.proximity = proximity;
+        reminder.toggleAirplane = toggleAirplane;
+        reminder.silencePhone = silencePhone;
+        reminder.timeCreated = timeCreated;
+        reminder.timeCompleted = timeCompleted;
+        reminder.transition = transition;
+        address = addressBox.getText().toString();
+        latitude = coords[0];
+        longitude = coords[1];
+        reminder.type = Constants.TYPE_FIXED;
+        reminder.address = address;
+        reminder.latitude = latitude;
+        reminder.longitude = longitude;reminders.add(reminder);
+        dataManager.saveReminders(reminders);
+        Toast.makeText(this, getString(R.string.toast_reminder_created), Toast.LENGTH_SHORT).show();
+        finish();
+    }
+
+    public void createDynamicReminder() {
+        double[] latLng = getLatLong();
+        business = businessBox.getText().toString();
+        new PlacesAPIAsyncTask(this, this, Constants.METHOD_PLACES_CREATE).execute(business, String.valueOf(latLng[0]), String.valueOf(latLng[1]));
+    }
+
+    public void finishCreatingDynamicReminder(ArrayList<Place> places) {
+        ArrayList<Reminder> reminders = dataManager.getSavedReminders();
+        Reminder reminder = new Reminder();
+        reminder.title = title;
+        reminder.completed = completed;
+        reminder.repeat = repeat;
+        reminder.days = days;
+        reminder.proximity = proximity;
+        reminder.toggleAirplane = toggleAirplane;
+        reminder.silencePhone = silencePhone;
+        reminder.timeCreated = timeCreated;
+        reminder.timeCompleted = timeCompleted;
+        reminder.transition = transition;
+        business = businessBox.getText().toString();
+        reminder.type = Constants.TYPE_DYNAMIC;
+        reminder.business = business;
+        reminder.places = places;
+        reminders.add(reminder);
+        dataManager.saveReminders(reminders);
+        Toast.makeText(this, getString(R.string.toast_reminder_created), Toast.LENGTH_SHORT).show();
+        finish();
     }
 
     public void createReminder() {
@@ -328,39 +376,11 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
             } else {
                 transition = Constants.TRANSITION_EXIT;
             }
-
-            Log.d("GeobellsCards", "Saving reminder with title " + title);
-            ArrayList<Reminder> reminders = dataManager.getSavedReminders();
-            Reminder reminder = new Reminder();
-            reminder.title = title;
-            reminder.completed = completed;
-            reminder.repeat = repeat;
-            reminder.days = days;
-            reminder.proximity = proximity;
-            reminder.toggleAirplane = toggleAirplane;
-            reminder.silencePhone = silencePhone;
-            reminder.timeCreated = timeCreated;
-            reminder.timeCompleted = timeCompleted;
-            reminder.transition = transition;
             if (specificRadioButton.isChecked()) {
-                address = addressBox.getText().toString();
-                double[] coords = getCoordsFromAddress(address);
-                latitude = coords[0];
-                longitude = coords[1];
-                reminder.type = Constants.TYPE_FIXED;
-                reminder.address = address;
-                reminder.latitude = latitude;
-                reminder.longitude = longitude;
+                createSpecificReminder();
             } else if (dynamicRadioButton.isChecked()) {
-                business = businessBox.getText().toString();
-                places = getPlacesFromBusiness(business);
-                reminder.type = Constants.TYPE_DYNAMIC;
-                reminder.business = business;
-                reminder.places = places;
+                createDynamicReminder();
             }
-            reminders.add(reminder);
-            dataManager.saveReminders(reminders);
-            finish();
         } else {
             Toast.makeText(this, getString(R.string.toast_fill_info), Toast.LENGTH_SHORT).show();
         }
@@ -431,20 +451,33 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
     }
 
     @Override
-    public void onTaskComplete(ArrayList<Place> places, String method) {
-        if(method.equals(Constants.METHOD_DIALOG_ADDRESS)){
+    public void onPlacesTaskComplete(ArrayList<Place> places, String method) {
+        if(method.equals(Constants.METHOD_PLACES_DIALOG_ADDRESS)){
             if(places.size() > 0) {
             createAddressPlaceSearchDialog(places);
             } else {
                 showSimpleDialog(getString(R.string.dialog_title_search_no_results), getString(R.string.dialog_message_search_no_results));
             }
-        } else if (method.equals(Constants.METHOD_CREATE)) {
-
-        } else if (method.equals(Constants.METHOD_DIALOG_VIEW)) {
+        } else if (method.equals(Constants.METHOD_PLACES_CREATE)) {
+            finishCreatingDynamicReminder(places);
+        } else if (method.equals(Constants.METHOD_PLACES_DIALOG_VIEW)) {
             if(places.size() > 0) {
             createViewPlaceSearchDialog(places);
             } else {
                 showSimpleDialog(getString(R.string.dialog_title_view_no_results), getString(R.string.dialog_message_view_no_results));
+            }
+        }
+    }
+
+    @Override
+    public void onGeocodeTaskComplete(Double[] coords, String method) {
+        if(method.equals(Constants.METHOD_GEOCODE_CREATE)) {
+            if(coords[0] == Constants.GEOCODE_RESPONSE_NORESULTS) {
+                Toast.makeText(this, getString(R.string.toast_no_geocode_results), Toast.LENGTH_SHORT).show();
+            } else if(coords[0] == Constants.GEOCODE_RESPONSE_ERROR) {
+                Toast.makeText(this, getString(R.string.toast_no_geocode_results), Toast.LENGTH_SHORT).show();
+            } else {
+                finishCreatingFixedReminder(coords);
             }
         }
     }
