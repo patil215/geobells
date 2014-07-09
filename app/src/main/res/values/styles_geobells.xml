@@ -40,6 +40,12 @@
         <item name="android:backgroundStacked">@drawable/ab_stacked_solid_geobells</item>
         <item name="android:backgroundSplit">@drawable/ab_bottom_solid_geobells</item>
         <item name="android:progressBarStyle">@style/ProgressBar.Geobells</item>
+        <item name="android:titleTextStyle">@style/ActionBarText.Geobells</item>
+    </style>
+
+    <style name="ActionBarText.Geobells" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+        <item name="android:textColor">#FAFAFA</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="ActionBar.Transparent.Geobells" parent="@android:style/Widget.Holo.ActionBar">
