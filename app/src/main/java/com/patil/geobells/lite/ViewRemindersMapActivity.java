@@ -5,6 +5,10 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.CheckBox;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -29,6 +33,7 @@ public class ViewRemindersMapActivity extends Activity {
 
     GeobellsDataManager dataManager;
     GoogleMap mapView;
+    LinearLayout keyLayout;
 
 
     @Override
@@ -38,10 +43,16 @@ public class ViewRemindersMapActivity extends Activity {
         dataManager = new GeobellsDataManager(this);
         ArrayList<Reminder> reminders = dataManager.getSavedReminders();
         mapView = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
-        ArrayList<Marker> markers = new ArrayList<Marker>();
+        keyLayout = (LinearLayout) findViewById(R.id.layout_key);
+        final ArrayList<ArrayList<Marker>> markersList = new ArrayList<ArrayList<Marker>>();
+        final ArrayList<ArrayList<Circle>> circlesList = new ArrayList<ArrayList<Circle>>();
+        int numMarkers = 0;
         for(int i = 0; i < reminders.size(); i++) {
+            final int index = i;
             Reminder reminder = reminders.get(i);
             float hue = indexToHue(i, reminders.size());
+            ArrayList<Marker> markers = new ArrayList<Marker>();
+            ArrayList<Circle> circles = new ArrayList<Circle>();
             if(!reminder.completed) {
                 if(reminder.type == Constants.TYPE_FIXED) {
                     LatLng markerPosition = new LatLng(reminder.latitude, reminder.longitude);
@@ -52,6 +63,8 @@ public class ViewRemindersMapActivity extends Activity {
                     circle.setStrokeWidth(2);
                     circle.setStrokeColor(Color.HSVToColor(130, new float[] {hue, 1, 1}));
                     circle.setFillColor(Color.HSVToColor(130, new float[] {hue, 1, 1}));
+                    circles.add(circle);
+                    numMarkers++;
                 } else {
                     for(Place place : reminder.places) {
                         LatLng markerPosition = new LatLng(place.latitude, place.longitude);
@@ -63,23 +76,57 @@ public class ViewRemindersMapActivity extends Activity {
                         circle.setStrokeWidth(2);
                         circle.setStrokeColor(Color.HSVToColor(130, new float[] {hue, 1, 1}));
                         circle.setFillColor(Color.HSVToColor(130, new float[] {hue, 1, 1}));
+                        numMarkers++;
+                        circles.add(circle);
                     }
                 }
+                markersList.add(markers);
+                circlesList.add(circles);
+                View keyView = getLayoutInflater().inflate(R.layout.map_reminder_key, null);
+                CheckBox checkBox = (CheckBox) keyView.findViewById(R.id.key_checkbox);
+                checkBox.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        ArrayList<Circle> circlesies = circlesList.get(index);
+                        ArrayList<Marker> markersies = markersList.get(index);
+                        for(Marker marker : markersies) {
+                            if(marker.isVisible()) {
+                                marker.setVisible(false);
+                            } else {
+                                marker.setVisible(true);
+                            }
+                        }
+                        for(Circle circle : circlesies) {
+                            if(circle.isVisible()) {
+                                circle.setVisible(false);
+                            } else {
+                                circle.setVisible(true);
+                            }
+                        }
+                    }
+                });
+                checkBox.setText(reminder.title);
+                ImageView colorBox = (ImageView) keyView.findViewById(R.id.view_colorbox);
+                colorBox.setBackgroundColor(Color.HSVToColor(new float[] {hue, 1, 1}));
+                keyLayout.addView(keyView);
             }
         }
-        final ArrayList<Marker> finalMarkers = markers;
+        final int finalNumMarkers = numMarkers;
+        final ArrayList<ArrayList<Marker>> finalMarkers = markersList;
         mapView.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
             @Override
             public void onMapLoaded() {
-                if(finalMarkers.size() == 0) {
+                if(finalNumMarkers == 0) {
 
-                } else if(finalMarkers.size() == 1) {
+                } else if(finalNumMarkers == 1) {
                     mapView.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                            new LatLng(finalMarkers.get(0).getPosition().latitude, finalMarkers.get(0).getPosition().longitude), 11));
+                            new LatLng(finalMarkers.get(0).get(0).getPosition().latitude, finalMarkers.get(0).get(0).getPosition().longitude), 11));
                 } else {
                     LatLngBounds.Builder builder = new LatLngBounds.Builder();
-                    for (Marker marker : finalMarkers) {
-                        builder.include(marker.getPosition());
+                    for (ArrayList<Marker> markers : finalMarkers) {
+                        for(Marker marker : markers) {
+                            builder.include(marker.getPosition());
+                        }
                     }
                     LatLngBounds bounds = builder.build();
                     int padding = 30; // offset from edges of the map in pixels

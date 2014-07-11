@@ -93,5 +93,6 @@
     <string name="button_create_a_reminder">Create a reminder</string>
     <string name="action_view_map">View on map</string>
     <string name="title_activity_view_reminders_map">Reminders on Map</string>
+    <string name="checkbox_map_key_default">Get Milk</string>
 
 </resources>
