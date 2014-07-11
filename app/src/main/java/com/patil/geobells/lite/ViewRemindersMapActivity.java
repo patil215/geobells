@@ -9,6 +9,7 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -40,12 +41,12 @@ public class ViewRemindersMapActivity extends Activity {
             if(!reminder.completed) {
                 if(reminder.type == Constants.TYPE_FIXED) {
                     LatLng markerPosition = new LatLng(reminder.latitude, reminder.longitude);
-                    Marker marker = mapView.addMarker(new MarkerOptions().title(reminder.title).snippet(reminder.address).position(markerPosition));
+                    Marker marker = mapView.addMarker(new MarkerOptions().title(reminder.title).snippet(reminder.address).position(markerPosition).icon(BitmapDescriptorFactory.defaultMarker(indexToHue(i, reminders.size()))));
                     markers.add(marker);
                 } else {
                     for(Place place : reminder.places) {
                         LatLng markerPosition = new LatLng(place.latitude, place.longitude);
-                        Marker marker = mapView.addMarker(new MarkerOptions().title(reminder.title).snippet(reminder.business).position(markerPosition));
+                        Marker marker = mapView.addMarker(new MarkerOptions().title(reminder.title).snippet(reminder.business).position(markerPosition).icon(BitmapDescriptorFactory.defaultMarker(indexToHue(i, reminders.size()))));
                         markers.add(marker);
                     }
                 }
@@ -72,6 +73,11 @@ public class ViewRemindersMapActivity extends Activity {
                 }
             }
         });
+    }
+
+    public float indexToHue(int index, int total) {
+        double ratio = (double)index / total;
+        return (float) ratio * 360;
     }
 
 
