@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primary">#669900</color>
-    <color name="accent">#99cc00</color>
-    <color name="primary_dark">#4f7600</color>
+    <color name="actionbar">#0a7e07</color>
     <color name="navigation_activated">#000000</color>
     <color name="navigation_deactivated">#757575</color>
     <color name="default_colorbar">#4d69ff</color>

@@ -105,6 +105,10 @@ public class MainActivity extends Activity
                 Intent intent = new Intent(this, CreateReminderActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.action_view_map:
+                Intent intent1 = new Intent(this, ViewRemindersMapActivity.class);
+                startActivity(intent1);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

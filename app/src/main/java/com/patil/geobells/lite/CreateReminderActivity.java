@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -281,7 +282,8 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
     }
 
     public void onAddressMapClick(View v) {
-
+        Intent intent = new Intent(this, ViewPickMapActivity.class);
+        startActivity(intent);
     }
 
     public boolean isNecessaryFieldsCompleted() {

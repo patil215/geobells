@@ -86,5 +86,12 @@
     <string name="toast_reminder_created">Reminder created.</string>
     <string name="toast_reminder_swipe_completed">Reminder set as completed.</string>
     <string name="toast_reminder_swipe_uncompleted">Reminder set as upcoming.</string>
+    <string name="title_activity_view_edit_reminder">ViewEditReminderActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_view_pick_map">ViewPickMapActivity</string>
+    <string name="text_no_reminders">No reminders</string>
+    <string name="button_create_a_reminder">Create a reminder</string>
+    <string name="action_view_map">View on map</string>
+    <string name="title_activity_view_reminders_map">Reminders on Map</string>
 
 </resources>

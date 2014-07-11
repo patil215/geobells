@@ -41,4 +41,9 @@ public class Constants {
     public static final String GEOCODE_STATUS_NORESULTS = "ZERO_RESULTS";
     public static final Double GEOCODE_RESPONSE_NORESULTS = -1.0;
     public static final Double GEOCODE_RESPONSE_ERROR = -2.0;
+    public static final String FILE_NAME_TEMP = "temp";
+
+    public static final String EXTRA_REMINDER_INDEX = "index";
+
+    public static final String MAPS_API_KEY_DEBUG = "AIzaSyAtycxCYF1MvdR2MgxTT3W3EQCiMj4DStQ";
 }
