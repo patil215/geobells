@@ -129,7 +129,7 @@ public class ViewRemindersMapActivity extends Activity {
                         }
                     }
                     LatLngBounds bounds = builder.build();
-                    int padding = 30; // offset from edges of the map in pixels
+                    int padding = 40; // offset from edges of the map in pixels
                     CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
                     mapView.moveCamera(cu);
                 }

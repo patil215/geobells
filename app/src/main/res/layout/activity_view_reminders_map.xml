@@ -14,15 +14,16 @@
             android:id="@+id/map"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.6"
+            android:layout_weight="0.65"
             android:name="com.google.android.gms.maps.MapFragment"/>
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.4">
+            android:layout_weight="0.35">
             <LinearLayout
                 android:id="@+id/layout_key"
+                android:paddingTop="12dp"
                 android:layout_width="match_parent"
                 android:orientation="vertical"
                 android:layout_height="match_parent"></LinearLayout>

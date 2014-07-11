@@ -2,7 +2,10 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:padding="24dp"
+    android:paddingLeft="24dp"
+    android:paddingRight="24dp"
+    android:paddingTop="6dp"
+    android:paddingBottom="6dp"
     android:layout_height="wrap_content">
 
 
@@ -17,7 +20,6 @@
 
     <ImageView
         android:id="@+id/view_colorbox"
-        android:padding="12dp"
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_alignParentRight="true"
