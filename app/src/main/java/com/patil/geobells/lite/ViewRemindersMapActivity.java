@@ -1,6 +1,7 @@
 package com.patil.geobells.lite;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -10,6 +11,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -38,16 +41,28 @@ public class ViewRemindersMapActivity extends Activity {
         ArrayList<Marker> markers = new ArrayList<Marker>();
         for(int i = 0; i < reminders.size(); i++) {
             Reminder reminder = reminders.get(i);
+            float hue = indexToHue(i, reminders.size());
             if(!reminder.completed) {
                 if(reminder.type == Constants.TYPE_FIXED) {
                     LatLng markerPosition = new LatLng(reminder.latitude, reminder.longitude);
-                    Marker marker = mapView.addMarker(new MarkerOptions().title(reminder.title).snippet(reminder.address).position(markerPosition).icon(BitmapDescriptorFactory.defaultMarker(indexToHue(i, reminders.size()))));
+                    Marker marker = mapView.addMarker(new MarkerOptions().title(reminder.title).snippet(reminder.address).position(markerPosition).icon(BitmapDescriptorFactory.defaultMarker(hue)));
                     markers.add(marker);
+                    CircleOptions circleOptions = new CircleOptions().center(new LatLng(reminder.latitude, reminder.longitude)).radius(reminder.proximity);
+                    Circle circle = mapView.addCircle(circleOptions);
+                    circle.setStrokeWidth(2);
+                    circle.setStrokeColor(Color.HSVToColor(130, new float[] {hue, 1, 1}));
+                    circle.setFillColor(Color.HSVToColor(130, new float[] {hue, 1, 1}));
                 } else {
                     for(Place place : reminder.places) {
                         LatLng markerPosition = new LatLng(place.latitude, place.longitude);
-                        Marker marker = mapView.addMarker(new MarkerOptions().title(reminder.title).snippet(reminder.business).position(markerPosition).icon(BitmapDescriptorFactory.defaultMarker(indexToHue(i, reminders.size()))));
+                        Marker marker = mapView.addMarker(new MarkerOptions().title(reminder.title).snippet(reminder.business).position(markerPosition).icon(BitmapDescriptorFactory.defaultMarker(hue)));
                         markers.add(marker);
+
+                        CircleOptions circleOptions = new CircleOptions().center(new LatLng(place.latitude, place.longitude)).radius(reminder.proximity);
+                        Circle circle = mapView.addCircle(circleOptions);
+                        circle.setStrokeWidth(2);
+                        circle.setStrokeColor(Color.HSVToColor(130, new float[] {hue, 1, 1}));
+                        circle.setFillColor(Color.HSVToColor(130, new float[] {hue, 1, 1}));
                     }
                 }
             }
