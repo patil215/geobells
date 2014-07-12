@@ -88,7 +88,7 @@
     <string name="toast_reminder_swipe_uncompleted">Reminder set as upcoming.</string>
     <string name="title_activity_view_edit_reminder">ViewEditReminderActivity</string>
     <string name="hello_world">Hello world!</string>
-    <string name="title_activity_view_pick_map">ViewPickMapActivity</string>
+    <string name="title_activity_view_pick_map">View or Pick from Map</string>
     <string name="text_no_reminders">No reminders.</string>
     <string name="button_create_a_reminder">Create a reminder</string>
     <string name="action_view_map">View on map</string>
@@ -97,5 +97,8 @@
     <string name="prompt_reminder_description">Reminder description</string>
     <string name="hint_reminder_description">Enter a description (optional)</string>
     <string name="text_no_completed_reminders">When a reminder has completed, it will appear here.</string>
+    <string name="toast_no_map_geocode_results_begin">Couldn\'t find</string>
+    <string name="toast_no_map_geocode_results_end">on the map.</string>
+    <string name="message_loading_map">Loading map...</string>
 
 </resources>

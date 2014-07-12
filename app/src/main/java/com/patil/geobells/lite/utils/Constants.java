@@ -37,6 +37,8 @@ public class Constants {
     public static final String METHOD_PLACES_DIALOG_VIEW = "view";
 
     public static final String METHOD_GEOCODE_CREATE = "create";
+    public static final String METHOD_GEOCODE_START_MAP = "startmap";
+    public static final String METHOD_REVERSE_GEOCODE_VIEW_MAP = "startmap";
     public static final String GEOCODE_STATUS_OK = "OK";
     public static final String GEOCODE_STATUS_NORESULTS = "ZERO_RESULTS";
     public static final Double GEOCODE_RESPONSE_NORESULTS = -1.0;
@@ -44,6 +46,18 @@ public class Constants {
     public static final String FILE_NAME_TEMP = "temp";
 
     public static final String EXTRA_REMINDER_INDEX = "index";
+    public static final String EXTRA_REMINDER_LATITUDE = "latitude";
+    public static final String EXTRA_REMINDER_LONGITUDE = "longitude";
+    public static final String EXTRA_REMINDER_ADDRESS = "address9";
+
 
     public static final String MAPS_API_KEY_DEBUG = "AIzaSyAtycxCYF1MvdR2MgxTT3W3EQCiMj4DStQ";
+    public static final double NO_REMINDER_LATITUDE = -1;
+    public static final double INVALID_REMINDER_LATITUDE = -2;
+    public static final double NO_REMINDER_LONGITUDE = -1;
+    public static final double INVALID_REMINDER_LONGITUDE = -2;
+    public static final String NO_REMINDER_ADDRESS = "";
+
+    public static final String GEOCODE_REVERSE_RESPONSE_ERROR = "ERROR";
+    public static final String GEOCODE_REVERSE_RESPONSE_NORESULTS = "ZERO_RESULTS";
 }

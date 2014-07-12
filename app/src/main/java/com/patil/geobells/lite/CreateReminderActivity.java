@@ -285,8 +285,16 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
     }
 
     public void onAddressMapClick(View v) {
-        Intent intent = new Intent(this, ViewPickMapActivity.class);
-        startActivity(intent);
+        if(addressBox.getText() != null && addressBox.getText().toString().length() != 0) {
+            address = addressBox.getText().toString();
+            new GeocoderAPIAsyncTask(this, this, Constants.METHOD_GEOCODE_START_MAP).execute(address);
+        } else {
+            Intent intent = new Intent(this, ViewPickMapActivity.class);
+            intent.putExtra(Constants.EXTRA_REMINDER_LATITUDE, Constants.NO_REMINDER_LATITUDE);
+            intent.putExtra(Constants.EXTRA_REMINDER_LONGITUDE, Constants.NO_REMINDER_LONGITUDE);
+            intent.putExtra(Constants.EXTRA_REMINDER_ADDRESS, Constants.NO_REMINDER_ADDRESS);
+            startActivity(intent);
+        }
     }
 
     public boolean isNecessaryFieldsCompleted() {
@@ -492,7 +500,26 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
             } else {
                 finishCreatingFixedReminder(coords);
             }
+        } else if(method.equals(Constants.METHOD_GEOCODE_START_MAP)) {
+            if(coords[0] == Constants.GEOCODE_RESPONSE_NORESULTS) {
+                Intent intent = new Intent(this, ViewPickMapActivity.class);
+                intent.putExtra(Constants.EXTRA_REMINDER_LATITUDE, Constants.INVALID_REMINDER_LATITUDE);
+                intent.putExtra(Constants.EXTRA_REMINDER_LONGITUDE, Constants.INVALID_REMINDER_LONGITUDE);
+                intent.putExtra(Constants.EXTRA_REMINDER_ADDRESS, addressBox.getText().toString());
+                startActivity(intent);
+            } else {
+                Intent intent = new Intent(this, ViewPickMapActivity.class);
+                intent.putExtra(Constants.EXTRA_REMINDER_LATITUDE, coords[0]);
+                intent.putExtra(Constants.EXTRA_REMINDER_LONGITUDE, coords[1]);
+                intent.putExtra(Constants.EXTRA_REMINDER_ADDRESS, addressBox.getText().toString());
+                startActivity(intent);
+            }
         }
+    }
+
+    @Override
+    public void onReverseGeocodeTaskComplete(String address, String method) {
+
     }
 
     private class PlacesAutoCompleteAddressAdapter extends ArrayAdapter<String> implements Filterable {
