@@ -94,5 +94,7 @@
     <string name="action_view_map">View on map</string>
     <string name="title_activity_view_reminders_map">Reminders on Map</string>
     <string name="checkbox_map_key_default">Get Milk</string>
+    <string name="prompt_reminder_description">Reminder description</string>
+    <string name="hint_reminder_description">Enter a description (optional)</string>
 
 </resources>

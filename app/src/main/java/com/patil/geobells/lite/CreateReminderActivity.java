@@ -55,6 +55,7 @@ import java.util.ArrayList;
 public class CreateReminderActivity extends Activity implements GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener, AsyncTaskCompleteListener<String> {
 
     EditText titleBox;
+    EditText descriptionBox;
     RadioButton specificRadioButton;
     RadioButton dynamicRadioButton;
     AutoCompleteTextView businessBox;
@@ -85,6 +86,7 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
     long timeCreated;
     long timeCompleted;
     int transition;
+    String description;
 
     // Fixed reminder
     String address;
@@ -175,6 +177,7 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
 
     public void setupViews() {
         titleBox = (EditText) findViewById(R.id.reminder_title);
+        descriptionBox = (EditText) findViewById(R.id.reminder_description);
         specificRadioButton = (RadioButton) findViewById(R.id.radiobutton_reminder_type_specific);
         dynamicRadioButton = (RadioButton) findViewById(R.id.radiobutton_reminder_type_dynamic);
         businessBox = (AutoCompleteTextView) findViewById(R.id.reminder_business);
@@ -313,6 +316,7 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
         ArrayList<Reminder> reminders = dataManager.getSavedReminders();
         Reminder reminder = new Reminder();
         reminder.title = title;
+        reminder.description = description;
         reminder.completed = completed;
         reminder.repeat = repeat;
         reminder.days = days;
@@ -344,6 +348,7 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
         ArrayList<Reminder> reminders = dataManager.getSavedReminders();
         Reminder reminder = new Reminder();
         reminder.title = title;
+        reminder.description = description;
         reminder.completed = completed;
         reminder.repeat = repeat;
         reminder.days = days;
@@ -368,6 +373,11 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
             title = titleBox.getText().toString();
             completed = false;
             repeat = repeatCheckBox.isChecked();
+            if(descriptionBox.getText().toString() != null && descriptionBox.getText().toString().length() > 0) {
+                description = descriptionBox.getText().toString();
+            } else {
+                description = "";
+            }
             // days is already set through dialog
             // proximity is already set through dialog
             toggleAirplane = airplaneCheckBox.isChecked();

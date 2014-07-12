@@ -196,6 +196,7 @@
             android:text="@string/button_advanced_options"
             android:visibility="gone" />
 
+
         <RelativeLayout
             android:id="@+id/layout_advanced_options"
             android:layout_width="match_parent"
@@ -204,11 +205,31 @@
             android:visibility="gone">
 
             <TextView
+                android:id="@+id/prompt_reminder_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="6dp"
+                android:paddingTop="18dp"
+                android:text="@string/prompt_reminder_description"
+                android:textAllCaps="true"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/reminder_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/prompt_reminder_description"
+                android:capitalize="sentences"
+                android:hint="@string/hint_reminder_description" />
+
+            <TextView
                 android:id="@+id/prompt_reminder_transition"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="6dp"
                 android:paddingTop="18dp"
+                android:layout_below="@id/reminder_description"
                 android:text="@string/prompt_reminder_transition"
                 android:textAllCaps="true"
                 android:textSize="14sp"

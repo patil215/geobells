@@ -14,6 +14,7 @@ public class Reminder {
     public long timeCreated;
     public long timeCompleted; // -1 if not completed yet
     public int transition; // Enter or exit, defined in Constants
+    public String description;
 
      /* Why include both FixedReminder and DynamicReminder elements instead of using polymorphism?, you ask.
         It's because Gson doesn't have an easy way of using polymorphism.
