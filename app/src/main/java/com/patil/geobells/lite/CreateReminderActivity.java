@@ -266,6 +266,7 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
 
         // Set an EditText view to get user input
         final EditText input = new EditText(this);
+        input.setHint(getString(R.string.hint_reminder_address_search));
         alert.setView(input);
 
         alert.setPositiveButton(getString(R.string.dialog_button_search), new DialogInterface.OnClickListener() {
@@ -275,7 +276,7 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
                 new PlacesAPIAsyncTask(CreateReminderActivity.this, CreateReminderActivity.this, Constants.METHOD_PLACES_DIALOG_ADDRESS).execute(value, String.valueOf(latLong[0]), String.valueOf(latLong[1]));
             }
         });
-
+        alert.setCancelable(false);
         alert.setNegativeButton(getString(R.string.dialog_button_cancel), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 dialog.dismiss();
