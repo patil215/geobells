@@ -48,7 +48,7 @@ public class Constants {
     public static final String EXTRA_REMINDER_INDEX = "index";
     public static final String EXTRA_REMINDER_LATITUDE = "latitude";
     public static final String EXTRA_REMINDER_LONGITUDE = "longitude";
-    public static final String EXTRA_REMINDER_ADDRESS = "address9";
+    public static final String EXTRA_REMINDER_ADDRESS = "address";
 
 
     public static final String MAPS_API_KEY_DEBUG = "AIzaSyAtycxCYF1MvdR2MgxTT3W3EQCiMj4DStQ";
@@ -60,4 +60,6 @@ public class Constants {
 
     public static final String GEOCODE_REVERSE_RESPONSE_ERROR = "ERROR";
     public static final String GEOCODE_REVERSE_RESPONSE_NORESULTS = "ZERO_RESULTS";
+    public static final String EXTRA_MARKER_ADDRESS = "markeraddress";
+    public static final int ACTIVITY_RESULT_CODE_PICK_MAP = 109;
 }

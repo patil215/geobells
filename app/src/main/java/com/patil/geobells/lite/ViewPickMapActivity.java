@@ -3,8 +3,11 @@ package com.patil.geobells.lite;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -43,6 +46,19 @@ public class ViewPickMapActivity extends Activity implements AsyncTaskCompleteLi
                 new ReverseGeocoderAPIAsyncTask(ViewPickMapActivity.this, ViewPickMapActivity.this, Constants.METHOD_REVERSE_GEOCODE_VIEW_MAP).execute(latLng.latitude, latLng.longitude);
             }
         });
+
+        mapView.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                if(marker.getTitle().equals(getString(R.string.marker_title_taptopick))) {
+                    Intent resultIntent = new Intent();
+                    resultIntent.putExtra(Constants.EXTRA_MARKER_ADDRESS, marker.getSnippet());
+                    setResult(Activity.RESULT_OK, resultIntent);
+                    finish();
+                }
+            }
+        });
+
         Intent intent = getIntent();
         double latitude = intent.getDoubleExtra(Constants.EXTRA_REMINDER_LATITUDE, Constants.NO_REMINDER_LATITUDE);
         double longitude = intent.getDoubleExtra(Constants.EXTRA_REMINDER_LONGITUDE, Constants.NO_REMINDER_LONGITUDE);
@@ -92,8 +108,9 @@ public class ViewPickMapActivity extends Activity implements AsyncTaskCompleteLi
 
     @Override
     public void onReverseGeocodeTaskComplete(String address, String method) {
-        if(method.equals(Constants.METHOD_REVERSE_GEOCODE_VIEW_MAP)) {;
-            Marker marker = mapView.addMarker(new MarkerOptions().title(address).position(lastTouchedPosition));
+        if(method.equals(Constants.METHOD_REVERSE_GEOCODE_VIEW_MAP)) {
+            mapView.clear();
+            Marker marker = mapView.addMarker(new MarkerOptions().snippet(address).position(lastTouchedPosition).title(getString(R.string.marker_title_taptopick)));
             mapView.moveCamera(CameraUpdateFactory.newLatLngZoom(lastTouchedPosition, 11));
         }
     }

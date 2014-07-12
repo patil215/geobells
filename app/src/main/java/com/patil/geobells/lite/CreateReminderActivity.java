@@ -30,9 +30,9 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.location.LocationClient;
+import com.patil.geobells.lite.asynctask.AsyncTaskCompleteListener;
 import com.patil.geobells.lite.asynctask.GeocoderAPIAsyncTask;
 import com.patil.geobells.lite.asynctask.PlacesAPIAsyncTask;
-import com.patil.geobells.lite.asynctask.AsyncTaskCompleteListener;
 import com.patil.geobells.lite.data.Place;
 import com.patil.geobells.lite.data.Reminder;
 import com.patil.geobells.lite.utils.Config;
@@ -104,7 +104,7 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_reminder);
         setupViews();
-        for(int i = 0; i < 7; i++) {
+        for (int i = 0; i < 7; i++) {
             days[i] = true;
         }
         locationClient = new LocationClient(this, this, this);
@@ -129,12 +129,12 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
 
     public double[] getLatLong() {
         Location lastLocation = locationClient.getLastLocation();
-        return new double[] {lastLocation.getLatitude(), lastLocation.getLongitude()};
+        return new double[]{lastLocation.getLatitude(), lastLocation.getLongitude()};
     }
 
     public void setupSpinner() {
         ArrayAdapter<CharSequence> adapter;
-        if(preferenceManager.isMetricEnabled()) {
+        if (preferenceManager.isMetricEnabled()) {
             adapter = ArrayAdapter.createFromResource(this,
                     R.array.spinner_proximity_metric, android.R.layout.simple_spinner_dropdown_item);
         } else {
@@ -164,7 +164,7 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
                 String str = (String) adapterView.getItemAtPosition(position);
             }
         });
-        if(Config.AUTOCOMPLETE_BUSINESSES) {
+        if (Config.AUTOCOMPLETE_BUSINESSES) {
             businessBox.setAdapter(new PlacesAutoCompleteBusinessAdapter(this, R.layout.list_item_autocomplete));
             businessBox.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
@@ -208,7 +208,7 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
     }
 
     public void onAdvancedOptionsClick(View v) {
-        if(advancedLayout.getVisibility() == View.VISIBLE) {
+        if (advancedLayout.getVisibility() == View.VISIBLE) {
             advancedLayout.setVisibility(View.GONE);
         } else {
             advancedLayout.setVisibility(View.VISIBLE);
@@ -229,7 +229,8 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
                                         boolean isChecked) {
                         selectedItems[indexSelected] = isChecked;
                     }
-                })
+                }
+        )
                 // Set the action buttons
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
@@ -249,7 +250,7 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
     }
 
     public void onBusinessViewPlacesClick(View v) {
-        if(businessBox.getText() != null && businessBox.getText().length() > 0) {
+        if (businessBox.getText() != null && businessBox.getText().length() > 0) {
             double[] latLong = getLatLong();
             new PlacesAPIAsyncTask(this, this, Constants.METHOD_PLACES_DIALOG_VIEW).execute(businessBox.getText().toString(), String.valueOf(latLong[0]), String.valueOf(latLong[1]));
         } else {
@@ -285,7 +286,7 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
     }
 
     public void onAddressMapClick(View v) {
-        if(addressBox.getText() != null && addressBox.getText().toString().length() != 0) {
+        if (addressBox.getText() != null && addressBox.getText().toString().length() != 0) {
             address = addressBox.getText().toString();
             new GeocoderAPIAsyncTask(this, this, Constants.METHOD_GEOCODE_START_MAP).execute(address);
         } else {
@@ -293,13 +294,13 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
             intent.putExtra(Constants.EXTRA_REMINDER_LATITUDE, Constants.NO_REMINDER_LATITUDE);
             intent.putExtra(Constants.EXTRA_REMINDER_LONGITUDE, Constants.NO_REMINDER_LONGITUDE);
             intent.putExtra(Constants.EXTRA_REMINDER_ADDRESS, Constants.NO_REMINDER_ADDRESS);
-            startActivity(intent);
+            startActivityForResult(intent, Constants.ACTIVITY_RESULT_CODE_PICK_MAP);
         }
     }
 
     public boolean isNecessaryFieldsCompleted() {
-        if(titleBox.getText().toString() != null && titleBox.getText().toString().length() > 0) {
-            if(enterRadioButton.isChecked() || exitRadioButton.isChecked()) {
+        if (titleBox.getText().toString() != null && titleBox.getText().toString().length() > 0) {
+            if (enterRadioButton.isChecked() || exitRadioButton.isChecked()) {
                 if (specificRadioButton.isChecked()) {
                     if (addressBox.getText().toString() != null && addressBox.getText().toString().length() > 0) {
                         return true;
@@ -340,7 +341,8 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
         reminder.type = Constants.TYPE_FIXED;
         reminder.address = address;
         reminder.latitude = latitude;
-        reminder.longitude = longitude;reminders.add(reminder);
+        reminder.longitude = longitude;
+        reminders.add(reminder);
         dataManager.saveReminders(reminders);
         Toast.makeText(this, getString(R.string.toast_reminder_created), Toast.LENGTH_SHORT).show();
         finish();
@@ -377,11 +379,11 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
     }
 
     public void createReminder() {
-        if(isNecessaryFieldsCompleted()) {
+        if (isNecessaryFieldsCompleted()) {
             title = titleBox.getText().toString();
             completed = false;
             repeat = repeatCheckBox.isChecked();
-            if(descriptionBox.getText().toString() != null && descriptionBox.getText().toString().length() > 0) {
+            if (descriptionBox.getText().toString() != null && descriptionBox.getText().toString().length() > 0) {
                 description = descriptionBox.getText().toString();
             } else {
                 description = "";
@@ -423,12 +425,12 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
         StringBuilder jsonResults = new StringBuilder();
         try {
             StringBuilder sb = new StringBuilder(Constants.PLACES_API_BASE + Constants.PLACES_TYPE_AUTOCOMPLETE + Constants.PLACES_OUT_JSON);
-            if(Config.IS_LITE_VERSION) {
+            if (Config.IS_LITE_VERSION) {
                 sb.append("?key=" + Constants.PLACES_API_KEY_AUTOCOMPLEE_LITE);
             } else {
                 sb.append("?key=" + Constants.PLACES_API_KEY_AUTOCOMPLETE_PRO);
             }
-            sb.append("&location=" +  getLatLong()[0] + "," + getLatLong()[1]);
+            sb.append("&location=" + getLatLong()[0] + "," + getLatLong()[1]);
             sb.append("&input=" + URLEncoder.encode(input, "utf8"));
             sb.append("&type=" + type);
 
@@ -473,17 +475,17 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
 
     @Override
     public void onPlacesTaskComplete(ArrayList<Place> places, String method) {
-        if(method.equals(Constants.METHOD_PLACES_DIALOG_ADDRESS)){
-            if(places.size() > 0) {
-            createAddressPlaceSearchDialog(places);
+        if (method.equals(Constants.METHOD_PLACES_DIALOG_ADDRESS)) {
+            if (places.size() > 0) {
+                createAddressPlaceSearchDialog(places);
             } else {
                 showSimpleDialog(getString(R.string.dialog_title_search_no_results), getString(R.string.dialog_message_search_no_results));
             }
         } else if (method.equals(Constants.METHOD_PLACES_CREATE)) {
             finishCreatingDynamicReminder(places);
         } else if (method.equals(Constants.METHOD_PLACES_DIALOG_VIEW)) {
-            if(places.size() > 0) {
-            createViewPlaceSearchDialog(places);
+            if (places.size() > 0) {
+                createViewPlaceSearchDialog(places);
             } else {
                 showSimpleDialog(getString(R.string.dialog_title_view_no_results), getString(R.string.dialog_message_view_no_results));
             }
@@ -491,28 +493,36 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        if (resultCode == Activity.RESULT_OK) {
+            addressBox.setText(intent.getStringExtra(Constants.EXTRA_MARKER_ADDRESS));
+        }
+    }
+
+    @Override
     public void onGeocodeTaskComplete(Double[] coords, String method) {
-        if(method.equals(Constants.METHOD_GEOCODE_CREATE)) {
-            if(coords[0] == Constants.GEOCODE_RESPONSE_NORESULTS) {
+        if (method.equals(Constants.METHOD_GEOCODE_CREATE)) {
+            if (coords[0] == Constants.GEOCODE_RESPONSE_NORESULTS) {
                 Toast.makeText(this, getString(R.string.toast_no_geocode_results), Toast.LENGTH_SHORT).show();
-            } else if(coords[0] == Constants.GEOCODE_RESPONSE_ERROR) {
+            } else if (coords[0] == Constants.GEOCODE_RESPONSE_ERROR) {
                 Toast.makeText(this, getString(R.string.toast_no_geocode_results), Toast.LENGTH_SHORT).show();
             } else {
                 finishCreatingFixedReminder(coords);
             }
-        } else if(method.equals(Constants.METHOD_GEOCODE_START_MAP)) {
-            if(coords[0] == Constants.GEOCODE_RESPONSE_NORESULTS) {
+        } else if (method.equals(Constants.METHOD_GEOCODE_START_MAP)) {
+            if (coords[0] == Constants.GEOCODE_RESPONSE_NORESULTS) {
                 Intent intent = new Intent(this, ViewPickMapActivity.class);
                 intent.putExtra(Constants.EXTRA_REMINDER_LATITUDE, Constants.INVALID_REMINDER_LATITUDE);
                 intent.putExtra(Constants.EXTRA_REMINDER_LONGITUDE, Constants.INVALID_REMINDER_LONGITUDE);
                 intent.putExtra(Constants.EXTRA_REMINDER_ADDRESS, addressBox.getText().toString());
-                startActivity(intent);
+                startActivityForResult(intent, Constants.ACTIVITY_RESULT_CODE_PICK_MAP);
             } else {
                 Intent intent = new Intent(this, ViewPickMapActivity.class);
                 intent.putExtra(Constants.EXTRA_REMINDER_LATITUDE, coords[0]);
                 intent.putExtra(Constants.EXTRA_REMINDER_LONGITUDE, coords[1]);
                 intent.putExtra(Constants.EXTRA_REMINDER_ADDRESS, addressBox.getText().toString());
-                startActivity(intent);
+                startActivityForResult(intent, Constants.ACTIVITY_RESULT_CODE_PICK_MAP);
             }
         }
     }
@@ -560,11 +570,11 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
                 protected void publishResults(CharSequence constraint, FilterResults results) {
                     if (results != null && results.count > 0) {
                         notifyDataSetChanged();
-                    }
-                    else {
+                    } else {
                         notifyDataSetInvalidated();
                     }
-                }};
+                }
+            };
             return filter;
         }
     }
@@ -607,11 +617,11 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
                 protected void publishResults(CharSequence constraint, FilterResults results) {
                     if (results != null && results.count > 0) {
                         notifyDataSetChanged();
-                    }
-                    else {
+                    } else {
                         notifyDataSetInvalidated();
                     }
-                }};
+                }
+            };
             return filter;
         }
     }
@@ -625,7 +635,7 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
         ListView modeList = new ListView(this);
 
         final String[] stringArray = new String[places.size()];
-        for(int i = 0; i < places.size(); i++) {
+        for (int i = 0; i < places.size(); i++) {
             stringArray[i] = places.get(i).title + " - " + places.get(i).address;
         }
         ArrayAdapter<String> modeAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, stringArray);
@@ -653,7 +663,7 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
         ListView modeList = new ListView(this);
 
         final String[] stringArray = new String[places.size()];
-        for(int i = 0; i < places.size(); i++) {
+        for (int i = 0; i < places.size(); i++) {
             stringArray[i] = places.get(i).title + " - " + places.get(i).address;
         }
         ArrayAdapter<String> modeAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, stringArray);
@@ -674,7 +684,7 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case R.id.action_done:
                 createReminder();
                 break;

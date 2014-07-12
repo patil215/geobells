@@ -100,5 +100,6 @@
     <string name="toast_no_map_geocode_results_begin">Couldn\'t find</string>
     <string name="toast_no_map_geocode_results_end">on the map.</string>
     <string name="message_loading_map">Loading map...</string>
+    <string name="marker_title_taptopick">Tap to pick:</string>
 
 </resources>
