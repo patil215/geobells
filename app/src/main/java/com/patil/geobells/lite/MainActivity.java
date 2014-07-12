@@ -81,6 +81,14 @@ public class MainActivity extends Activity
         actionBar.setTitle(title);
     }
 
+    public void onCreateReminderClick(View v) {
+        startCreateReminderActivity();
+    }
+
+    public void startCreateReminderActivity() {
+        Intent intent = new Intent(this, CreateReminderActivity.class);
+        startActivity(intent);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -102,8 +110,7 @@ public class MainActivity extends Activity
         // as you specify a parent activity in AndroidManifest.xml.
         switch(item.getItemId()) {
             case R.id.action_create:
-                Intent intent = new Intent(this, CreateReminderActivity.class);
-                startActivity(intent);
+                startCreateReminderActivity();
                 break;
             case R.id.action_view_map:
                 Intent intent1 = new Intent(this, ViewRemindersMapActivity.class);

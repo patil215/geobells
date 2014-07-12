@@ -15,15 +15,16 @@
     <RelativeLayout
         android:id="@+id/layout_noreminders"
         android:layout_width="match_parent"
-
         android:layout_height="match_parent">
         <Button
             android:id="@+id/button_create_a_reminder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="?android:attr/buttonBarButtonStyle"
             android:fontFamily="sans-serif-light"
+            android:layout_marginTop="12dp"
             android:layout_centerVertical="true"
+            android:padding="18dp"
+            android:onClick="onCreateReminderClick"
             android:text="@string/button_create_a_reminder"
             android:layout_centerHorizontal="true"/>
         <TextView

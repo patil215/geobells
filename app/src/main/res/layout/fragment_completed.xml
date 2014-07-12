@@ -12,4 +12,31 @@
         android:layout_height="match_parent"
         android:id="@+id/cardList" />
 
+    <RelativeLayout
+        android:id="@+id/layout_noreminders"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <Button
+            android:id="@+id/button_create_a_reminder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-light"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="12dp"
+            android:padding="18dp"
+            android:onClick="onCreateReminderClick"
+            android:text="@string/button_create_a_reminder"
+            android:layout_centerHorizontal="true"/>
+        <TextView
+            android:layout_width="300dp"
+            android:gravity="center_horizontal"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="@string/text_no_completed_reminders"
+            android:fontFamily="sans-serif-light"
+            android:textSize="18sp"
+            android:layout_above="@id/button_create_a_reminder"/>
+
+    </RelativeLayout>
+
 </LinearLayout>
