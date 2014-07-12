@@ -41,19 +41,19 @@ public class ViewRemindersMapActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_reminders_map);
         dataManager = new GeobellsDataManager(this);
-        ArrayList<Reminder> reminders = dataManager.getSavedReminders();
+        ArrayList<Reminder> reminders = dataManager.getUpcomingReminders();
         mapView = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
         keyLayout = (LinearLayout) findViewById(R.id.layout_key);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
         final ArrayList<ArrayList<Marker>> markersList = new ArrayList<ArrayList<Marker>>();
         final ArrayList<ArrayList<Circle>> circlesList = new ArrayList<ArrayList<Circle>>();
         int numMarkers = 0;
         for(int i = 0; i < reminders.size(); i++) {
-            final int index = i;
             Reminder reminder = reminders.get(i);
-            float hue = indexToHue(i, reminders.size());
-            ArrayList<Marker> markers = new ArrayList<Marker>();
-            ArrayList<Circle> circles = new ArrayList<Circle>();
-            if(!reminder.completed) {
+                final int index = i;
+                float hue = indexToHue(i, reminders.size());
+                ArrayList<Marker> markers = new ArrayList<Marker>();
+                ArrayList<Circle> circles = new ArrayList<Circle>();
                 if(reminder.type == Constants.TYPE_FIXED) {
                     LatLng markerPosition = new LatLng(reminder.latitude, reminder.longitude);
                     Marker marker = mapView.addMarker(new MarkerOptions().title(reminder.title).snippet(reminder.address).position(markerPosition).icon(BitmapDescriptorFactory.defaultMarker(hue)));
@@ -109,7 +109,6 @@ public class ViewRemindersMapActivity extends Activity {
                 ImageView colorBox = (ImageView) keyView.findViewById(R.id.view_colorbox);
                 colorBox.setBackgroundColor(Color.HSVToColor(new float[] {hue, 1, 1}));
                 keyLayout.addView(keyView);
-            }
         }
         final int finalNumMarkers = numMarkers;
         final ArrayList<ArrayList<Marker>> finalMarkers = markersList;
@@ -155,9 +154,10 @@ public class ViewRemindersMapActivity extends Activity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
+        switch(item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

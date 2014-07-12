@@ -34,6 +34,39 @@ public class GeobellsDataManager {
         }.getType());
     }
 
+    public ArrayList<Reminder> getUpcomingReminders() {
+        String dataString = preferences.getString(Constants.PREFERENCES_DATA_KEY, "");
+        if(dataString.length() == 0) {
+            return new ArrayList<Reminder>();
+        }
+        ArrayList<Reminder> reminders = new Gson().fromJson(dataString, new TypeToken<List<Reminder>>() {
+        }.getType());
+        ArrayList<Reminder> upcomingReminders = new ArrayList<Reminder>();
+        for(Reminder reminder : reminders) {
+            if(!reminder.completed) {
+                upcomingReminders.add(reminder);
+            }
+        }
+        return upcomingReminders;
+    }
+
+
+    public ArrayList<Reminder> getCompletedReminders() {
+        String dataString = preferences.getString(Constants.PREFERENCES_DATA_KEY, "");
+        if(dataString.length() == 0) {
+            return new ArrayList<Reminder>();
+        }
+        ArrayList<Reminder> reminders = new Gson().fromJson(dataString, new TypeToken<List<Reminder>>() {
+        }.getType());
+        ArrayList<Reminder> completedReminders = new ArrayList<Reminder>();
+        for(Reminder reminder : reminders) {
+            if(reminder.completed) {
+                completedReminders.add(reminder);
+            }
+        }
+        return completedReminders;
+    }
+
     public void saveReminders(ArrayList<Reminder> reminders) {
         SharedPreferences.Editor editor = preferences.edit();
         String dataString = new Gson().toJson(reminders);
