@@ -2,10 +2,15 @@ package com.patil.geobells.lite;
 
 import android.app.Activity;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.BounceInterpolator;
+import android.view.animation.Interpolator;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -14,6 +19,7 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
@@ -70,7 +76,6 @@ public class ViewRemindersMapActivity extends Activity {
                     LatLng markerPosition = new LatLng(place.latitude, place.longitude);
                     Marker marker = mapView.addMarker(new MarkerOptions().title(reminder.title).snippet(reminder.business).position(markerPosition).icon(BitmapDescriptorFactory.defaultMarker(hue)));
                     markers.add(marker);
-
                     CircleOptions circleOptions = new CircleOptions().center(new LatLng(place.latitude, place.longitude)).radius(reminder.proximity);
                     Circle circle = mapView.addCircle(circleOptions);
                     circle.setStrokeWidth(2);
@@ -94,6 +99,7 @@ public class ViewRemindersMapActivity extends Activity {
                             marker.setVisible(false);
                         } else {
                             marker.setVisible(true);
+                            animateMarkerAdd(marker, marker.getPosition());
                         }
                     }
                     for (Circle circle : circlesies) {
@@ -160,5 +166,30 @@ public class ViewRemindersMapActivity extends Activity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void animateMarkerAdd(final Marker marker, final LatLng position) {
+        final Handler handler = new Handler();
+        final long start = SystemClock.uptimeMillis();
+        Projection proj = mapView.getProjection();
+        Point startPoint = proj.toScreenLocation(position);
+        startPoint.offset(0, -200);
+        final LatLng startLatLng = proj.fromScreenLocation(startPoint);
+        final long duration = 1500;
+        final Interpolator interpolator = new BounceInterpolator();
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                long elapsed = SystemClock.uptimeMillis() - start;
+                float t = interpolator.getInterpolation((float) elapsed / duration);
+                double lng = t * position.longitude + (1 - t) * startLatLng.longitude;
+                double lat = t * position.latitude + (1 - t) * startLatLng.latitude;
+                marker.setPosition(new LatLng(lat, lng));
+                if (t < 1.0) {
+                    // Post again 16ms later.
+                    handler.postDelayed(this, 16);
+                }
+            }
+        });
     }
 }
