@@ -62,4 +62,5 @@ public class Constants {
     public static final String GEOCODE_REVERSE_RESPONSE_NORESULTS = "ZERO_RESULTS";
     public static final String EXTRA_MARKER_ADDRESS = "markeraddress";
     public static final int ACTIVITY_RESULT_CODE_PICK_MAP = 109;
+    public static final int MAP_DEFAULT_ZOOM = 11;
 }

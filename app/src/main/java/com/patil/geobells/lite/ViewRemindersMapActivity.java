@@ -44,6 +44,7 @@ public class ViewRemindersMapActivity extends Activity {
         mapView = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
         keyLayout = (LinearLayout) findViewById(R.id.layout_key);
         getActionBar().setDisplayHomeAsUpEnabled(true);
+        mapView.setMyLocationEnabled(true);
         final ArrayList<ArrayList<Marker>> markersList = new ArrayList<ArrayList<Marker>>();
         final ArrayList<ArrayList<Circle>> circlesList = new ArrayList<ArrayList<Circle>>();
         int numMarkers = 0;
