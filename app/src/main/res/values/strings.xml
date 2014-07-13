@@ -102,5 +102,8 @@
     <string name="message_loading_map">Loading map...</string>
     <string name="marker_title_taptopick">Tap to pick:</string>
     <string name="hint_reminder_address_search">enter a search term here</string>
+    <string name="toast_reminders_cleared">All reminders deleted.</string>
+    <string name="dialog_message_clear_all_reminders">All reminders will be deleted.</string>
+    <string name="dialog_title_clear_all_reminders">Clear all reminders</string>
 
 </resources>

@@ -27,9 +27,9 @@
     <PreferenceCategory
         android:title="@string/preference_category_saveddata"
         android:key="preference_category_saveddata" >
-        <Preference
+       <!-- <Preference
             android:title="@string/preference_clear_autocomplete"
-            android:key="preference_clear_autocomplete"/>
+            android:key="preference_clear_autocomplete"/> -->
         <Preference
             android:title="@string/preference_clear_reminders"
             android:key="preference_clear_reminders"/>

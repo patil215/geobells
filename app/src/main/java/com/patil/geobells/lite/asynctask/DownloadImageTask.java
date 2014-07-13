@@ -1,8 +1,14 @@
 package com.patil.geobells.lite.asynctask;
 
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.TransitionDrawable;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ImageView;
@@ -11,9 +17,10 @@ import java.io.InputStream;
 
 public class DownloadImageTask extends AsyncTask<String, Void, Bitmap>  {
     ImageView bmImage;
+    Context context;
 
-    public DownloadImageTask(ImageView bmImage) {
-        this.bmImage = bmImage;
+    public DownloadImageTask(Context context, ImageView bmImage) {
+        this.context = context; this.bmImage = bmImage;
     }
 
     protected Bitmap doInBackground(String... urls) {
@@ -30,6 +37,15 @@ public class DownloadImageTask extends AsyncTask<String, Void, Bitmap>  {
     }
 
     protected void onPostExecute(Bitmap result) {
+        // Transition drawable with a transparent drwabale and the final bitmap
+        final TransitionDrawable td =
+                new TransitionDrawable(new Drawable[] {
+                        new ColorDrawable(Color.TRANSPARENT),
+                        new BitmapDrawable(context.getResources(), result)
+                });
+
+        bmImage.setImageDrawable(td);
+        td.startTransition(750);
         bmImage.setImageBitmap(result);
     }
 }

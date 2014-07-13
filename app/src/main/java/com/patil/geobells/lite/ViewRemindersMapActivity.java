@@ -99,7 +99,7 @@ public class ViewRemindersMapActivity extends Activity {
                             marker.setVisible(false);
                         } else {
                             marker.setVisible(true);
-                            animateMarkerAdd(marker, marker.getPosition());
+                            //animateMarkerAdd(marker, marker.getPosition());
                         }
                     }
                     for (Circle circle : circlesies) {

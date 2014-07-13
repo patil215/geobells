@@ -83,7 +83,7 @@ public class ViewPickMapActivity extends Activity implements AsyncTaskCompleteLi
             LatLng markerPosition = new LatLng(latitude, longitude);
             mapView.moveCamera(CameraUpdateFactory.newLatLngZoom(markerPosition, Constants.MAP_DEFAULT_ZOOM));
             Marker marker = mapView.addMarker(new MarkerOptions().title(address).position(markerPosition));
-            animateMarkerAdd(marker, marker.getPosition());
+            //animateMarkerAdd(marker, marker.getPosition());
         }
     }
 
@@ -136,7 +136,7 @@ public class ViewPickMapActivity extends Activity implements AsyncTaskCompleteLi
             mapView.clear();
             Marker marker = mapView.addMarker(new MarkerOptions().snippet(address).position(lastTouchedPosition).title(getString(R.string.marker_title_taptopick)));
             marker.showInfoWindow();
-            animateMarkerAdd(marker, marker.getPosition());
+            //animateMarkerAdd(marker, marker.getPosition());
             mapView.animateCamera(CameraUpdateFactory.newLatLngZoom(lastTouchedPosition, 11));
         }
     }

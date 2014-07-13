@@ -32,9 +32,11 @@ public class ReminderCard extends Card {
     int positionInList;
     Reminder reminder;
     ArrayList<String> additionalInfo; // Days to trigger on, settings to change, etc
+    Context context;
 
     public ReminderCard(Context context, int innerLayout, Reminder reminder, int positionInList) {
         super(context, innerLayout);
+        this.context = context;
         getTextFromReminder(reminder);
         this.reminder = reminder;
         this.positionInList = positionInList;
@@ -74,13 +76,13 @@ public class ReminderCard extends Card {
         if(reminder.type == Constants.TYPE_FIXED) {
             positions.add(new LatLng(reminder.latitude, reminder.longitude));
             String url = GeobellsUtils.constructMapImageURL(positions, Color.parseColor(color));
-            new DownloadImageTask(mapImage).execute(url);
+            new DownloadImageTask(context, mapImage).execute(url);
         } else {
             for(Place place : reminder.places) {
                 positions.add(new LatLng(place.latitude, place.longitude));
             }
             String url = GeobellsUtils.constructMapImageURL(positions, Color.parseColor(color));
-            new DownloadImageTask(mapImage).execute(url);
+            new DownloadImageTask(context, mapImage).execute(url);
         }
         colorStripe.setBackgroundColor(Color.parseColor(color));
     }
