@@ -71,10 +71,10 @@ public class Constants {
     public static final int POLLING_INTERVAL_DEFAULT = 30000;
     public static final String EXTRA_ACTIVITY = "activity";
 
-    public static final int ACTIVITY_STANDING = 0;
-    public static final int ACTIVITY_WALKING = 1;
-    public static final int ACTIVITY_BIKING = 2;
-    public static final int ACTIVITY_DRIVING = 3;
+    public static final int ACTIVITY_STANDING = 3;
+    public static final int ACTIVITY_WALKING = 2;
+    public static final int ACTIVITY_BIKING = 1;
+    public static final int ACTIVITY_DRIVING = 0;
     public static final int ACTIVITY_UNKNOWN = 4;
     public static final int ACTIVITY_TILTING = 5;
 

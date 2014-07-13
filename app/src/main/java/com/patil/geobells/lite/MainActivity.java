@@ -2,6 +2,7 @@ package com.patil.geobells.lite;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,10 +11,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.patil.geobells.lite.service.ActivityRecognitionService;
+import com.patil.geobells.lite.service.LocationService;
 import com.patil.geobells.lite.utils.Constants;
 import com.patil.geobells.lite.views.CompletedRemindersFragment;
 import com.patil.geobells.lite.views.NavigationDrawerFragment;
 import com.patil.geobells.lite.views.UpcomingRemindersFragment;
+
+import java.util.Iterator;
 
 
 public class MainActivity extends Activity
@@ -34,6 +39,16 @@ public class MainActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        if(!isLocationServiceRunning()) {
+            Intent serviceIntent = new Intent(this, LocationService.class);
+            serviceIntent.putExtra(Constants.EXTRA_ACTIVITY, Constants.ACTIVITY_UNKNOWN);
+            startService(serviceIntent);
+        }
+        if(!isActivityServiceRunning()) {
+            Intent serviceIntent = new Intent(this, ActivityRecognitionService.class);
+            startService(serviceIntent);
+        }
+
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.navigation_drawer);
         title = getTitle();
@@ -42,6 +57,28 @@ public class MainActivity extends Activity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+    }
+
+    public boolean isLocationServiceRunning() {
+        Iterator iterator = ((ActivityManager)getSystemService(ACTIVITY_SERVICE)).getRunningServices(Integer.MAX_VALUE).iterator();
+        while(iterator.hasNext()) {
+            ActivityManager.RunningServiceInfo localRunningServiceInfo = (ActivityManager.RunningServiceInfo)iterator.next();
+            if (LocationService.class.getName().equals(localRunningServiceInfo.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isActivityServiceRunning() {
+        Iterator iterator = ((ActivityManager)getSystemService(ACTIVITY_SERVICE)).getRunningServices(Integer.MAX_VALUE).iterator();
+        while(iterator.hasNext()) {
+            ActivityManager.RunningServiceInfo localRunningServiceInfo = (ActivityManager.RunningServiceInfo)iterator.next();
+            if (ActivityRecognitionService.class.getName().equals(localRunningServiceInfo.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

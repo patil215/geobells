@@ -1,55 +1,29 @@
 package com.patil.geobells.lite.service;
 
 import android.app.IntentService;
+import android.content.ComponentName;
 import android.content.Intent;
-import android.content.Context;
+import android.content.ServiceConnection;
+import android.os.IBinder;
 
-/**
- * An {@link IntentService} subclass for handling asynchronous task requests in
- * a service on a separate handler thread.
- * <p>
- * TODO: Customize class - update intent actions, extra parameters and static
- * helper methods.
- */
+import com.google.android.gms.location.ActivityRecognitionResult;
+import com.google.android.gms.location.DetectedActivity;
+import com.patil.geobells.lite.utils.Constants;
+
 public class ActivityRecognitionIntentService extends IntentService {
-    // TODO: Rename actions, choose action names that describe tasks that this
-    // IntentService can perform, e.g. ACTION_FETCH_NEW_ITEMS
-    private static final String ACTION_FOO = "com.patil.geobells.lite.service.action.FOO";
-    private static final String ACTION_BAZ = "com.patil.geobells.lite.service.action.BAZ";
+    private ServiceConnection connection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            ActivityRecognitionIntentService.this.locationService = ((LocationService.LocationBinder)iBinder).getService();
+        }
 
-    // TODO: Rename parameters
-    private static final String EXTRA_PARAM1 = "com.patil.geobells.lite.service.extra.PARAM1";
-    private static final String EXTRA_PARAM2 = "com.patil.geobells.lite.service.extra.PARAM2";
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            ActivityRecognitionIntentService.this.locationService = null;
+        }
+    };
 
-    /**
-     * Starts this service to perform action Foo with the given parameters. If
-     * the service is already performing a task this action will be queued.
-     *
-     * @see IntentService
-     */
-    // TODO: Customize helper method
-    public static void startActionFoo(Context context, String param1, String param2) {
-        Intent intent = new Intent(context, ActivityRecognitionIntentService.class);
-        intent.setAction(ACTION_FOO);
-        intent.putExtra(EXTRA_PARAM1, param1);
-        intent.putExtra(EXTRA_PARAM2, param2);
-        context.startService(intent);
-    }
-
-    /**
-     * Starts this service to perform action Baz with the given parameters. If
-     * the service is already performing a task this action will be queued.
-     *
-     * @see IntentService
-     */
-    // TODO: Customize helper method
-    public static void startActionBaz(Context context, String param1, String param2) {
-        Intent intent = new Intent(context, ActivityRecognitionIntentService.class);
-        intent.setAction(ACTION_BAZ);
-        intent.putExtra(EXTRA_PARAM1, param1);
-        intent.putExtra(EXTRA_PARAM2, param2);
-        context.startService(intent);
-    }
+    LocationService locationService;
 
     public ActivityRecognitionIntentService() {
         super("ActivityRecognitionIntentService");
@@ -57,35 +31,15 @@ public class ActivityRecognitionIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        if (intent != null) {
-            final String action = intent.getAction();
-            if (ACTION_FOO.equals(action)) {
-                final String param1 = intent.getStringExtra(EXTRA_PARAM1);
-                final String param2 = intent.getStringExtra(EXTRA_PARAM2);
-                handleActionFoo(param1, param2);
-            } else if (ACTION_BAZ.equals(action)) {
-                final String param1 = intent.getStringExtra(EXTRA_PARAM1);
-                final String param2 = intent.getStringExtra(EXTRA_PARAM2);
-                handleActionBaz(param1, param2);
-            }
+        if(ActivityRecognitionResult.hasResult(intent)) {
+            bindService(new Intent(this, LocationService.class), this.connection, BIND_AUTO_CREATE);
+            DetectedActivity detectedActivity = ActivityRecognitionResult.extractResult(intent).getMostProbableActivity();
+            int activityType = detectedActivity.getType();
+            Intent startIntent = new Intent(this, LocationService.class);
+            startIntent.putExtra(Constants.EXTRA_ACTIVITY, activityType);
+            unbindService(connection);
+            stopService(new Intent(this, LocationService.class));
+            startService(startIntent);
         }
-    }
-
-    /**
-     * Handle action Foo in the provided background thread with the provided
-     * parameters.
-     */
-    private void handleActionFoo(String param1, String param2) {
-        // TODO: Handle action Foo
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
-
-    /**
-     * Handle action Baz in the provided background thread with the provided
-     * parameters.
-     */
-    private void handleActionBaz(String param1, String param2) {
-        // TODO: Handle action Baz
-        throw new UnsupportedOperationException("Not yet implemented");
     }
 }

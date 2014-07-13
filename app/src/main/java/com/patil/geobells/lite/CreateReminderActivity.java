@@ -36,6 +36,7 @@ import com.patil.geobells.lite.asynctask.GeocoderAPIAsyncTask;
 import com.patil.geobells.lite.asynctask.PlacesAPIAsyncTask;
 import com.patil.geobells.lite.data.Place;
 import com.patil.geobells.lite.data.Reminder;
+import com.patil.geobells.lite.service.LocationService;
 import com.patil.geobells.lite.utils.Config;
 import com.patil.geobells.lite.utils.Constants;
 import com.patil.geobells.lite.utils.GeobellsDataManager;
@@ -353,6 +354,8 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
         Toast.makeText(this, getString(R.string.toast_reminder_created), Toast.LENGTH_SHORT).show();
         Intent returnIntent = new Intent();
         setResult(RESULT_OK, returnIntent);
+        Intent serviceIntent = new Intent(this, LocationService.class);
+        startService(serviceIntent);
         finish();
     }
 
@@ -383,6 +386,8 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
         reminders.add(reminder);
         dataManager.saveReminders(reminders);
         Toast.makeText(this, getString(R.string.toast_reminder_created), Toast.LENGTH_SHORT).show();
+        Intent serviceIntent = new Intent(this, LocationService.class);
+        startService(serviceIntent);
         finish();
     }
 

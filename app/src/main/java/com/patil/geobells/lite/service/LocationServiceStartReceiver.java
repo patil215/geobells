@@ -10,8 +10,7 @@ public class LocationServiceStartReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        // TODO: This method is called when the BroadcastReceiver is receiving
-        // an Intent broadcast.
-        throw new UnsupportedOperationException("Not yet implemented");
+        context.startService(new Intent(context, LocationService.class));
+        context.startService(new Intent(context, ActivityRecognitionService.class));
     }
 }
