@@ -45,7 +45,6 @@ public class DownloadImageTask extends AsyncTask<String, Void, Bitmap>  {
                 });
 
         bmImage.setImageDrawable(td);
-        td.startTransition(750);
-        bmImage.setImageBitmap(result);
+        td.startTransition(500);
     }
 }
