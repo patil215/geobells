@@ -295,7 +295,7 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
             intent.putExtra(Constants.EXTRA_REMINDER_LATITUDE, Constants.NO_REMINDER_LATITUDE);
             intent.putExtra(Constants.EXTRA_REMINDER_LONGITUDE, Constants.NO_REMINDER_LONGITUDE);
             intent.putExtra(Constants.EXTRA_REMINDER_ADDRESS, Constants.NO_REMINDER_ADDRESS);
-            startActivityForResult(intent, Constants.ACTIVITY_RESULT_CODE_PICK_MAP);
+            startActivityForResult(intent, Constants.ACTIVITY_REQUEST_CODE_PICK_MAP);
         }
     }
 
@@ -346,6 +346,8 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
         reminders.add(reminder);
         dataManager.saveReminders(reminders);
         Toast.makeText(this, getString(R.string.toast_reminder_created), Toast.LENGTH_SHORT).show();
+        Intent returnIntent = new Intent();
+        setResult(RESULT_OK, returnIntent);
         finish();
     }
 
@@ -517,13 +519,13 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
                 intent.putExtra(Constants.EXTRA_REMINDER_LATITUDE, Constants.INVALID_REMINDER_LATITUDE);
                 intent.putExtra(Constants.EXTRA_REMINDER_LONGITUDE, Constants.INVALID_REMINDER_LONGITUDE);
                 intent.putExtra(Constants.EXTRA_REMINDER_ADDRESS, addressBox.getText().toString());
-                startActivityForResult(intent, Constants.ACTIVITY_RESULT_CODE_PICK_MAP);
+                startActivityForResult(intent, Constants.ACTIVITY_REQUEST_CODE_PICK_MAP);
             } else {
                 Intent intent = new Intent(this, ViewPickMapActivity.class);
                 intent.putExtra(Constants.EXTRA_REMINDER_LATITUDE, coords[0]);
                 intent.putExtra(Constants.EXTRA_REMINDER_LONGITUDE, coords[1]);
                 intent.putExtra(Constants.EXTRA_REMINDER_ADDRESS, addressBox.getText().toString());
-                startActivityForResult(intent, Constants.ACTIVITY_RESULT_CODE_PICK_MAP);
+                startActivityForResult(intent, Constants.ACTIVITY_REQUEST_CODE_PICK_MAP);
             }
         }
     }

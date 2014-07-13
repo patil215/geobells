@@ -2,7 +2,9 @@ package com.patil.geobells.lite.views;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,7 @@ import android.widget.Toast;
 import com.patil.geobells.lite.MainActivity;
 import com.patil.geobells.lite.R;
 import com.patil.geobells.lite.data.Reminder;
+import com.patil.geobells.lite.utils.Constants;
 import com.patil.geobells.lite.utils.GeobellsDataManager;
 
 import java.util.ArrayList;
@@ -22,6 +25,9 @@ import it.gmariotti.cardslib.library.view.CardListView;
 
 public class UpcomingRemindersFragment extends Fragment {
 
+    CardListView listView;
+    CardArrayAdapter cardArrayAdapter;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -29,7 +35,7 @@ public class UpcomingRemindersFragment extends Fragment {
         final View rootView = inflater.inflate(R.layout.fragment_upcoming, container, false);
         final GeobellsDataManager dataManager = new GeobellsDataManager(rootView.getContext());
         final ArrayList<Reminder> reminders = dataManager.getSavedReminders();
-        CardListView listView = (CardListView) rootView.findViewById(R.id.cardList);
+        listView = (CardListView) rootView.findViewById(R.id.cardList);
         RelativeLayout noReminderLayout = (RelativeLayout) rootView.findViewById(R.id.layout_noreminders);
         if (numUpcomingReminders(reminders) > 0) {
             listView.setVisibility(View.VISIBLE);
@@ -62,7 +68,7 @@ public class UpcomingRemindersFragment extends Fragment {
                     cards.add(card);
                 }
             }
-            CardArrayAdapter cardArrayAdapter = new CardArrayAdapter(rootView.getContext(), cards);
+            cardArrayAdapter = new CardArrayAdapter(rootView.getContext(), cards);
             listView.setAdapter(cardArrayAdapter);
         } else {
             listView.setVisibility(View.GONE);

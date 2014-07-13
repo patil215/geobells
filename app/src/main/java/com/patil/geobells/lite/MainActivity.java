@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.patil.geobells.lite.utils.Constants;
 import com.patil.geobells.lite.views.CompletedRemindersFragment;
 import com.patil.geobells.lite.views.NavigationDrawerFragment;
 import com.patil.geobells.lite.views.UpcomingRemindersFragment;
@@ -81,13 +82,23 @@ public class MainActivity extends Activity
         actionBar.setTitle(title);
     }
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UpcomingRemindersFragment upcomingFragment = new UpcomingRemindersFragment();
+        getFragmentManager().beginTransaction()
+                .replace(R.id.container, upcomingFragment)
+                .commit();
+    }
+
     public void onCreateReminderClick(View v) {
         startCreateReminderActivity();
     }
 
     public void startCreateReminderActivity() {
         Intent intent = new Intent(this, CreateReminderActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, Constants.ACTIVITY_REQUEST_CODE_CREATE_REMINDER);
     }
 
     @Override
@@ -123,7 +134,7 @@ public class MainActivity extends Activity
     public void onSettingsClick(View v) {
         mNavigationDrawerFragment.mDrawerLayout.closeDrawer(mNavigationDrawerFragment.mFragmentContainerView);
         Intent intent = new Intent(this, SettingsActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, Constants.ACTIVITY_REQUEST_CODE_SETTINGS);
     }
 
     public void onAboutClick(View v) {

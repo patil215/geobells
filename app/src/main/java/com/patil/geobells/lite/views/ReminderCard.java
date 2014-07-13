@@ -73,16 +73,18 @@ public class ReminderCard extends Card {
         colorStripe = (ImageView) view.findViewById(R.id.view_colorbar);
         String color = Constants.COLORS[positionInList % Constants.COLORS.length];
         ArrayList<LatLng> positions = new ArrayList<LatLng>();
-        if(reminder.type == Constants.TYPE_FIXED) {
-            positions.add(new LatLng(reminder.latitude, reminder.longitude));
-            String url = GeobellsUtils.constructMapImageURL(positions, Color.parseColor(color));
-            new DownloadImageTask(context, mapImage).execute(url);
-        } else {
-            for(Place place : reminder.places) {
-                positions.add(new LatLng(place.latitude, place.longitude));
+        if(mapImage.getDrawable() == null) {
+            if (reminder.type == Constants.TYPE_FIXED) {
+                positions.add(new LatLng(reminder.latitude, reminder.longitude));
+                String url = GeobellsUtils.constructMapImageURL(positions, Color.parseColor(color));
+                new DownloadImageTask(context, mapImage).execute(url);
+            } else {
+                for (Place place : reminder.places) {
+                    positions.add(new LatLng(place.latitude, place.longitude));
+                }
+                String url = GeobellsUtils.constructMapImageURL(positions, Color.parseColor(color));
+                new DownloadImageTask(context, mapImage).execute(url);
             }
-            String url = GeobellsUtils.constructMapImageURL(positions, Color.parseColor(color));
-            new DownloadImageTask(context, mapImage).execute(url);
         }
         colorStripe.setBackgroundColor(Color.parseColor(color));
     }
