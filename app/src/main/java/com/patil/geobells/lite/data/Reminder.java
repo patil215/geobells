@@ -13,7 +13,7 @@ public class Reminder {
     public boolean silencePhone;
     public long timeCreated;
     public long timeCompleted; // -1 if not completed yet
-    public int transition; // Enter or exit, defined in Constants
+    public int transition; // Enter, exit, or entered with intent to exit, defined in Constants
     public String description;
 
      /* Why include both FixedReminder and DynamicReminder elements instead of using polymorphism?, you ask.

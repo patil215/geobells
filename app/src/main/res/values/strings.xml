@@ -112,5 +112,9 @@
     <string name="title_activity_popup">PopupActivity</string>
     <string name="notification_listening_message">You\'ll be reminded where you specified.</string>
     <string name="notification_listening_title">Geobells is listening</string>
+    <string name="notification_action_navigate">Directions</string>
+    <string name="notification_message_approaching">Approaching</string>
+    <string name="notification_message_dontforget">don\'t forget to</string>
+    <string name="notification_message_exiting">Leaving</string>
 
 </resources>

@@ -4,6 +4,7 @@ package com.patil.geobells.lite.utils;
 public class Constants {
     public static final int TRANSITION_ENTER = 0;
     public static final int TRANSITION_EXIT = 1;
+    public static final int TRANSITION_ENTER_TO_EXIT = 2;
     public static final int[] PROXIMITY_DISTANCES = new int[] {15, 30, 90, 200, 400, 800, 1600, 3200, 8000, 16000};
     public static final int PROXIMITY_DISTANCES_DEFAULT_INDEX = 5;
     public static final String PREFERENCES_DATA = "data";
@@ -67,4 +68,21 @@ public class Constants {
     public static final int MAP_DEFAULT_ZOOM = 11;
     public static final int ACTIVITY_REQUEST_CODE_SETTINGS = 124;
     public static final int NOTIFICATION_LISTENING_ID = 12;
+    public static final int POLLING_INTERVAL_DEFAULT = 30000;
+    public static final String EXTRA_ACTIVITY = "activity";
+
+    public static final int ACTIVITY_STANDING = 0;
+    public static final int ACTIVITY_WALKING = 1;
+    public static final int ACTIVITY_BIKING = 2;
+    public static final int ACTIVITY_DRIVING = 3;
+    public static final int ACTIVITY_UNKNOWN = 4;
+    public static final int ACTIVITY_TILTING = 5;
+
+    public static final int POLLING_INTERVAL_STANDING = 60000;
+    public static final int POLLING_INTERVAL_WALKING = 40000;
+    public static final int POLLING_INTERVAL_BIKING = 25000;
+    public static final int POLLING_INTERVAL_DRIVING = 8000;
+    public static final int POLLING_INTERVAL_UNKNOWN = 40000;
+    public static final int POLLING_INTERVAL_TILTING = 45000;
+    public static final String EXTRA_SPEAKTEXT = "text";
 }
