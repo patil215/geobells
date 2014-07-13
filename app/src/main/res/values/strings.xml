@@ -105,5 +105,12 @@
     <string name="toast_reminders_cleared">All reminders deleted.</string>
     <string name="dialog_message_clear_all_reminders">All reminders will be deleted.</string>
     <string name="dialog_title_clear_all_reminders">Clear all reminders</string>
+    <string name="service_location">Geofence</string>
+    <string name="service_activityrecognition">ActivityRecognition</string>
+    <string name="service_speak">Voice</string>
+    <string name="service_activityhandler">ActivityHandler</string>
+    <string name="title_activity_popup">PopupActivity</string>
+    <string name="notification_listening_message">You\'ll be reminded where you specified.</string>
+    <string name="notification_listening_title">Geobells is listening</string>
 
 </resources>

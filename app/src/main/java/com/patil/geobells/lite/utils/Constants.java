@@ -66,4 +66,5 @@ public class Constants {
     public static final int ACTIVITY_REQUEST_CODE_CREATE_REMINDER = 102;
     public static final int MAP_DEFAULT_ZOOM = 11;
     public static final int ACTIVITY_REQUEST_CODE_SETTINGS = 124;
+    public static final int NOTIFICATION_LISTENING_ID = 12;
 }
