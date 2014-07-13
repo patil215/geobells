@@ -28,15 +28,16 @@ public class UpcomingRemindersFragment extends Fragment {
                              Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_upcoming, container, false);
         final GeobellsDataManager dataManager = new GeobellsDataManager(rootView.getContext());
-        final ArrayList<Reminder> reminders = dataManager.getUpcomingReminders();
+        final ArrayList<Reminder> reminders = dataManager.getSavedReminders();
         CardListView listView = (CardListView) rootView.findViewById(R.id.cardList);
         RelativeLayout noReminderLayout = (RelativeLayout) rootView.findViewById(R.id.layout_noreminders);
-        if (reminders.size() > 0) {
+        if (numUpcomingReminders(reminders) > 0) {
             listView.setVisibility(View.VISIBLE);
             noReminderLayout.setVisibility(View.GONE);
             ArrayList<Card> cards = new ArrayList<Card>();
             for (int i = 0; i < reminders.size(); i++) {
-                final int index = i;
+                if (!reminders.get(i).completed) {
+                    final int index = i;
                     ReminderCard card = new ReminderCard(rootView.getContext(), R.layout.card_reminder, reminders.get(i), i);
                     card.setSwipeable(true);
                     card.setOnSwipeListener(new Card.OnSwipeListener() {
@@ -59,15 +60,25 @@ public class UpcomingRemindersFragment extends Fragment {
                         }
                     });
                     cards.add(card);
-
+                }
             }
-        CardArrayAdapter cardArrayAdapter = new CardArrayAdapter(rootView.getContext(), cards);
-        listView.setAdapter(cardArrayAdapter);
+            CardArrayAdapter cardArrayAdapter = new CardArrayAdapter(rootView.getContext(), cards);
+            listView.setAdapter(cardArrayAdapter);
         } else {
             listView.setVisibility(View.GONE);
             noReminderLayout.setVisibility(View.VISIBLE);
         }
         return rootView;
+    }
+
+    public int numUpcomingReminders(ArrayList<Reminder> reminders) {
+        int sum = 0;
+        for(Reminder reminder : reminders) {
+            if(!reminder.completed) {
+                sum++;
+            }
+        }
+        return sum;
     }
 
     @Override

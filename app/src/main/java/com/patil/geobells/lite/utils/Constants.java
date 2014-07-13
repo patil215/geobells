@@ -31,6 +31,7 @@ public class Constants {
     public static final String GEOCODE_API_BASE=  "http://maps.googleapis.com/maps/api/geocode";
     public static final String GEOCODE_OUT_JSON =  "/json";
 
+    public static final String STATIC_MAP_API_BASE = "http://maps.googleapis.com/maps/api/staticmap";
 
     public static final String METHOD_PLACES_DIALOG_ADDRESS = "address";
     public static final String METHOD_PLACES_CREATE = "create";

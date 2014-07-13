@@ -30,26 +30,28 @@ public class CompletedRemindersFragment extends Fragment {
         CardListView listView = (CardListView) rootView.findViewById(R.id.cardList);
         RelativeLayout noReminderLayout = (RelativeLayout) rootView.findViewById(R.id.layout_noreminders);
         final GeobellsDataManager dataManager = new GeobellsDataManager(rootView.getContext());
-        final ArrayList<Reminder> reminders = dataManager.getCompletedReminders();
-        if(reminders.size() > 0) {
+        final ArrayList<Reminder> reminders = dataManager.getSavedReminders();
+        if(numCompletedReminders(reminders) > 0) {
             listView.setVisibility(View.VISIBLE);
             noReminderLayout.setVisibility(View.GONE);
             ArrayList<Card> cards = new ArrayList<Card>();
             for (int i = 0; i < reminders.size(); i++) {
-                final int index = i;
-                if (reminders.get(i).completed) {
-                    ReminderCard card = new ReminderCard(rootView.getContext(), R.layout.card_reminder, reminders.get(i), i);
-                    card.setSwipeable(true);
-                    card.setOnSwipeListener(new Card.OnSwipeListener() {
-                        @Override
-                        public void onSwipe(Card card) {
-                            Toast.makeText(rootView.getContext(), rootView.getContext().getString(R.string.toast_reminder_swipe_uncompleted), Toast.LENGTH_SHORT).show();
-                            Reminder reminder = reminders.get(index);
-                            reminder.completed = false;
-                            dataManager.saveReminders(reminders);
-                        }
-                    });
-                    cards.add(card);
+                if(reminders.get(i).completed) {
+                    final int index = i;
+                    if (reminders.get(i).completed) {
+                        ReminderCard card = new ReminderCard(rootView.getContext(), R.layout.card_reminder, reminders.get(i), i);
+                        card.setSwipeable(true);
+                        card.setOnSwipeListener(new Card.OnSwipeListener() {
+                            @Override
+                            public void onSwipe(Card card) {
+                                Toast.makeText(rootView.getContext(), rootView.getContext().getString(R.string.toast_reminder_swipe_uncompleted), Toast.LENGTH_SHORT).show();
+                                Reminder reminder = reminders.get(index);
+                                reminder.completed = false;
+                                dataManager.saveReminders(reminders);
+                            }
+                        });
+                        cards.add(card);
+                    }
                 }
             }
             CardArrayAdapter cardArrayAdapter = new CardArrayAdapter(rootView.getContext(), cards);
@@ -59,6 +61,16 @@ public class CompletedRemindersFragment extends Fragment {
             noReminderLayout.setVisibility(View.VISIBLE);
         }
         return rootView;
+    }
+
+    public int numCompletedReminders(ArrayList<Reminder> reminders) {
+        int sum = 0;
+        for(Reminder reminder : reminders) {
+            if(reminder.completed) {
+                sum++;
+            }
+        }
+        return sum;
     }
 
     @Override
