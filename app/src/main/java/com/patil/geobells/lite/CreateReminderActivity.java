@@ -22,6 +22,7 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ListView;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -62,6 +63,7 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
     AutoCompleteTextView addressBox;
     RadioButton enterRadioButton;
     RadioButton exitRadioButton;
+    RadioGroup transitionRadioGroup;
     CheckBox repeatCheckBox;
     CheckBox airplaneCheckBox;
     CheckBox silenceCheckBox;
@@ -193,18 +195,21 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
         dynamicLayout = (RelativeLayout) findViewById(R.id.layout_reminder_dynamic);
         advancedLayout = (RelativeLayout) findViewById(R.id.layout_advanced_options);
         advancedButton = (Button) findViewById(R.id.button_advanced_options);
+        transitionRadioGroup = (RadioGroup) findViewById(R.id.radiobutton_group_reminder_transition);
     }
 
     public void onTypeSpecificClick(View v) {
         dynamicLayout.setVisibility(View.GONE);
         specificLayout.setVisibility(View.VISIBLE);
         advancedButton.setVisibility(View.VISIBLE);
+        transitionRadioGroup.setVisibility(View.VISIBLE);
     }
 
     public void onTypeDynamicClick(View v) {
         specificLayout.setVisibility(View.GONE);
         dynamicLayout.setVisibility(View.VISIBLE);
         advancedButton.setVisibility(View.VISIBLE);
+        transitionRadioGroup.setVisibility(View.GONE);
     }
 
     public void onAdvancedOptionsClick(View v) {
