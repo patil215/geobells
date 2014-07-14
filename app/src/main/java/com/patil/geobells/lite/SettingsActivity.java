@@ -37,7 +37,7 @@ public class SettingsActivity extends PreferenceActivity {
         preferenceManager = new GeobellsPreferenceManager(this);
         dataManager = new GeobellsDataManager(this);
 
-        notificationSoundPreference = (Preference) findPreference("preference_notification_sound");
+        notificationSoundPreference = (Preference) findPreference("pref_notification_sound");
         notificationSoundPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
                 Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
@@ -50,7 +50,7 @@ public class SettingsActivity extends PreferenceActivity {
             }
         });
 
-        clearRemindersPreference = (Preference) findPreference("preference_clear_reminders");
+        clearRemindersPreference = (Preference) findPreference("pref_clear_reminders");
         clearRemindersPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
@@ -76,10 +76,10 @@ public class SettingsActivity extends PreferenceActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case android.R.id.home:
-                finish();
+                super.onBackPressed();
                 break;
         }
-        return super.onOptionsItemSelected(item);
+        return false;
     }
 
     @Override

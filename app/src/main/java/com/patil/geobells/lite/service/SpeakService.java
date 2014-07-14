@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.os.IBinder;
 import android.speech.tts.TextToSpeech;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.patil.geobells.lite.utils.Constants;
@@ -20,6 +21,7 @@ public class SpeakService extends Service implements TextToSpeech.OnInitListener
     @Override
     public void onCreate() {
         super.onCreate();
+        Log.d("BackgroundService", "SpeakService created");
         mTts = new TextToSpeech(this, this);
         mTts.setLanguage(Locale.getDefault());
     }
@@ -60,6 +62,7 @@ public class SpeakService extends Service implements TextToSpeech.OnInitListener
     }
 
     public void sayText(String text) {
+        Log.d("BackgroundService", "Saying text " + text);
         AudioManager localAudioManager = (AudioManager)getSystemService(AUDIO_SERVICE);
         localAudioManager.setSpeakerphoneOn(true);
         HashMap localHashMap = new HashMap();

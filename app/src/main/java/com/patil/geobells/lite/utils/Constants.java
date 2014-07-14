@@ -85,4 +85,5 @@ public class Constants {
     public static final int POLLING_INTERVAL_UNKNOWN = 40000;
     public static final int POLLING_INTERVAL_TILTING = 45000;
     public static final String EXTRA_SPEAKTEXT = "text";
+    public static final long POLLING_INTERVAL_ACTIVITY_RECOGNITION = 90000;
 }

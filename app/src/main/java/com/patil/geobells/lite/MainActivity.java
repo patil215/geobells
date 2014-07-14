@@ -7,6 +7,7 @@ import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -42,11 +43,17 @@ public class MainActivity extends Activity
         if(!isLocationServiceRunning()) {
             Intent serviceIntent = new Intent(this, LocationService.class);
             serviceIntent.putExtra(Constants.EXTRA_ACTIVITY, Constants.ACTIVITY_UNKNOWN);
+            Log.d("BackgroundService", "Started LocationService from MainActivity");
             startService(serviceIntent);
+        } else {
+            Log.d("BackgroundService", "LocationService already running");
         }
         if(!isActivityServiceRunning()) {
             Intent serviceIntent = new Intent(this, ActivityRecognitionService.class);
+            Log.d("BackgroundService", "Started ActivityRecognitionService from MainActivity");
             startService(serviceIntent);
+        } else {
+            Log.d("BackgroundService", "ActivityRecognitionService already running");
         }
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)

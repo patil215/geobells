@@ -3,6 +3,7 @@ package com.patil.geobells.lite.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -16,28 +17,30 @@ public class GeobellsPreferenceManager {
 
     public void saveNotificationSoundURI(String chosenRingtone) {
         SharedPreferences.Editor edit = preferences.edit();
-        edit.putString("notification_sound", chosenRingtone);
+        edit.putString("pref_notification_sound", chosenRingtone);
         edit.commit();
     }
 
     public String getNotificationSoundUri() {
-        return preferences.getString("notification_sound", "");
+        return preferences.getString("pref_notification_sound", "");
     }
 
     public boolean isVoiceReminderEnabled() {
-        return preferences.getBoolean("preference_voice", false);
+        boolean voiceEnabled = preferences.getBoolean("pref_voice", true);
+        Log.d("Preferencies", String.valueOf(voiceEnabled));
+        return preferences.getBoolean("pref_voice", false);
     }
 
     public boolean isPopupReminderEnabled() {
-        return preferences.getBoolean("preference_popup", false);
+        return preferences.getBoolean("pref_popup", false);
     }
 
     public boolean isShowBackgroundNotificationEnabled() {
-        return preferences.getBoolean("preference_notification", true);
+        return preferences.getBoolean("pref_notification", true);
     }
 
     public boolean isLowPowerEnabled() {
-        return preferences.getBoolean("preference_low_power", false);
+        return preferences.getBoolean("pref_low_power", false);
     }
 
     public boolean isMetricEnabled() {

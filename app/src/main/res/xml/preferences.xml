@@ -4,49 +4,49 @@
 
     <PreferenceCategory
         android:title="@string/preference_category_notifications"
-        android:key="preference_category_notifications" >
+        android:key="pref_category_notifications" >
         <CheckBoxPreference
             android:title="@string/preference_voice"
             android:summary="@string/preference_voice_summary"
-            android:key="preference_voice"
+            android:key="pref_voice"
             android:defaultValue="true"/>
 
         <CheckBoxPreference
             android:title="@string/preference_popup"
             android:summary="@string/preference_popup_summary"
-            android:key="preference_popup"/>
+            android:key="pref_popup"/>
 
         <CheckBoxPreference
             android:title="@string/preference_notification"
             android:summary="@string/preference_notification_summary"
             android:defaultValue="true"
-            android:key="preference_notification"/>
+            android:key="pref_notification"/>
 
         <Preference
             android:title="@string/preference_notification_sound"
-            android:key="preference_notification_sound" />
+            android:key="pref_notification_sound" />
     </PreferenceCategory>
     <PreferenceCategory
         android:title="@string/preference_category_saveddata"
-        android:key="preference_category_saveddata" >
+        android:key="pref_category_saveddata" >
        <!-- <Preference
             android:title="@string/preference_clear_autocomplete"
             android:key="preference_clear_autocomplete"/> -->
         <Preference
             android:title="@string/preference_clear_reminders"
-            android:key="preference_clear_reminders"/>
+            android:key="pref_clear_reminders"/>
     </PreferenceCategory>
 
     <PreferenceCategory
         android:title="@string/preference_category_other"
-        android:key="preference_category_other" >
+        android:key="pref_category_other" >
         <CheckBoxPreference
             android:title="@string/preference_low_power"
             android:summary="@string/preference_low_power_summary"
-            android:key="preference_low_power"/>
+            android:key="pref_low_power"/>
         <CheckBoxPreference
             android:title="@string/preference_metric"
-            android:key="preference_metric"/>
+            android:key="pref_metric"/>
         <PreferenceScreen
             android:key="preferencescreen_advanced"
             android:title="@string/preferencescreen_advanced">

@@ -3,13 +3,12 @@ package com.patil.geobells.lite.service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 public class LocationServiceStartReceiver extends BroadcastReceiver {
-    public LocationServiceStartReceiver() {
-    }
-
     @Override
     public void onReceive(Context context, Intent intent) {
+        Log.d("BackgroundService", "Received boot broadcast receiver");
         context.startService(new Intent(context, LocationService.class));
         context.startService(new Intent(context, ActivityRecognitionService.class));
     }
