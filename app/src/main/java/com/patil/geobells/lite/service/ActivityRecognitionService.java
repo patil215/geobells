@@ -20,10 +20,10 @@ public class ActivityRecognitionService extends Service implements GooglePlaySer
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d("BackgroundService", "onStartCommand for ActivityRecognitionService");
-        if (this.activityRecognitionClient != null) {
-            this.activityRecognitionClient.removeActivityUpdates(this.activityRecognitionIntent);
+        activityRecognitionIntent = PendingIntent.getService(this, 0, new Intent(this, ActivityRecognitionIntentService.class), PendingIntent.FLAG_UPDATE_CURRENT);
+        if (activityRecognitionClient != null) {
+            activityRecognitionClient.removeActivityUpdates(activityRecognitionIntent);
         }
-        this.activityRecognitionIntent = PendingIntent.getService(this, 0, new Intent(this, ActivityRecognitionIntentService.class), 134217728);
         startActivityListening();
         return START_STICKY;
     }

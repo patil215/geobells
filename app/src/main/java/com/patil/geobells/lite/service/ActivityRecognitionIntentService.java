@@ -15,7 +15,7 @@ public class ActivityRecognitionIntentService extends IntentService {
     private ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            ActivityRecognitionIntentService.this.locationService = ((LocationService.LocationBinder)iBinder).getService();
+            ActivityRecognitionIntentService.this.locationService = ((LocationService.LocationBinder) iBinder).getService();
         }
 
         @Override
@@ -32,18 +32,34 @@ public class ActivityRecognitionIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        if(ActivityRecognitionResult.hasResult(intent)) {
-            Log.d("BackgroundService", "Got activity");
-            bindService(new Intent(this, LocationService.class), this.connection, BIND_AUTO_CREATE);
+        if (ActivityRecognitionResult.hasResult(intent)) {
+            bindService(new Intent(this, LocationService.class), connection, BIND_AUTO_CREATE);
+            int currentActivity = -1;
+            if(locationService != null) {
+                Log.d("BackgroundService", "LocationService successfully bound to ActivityRecognitionIntentService");
+                currentActivity = locationService.getActivity();
+            }
             DetectedActivity detectedActivity = ActivityRecognitionResult.extractResult(intent).getMostProbableActivity();
-            int activityType = detectedActivity.getType();
-            Log.d("BackgroundService", "Activity type is " + String.valueOf(activityType));
-            Intent startIntent = new Intent(this, LocationService.class);
-            startIntent.putExtra(Constants.EXTRA_ACTIVITY, activityType);
-            unbindService(connection);
-            Log.d("BackgroundService", "Restarting LocationService");
-            stopService(new Intent(this, LocationService.class));
-            startService(startIntent);
+            int type = detectedActivity.getType();
+            if(currentActivity == -1) {
+                Log.d("BackgroundService", "current activity not gotten, restarting LocationService");
+                Intent locationIntent = new Intent(this, LocationService.class);
+                locationIntent.putExtra(Constants.EXTRA_ACTIVITY, type);
+                unbindService(connection);
+                stopService(new Intent(this, LocationService.class));
+                startService(locationIntent);
+            } else if(currentActivity != type) {
+                Log.d("BackgroundService", "current activity different, restarting LocationService");
+                Intent locationIntent = new Intent(this, LocationService.class);
+                locationIntent.putExtra(Constants.EXTRA_ACTIVITY, type);
+                unbindService(connection);
+                stopService(new Intent(this, LocationService.class));
+                startService(locationIntent);
+            } else {
+                Log.d("BackgroundService", "No need to restart LocationService");
+            }
         }
     }
+
+
 }

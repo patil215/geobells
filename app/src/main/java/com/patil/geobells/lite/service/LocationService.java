@@ -60,7 +60,7 @@ public class LocationService extends Service implements GooglePlayServicesClient
         builder.setContentIntent(pendingIntent);
         builder.setPriority(NotificationCompat.PRIORITY_MIN);
         builder.setOnlyAlertOnce(true);
-        startForeground(Constants.NOTIFICATION_LISTENING_ID, builder.build());
+        startForeground(1, builder.build());
     }
 
     public void makeUseOfLocation(Location currentLocation) {
@@ -224,6 +224,9 @@ public class LocationService extends Service implements GooglePlayServicesClient
                             startLocationListening(Constants.POLLING_INTERVAL_TILTING);
                             break;
                     }
+                } else {
+                    Log.d("BackgroundService", "No bundle, starting with unknown default polling interval");
+                    startLocationListening(Constants.POLLING_INTERVAL_UNKNOWN);
                 }
             }
         } else {
