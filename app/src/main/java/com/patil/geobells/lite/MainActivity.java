@@ -11,10 +11,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.patil.geobells.lite.service.ActivityRecognitionService;
 import com.patil.geobells.lite.service.LocationService;
 import com.patil.geobells.lite.utils.Constants;
+import com.patil.geobells.lite.utils.GeobellsDataManager;
+import com.patil.geobells.lite.utils.GeobellsPreferenceManager;
 import com.patil.geobells.lite.views.AboutDialog;
 import com.patil.geobells.lite.views.CompletedRemindersFragment;
 import com.patil.geobells.lite.views.NavigationDrawerFragment;
@@ -169,8 +172,12 @@ public class MainActivity extends Activity
                 startCreateReminderActivity();
                 break;
             case R.id.action_view_map:
-                Intent intent1 = new Intent(this, ViewRemindersMapActivity.class);
-                startActivity(intent1);
+                if(new GeobellsDataManager(this).getSavedReminders().size() > 0) {
+                    Intent intent1 = new Intent(this, ViewRemindersMapActivity.class);
+                    startActivity(intent1);
+                } else {
+                    Toast.makeText(this, getString(R.string.toast_no_map_reminders), Toast.LENGTH_SHORT).show();
+                }
                 break;
         }
         return super.onOptionsItemSelected(item);

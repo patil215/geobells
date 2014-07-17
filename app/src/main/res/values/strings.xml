@@ -117,5 +117,6 @@
     <string name="notification_message_dontforget">don\'t forget to</string>
     <string name="notification_message_exiting">Leaving</string>
     <string name="dialog_title_about">About</string>
+    <string name="toast_no_map_reminders">No reminders to show on map.</string>
 
 </resources>
