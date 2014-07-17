@@ -13,7 +13,6 @@ import android.os.Binder;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
@@ -33,6 +32,8 @@ import com.patil.geobells.lite.utils.GeobellsDataManager;
 import com.patil.geobells.lite.utils.GeobellsPreferenceManager;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class LocationService extends Service implements GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {
 
@@ -65,80 +66,101 @@ public class LocationService extends Service implements GooglePlayServicesClient
 
     public void makeUseOfLocation(Location currentLocation) {
         Log.d("BackgroundService", "Making use of new location");
-        if(reminders.size() > 0) {
+        if (reminders.size() > 0) {
             for (int reminderIndex = 0; reminderIndex < reminders.size(); reminderIndex++) {
                 Reminder reminder = reminders.get(reminderIndex);
                 if (!reminder.completed) {
-                    Log.d("BackgroundService", "Scanning reminder " + reminder.title);
-                    int triggerDistance = reminder.proximity;
-                    int type = reminder.type;
-                    if (type == Constants.TYPE_DYNAMIC) {
-                        Log.d("BackgroundService", "Scanning dynamic reminder");
-                        ArrayList<Place> places = reminder.places;
-                        for (int placeIndex = 0; placeIndex < places.size(); placeIndex++) {
-                            Place place = places.get(placeIndex);
-                            Location placeLocation = new Location("");
-                            placeLocation.setLatitude(place.latitude);
-                            placeLocation.setLongitude(place.longitude);
-                            double placeDistance = currentLocation.distanceTo(placeLocation);
-                            if (placeDistance <= triggerDistance) {
-                                Log.d("BackgroundService", "Reminder triggered");
-                                reminder.completed = true;
-                                reminder.timeCompleted = System.currentTimeMillis();
-                                dataManager.saveReminders(reminders);
-                                reminders = dataManager.getSavedReminders();
-                                sendNotification(reminder.title, place.title, Constants.TRANSITION_ENTER, currentLocation, place.latitude, place.longitude, reminder.silencePhone);
-                                if (reminder.toggleAirplane) {
-                                    toggleAirplaneMode();
+                    // Get the current day. If the current day is one of the days to remind, then proceed, otherwise don't.
+                    Calendar calendar = Calendar.getInstance();
+                    int day = calendar.get(Calendar.DAY_OF_WEEK) - 1; // -1 to make it zero based indexing: 0 = Sunday, 6 = Saturday, etc
+                    if (reminder.days[day]) {
+                        Log.d("BackgroundService", "Scanning reminder " + reminder.title);
+                        int triggerDistance = reminder.proximity;
+                        int type = reminder.type;
+                        if (type == Constants.TYPE_DYNAMIC) {
+                            Log.d("BackgroundService", "Scanning dynamic reminder");
+                            ArrayList<Place> places = reminder.places;
+                            for (int placeIndex = 0; placeIndex < places.size(); placeIndex++) {
+                                Place place = places.get(placeIndex);
+                                Location placeLocation = new Location("");
+                                placeLocation.setLatitude(place.latitude);
+                                placeLocation.setLongitude(place.longitude);
+                                double placeDistance = currentLocation.distanceTo(placeLocation);
+                                if (placeDistance <= triggerDistance) {
+                                    Log.d("BackgroundService", "Reminder triggered");
+                                    reminder.completed = true;
+                                    reminder.timeCompleted = System.currentTimeMillis();
+                                    dataManager.saveReminders(reminders);
+                                    reminders = dataManager.getSavedReminders();
+                                    sendNotification(reminder.title, place.title, Constants.TRANSITION_ENTER, currentLocation, place.latitude, place.longitude, reminder.silencePhone);
+                                    if (reminder.toggleAirplane) {
+                                        toggleAirplaneMode();
+                                    }
+                                    if (reminder.silencePhone) {
+                                        silencePhone();
+                                    }
                                 }
-                                if (reminder.silencePhone) {
-                                    silencePhone();
+                            }
+                        } else if (type == Constants.TYPE_FIXED) {
+                            Log.d("BackgroundService", "Scanning fixed reminder");
+                            Location reminderLocation = new Location("");
+                            reminderLocation.setLatitude(reminder.latitude);
+                            reminderLocation.setLongitude(reminder.longitude);
+                            double reminderDistance = currentLocation.distanceTo(reminderLocation);
+                            if (reminderDistance <= triggerDistance) {
+                                if (reminder.transition == Constants.TRANSITION_ENTER) {
+                                    Log.d("BackgroundService", "Reminder triggered on enter");
+                                    reminder.completed = true;
+                                    reminder.timeCompleted = System.currentTimeMillis();
+                                    dataManager.saveReminders(reminders);
+                                    reminders = dataManager.getSavedReminders();
+                                    sendNotification(reminder.title, reminder.address, Constants.TRANSITION_ENTER, currentLocation, reminder.latitude, reminder.longitude, reminder.silencePhone);
+                                    if (reminder.toggleAirplane) {
+                                        toggleAirplaneMode();
+                                    }
+                                    if (reminder.silencePhone) {
+                                        silencePhone();
+                                    }
+                                } else if (reminder.transition == Constants.TRANSITION_EXIT) {
+                                    Log.d("BackgroundService", "Reminder triggered on enter but is for exit, setting transition");
+                                    reminder.transition = Constants.TRANSITION_ENTER_TO_EXIT;
+                                    dataManager.saveReminders(reminders);
+                                    reminders = dataManager.getSavedReminders();
+                                }
+                            } else if (reminderDistance > triggerDistance) {
+                                Log.d("BackgroundService", "Reminder triggered from exit");
+                                if (reminder.transition == Constants.TRANSITION_ENTER_TO_EXIT) {
+                                    reminder.completed = true;
+                                    reminder.timeCompleted = System.currentTimeMillis();
+                                    reminder.transition = Constants.TRANSITION_EXIT;
+                                    dataManager.saveReminders(reminders);
+                                    reminders = dataManager.getSavedReminders();
+                                    sendNotification(reminder.title, reminder.address, Constants.TRANSITION_EXIT, currentLocation, reminder.latitude, reminder.longitude, reminder.silencePhone);
+                                    if (reminder.toggleAirplane) {
+                                        toggleAirplaneMode();
+                                    }
+                                    if (reminder.silencePhone) {
+                                        silencePhone();
+                                    }
                                 }
                             }
                         }
-                    } else if (type == Constants.TYPE_FIXED) {
-                        Log.d("BackgroundService", "Scanning fixed reminder");
-                        Location reminderLocation = new Location("");
-                        reminderLocation.setLatitude(reminder.latitude);
-                        reminderLocation.setLongitude(reminder.longitude);
-                        double reminderDistance = currentLocation.distanceTo(reminderLocation);
-                        if (reminderDistance <= triggerDistance) {
-                            if (reminder.transition == Constants.TRANSITION_ENTER) {
-                                Log.d("BackgroundService", "Reminder triggered on enter");
-                                reminder.completed = true;
-                                reminder.timeCompleted = System.currentTimeMillis();
-                                dataManager.saveReminders(reminders);
-                                reminders = dataManager.getSavedReminders();
-                                sendNotification(reminder.title, reminder.address, Constants.TRANSITION_ENTER, currentLocation, reminder.latitude, reminder.longitude, reminder.silencePhone);
-                                if (reminder.toggleAirplane) {
-                                    toggleAirplaneMode();
-                                }
-                                if (reminder.silencePhone) {
-                                    silencePhone();
-                                }
-                            } else if (reminder.transition == Constants.TRANSITION_EXIT) {
-                                Log.d("BackgroundService", "Reminder triggered on enter but is for exit, setting transition");
-                                reminder.transition = Constants.TRANSITION_ENTER_TO_EXIT;
-                                dataManager.saveReminders(reminders);
-                                reminders = dataManager.getSavedReminders();
-                            }
-                        } else if (reminderDistance > triggerDistance) {
-                            Log.d("BackgroundService", "Reminder triggered from exit");
-                            if (reminder.transition == Constants.TRANSITION_ENTER_TO_EXIT) {
-                                reminder.completed = true;
-                                reminder.timeCompleted = System.currentTimeMillis();
-                                reminder.transition = Constants.TRANSITION_EXIT;
-                                dataManager.saveReminders(reminders);
-                                reminders = dataManager.getSavedReminders();
-                                sendNotification(reminder.title, reminder.address, Constants.TRANSITION_EXIT, currentLocation, reminder.latitude, reminder.longitude, reminder.silencePhone);
-                                if (reminder.toggleAirplane) {
-                                    toggleAirplaneMode();
-                                }
-                                if (reminder.silencePhone) {
-                                    silencePhone();
-                                }
-                            }
-                        }
+                    }
+                } else {
+                    // Reminder completed. Check if it's a new day since the time the reminder was completed. If it is, reset.
+                    long timeCompleted = reminder.timeCompleted;
+                    long currentTime = System.currentTimeMillis();
+                    Date completedDate = new Date(timeCompleted);
+                    Date currentDate = new Date(currentTime);
+                    Calendar completedCalendar = Calendar.getInstance();
+                    Calendar currentCalendar = Calendar.getInstance();
+                    completedCalendar.setTime(completedDate);
+                    currentCalendar.setTime(currentDate);
+                    boolean sameDay = completedCalendar.get(Calendar.YEAR) == currentCalendar.get(Calendar.YEAR) &&
+                            completedCalendar.get(Calendar.DAY_OF_YEAR) == currentCalendar.get(Calendar.DAY_OF_YEAR);
+                    if (sameDay) {
+                        reminder.completed = false;
+                        dataManager.saveReminders(reminders);
                     }
                 }
             }

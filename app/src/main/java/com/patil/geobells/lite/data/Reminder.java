@@ -16,9 +16,9 @@ public class Reminder {
     public int transition; // Enter, exit, or entered with intent to exit, defined in Constants
     public String description;
 
-     /* Why include both FixedReminder and DynamicReminder elements instead of using polymorphism?, you ask.
-        It's because Gson doesn't have an easy way of using polymorphism.
-       That's okay because we'll just have a variable containing the type of the reminder. */
+    /* Why include both FixedReminder and DynamicReminder elements instead of using polymorphism?, you ask.
+       It's because Gson doesn't have an easy way of using polymorphism.
+      That's okay because we'll just have a variable containing the type of the reminder. */
     public int type; // Fixed or dynamic, defined in Constants
 
     // Fixed reminder data
