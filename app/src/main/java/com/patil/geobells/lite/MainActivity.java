@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.patil.geobells.lite.service.ActivityRecognitionService;
 import com.patil.geobells.lite.service.LocationService;
+import com.patil.geobells.lite.utils.ConnectivityChecker;
 import com.patil.geobells.lite.utils.Constants;
 import com.patil.geobells.lite.utils.GeobellsDataManager;
 import com.patil.geobells.lite.utils.GeobellsPreferenceManager;
@@ -169,12 +170,20 @@ public class MainActivity extends Activity
         // as you specify a parent activity in AndroidManifest.xml.
         switch(item.getItemId()) {
             case R.id.action_create:
-                startCreateReminderActivity();
+                if(new ConnectivityChecker(this).isOnline()) {
+                    startCreateReminderActivity();
+                } else {
+                    Toast.makeText(this, getString(R.string.toast_connect_internet_create_reminder), Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.action_view_map:
                 if(new GeobellsDataManager(this).getSavedReminders().size() > 0) {
-                    Intent intent1 = new Intent(this, ViewRemindersMapActivity.class);
-                    startActivity(intent1);
+                    if(new ConnectivityChecker(this).isOnline()) {
+                        Intent intent1 = new Intent(this, ViewRemindersMapActivity.class);
+                        startActivity(intent1);
+                    } else {
+                        Toast.makeText(this, getString(R.string.toast_connect_internet_map), Toast.LENGTH_SHORT).show();
+                    }
                 } else {
                     Toast.makeText(this, getString(R.string.toast_no_map_reminders), Toast.LENGTH_SHORT).show();
                 }

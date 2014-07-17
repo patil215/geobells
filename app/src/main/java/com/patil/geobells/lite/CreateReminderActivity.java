@@ -39,6 +39,7 @@ import com.patil.geobells.lite.data.Place;
 import com.patil.geobells.lite.data.Reminder;
 import com.patil.geobells.lite.service.LocationService;
 import com.patil.geobells.lite.utils.Config;
+import com.patil.geobells.lite.utils.ConnectivityChecker;
 import com.patil.geobells.lite.utils.Constants;
 import com.patil.geobells.lite.utils.GeobellsDataManager;
 import com.patil.geobells.lite.utils.GeobellsPreferenceManager;
@@ -411,29 +412,33 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
 
     public void createReminder() {
         if (isNecessaryFieldsCompleted()) {
-            title = titleBox.getText().toString();
-            completed = false;
-            repeat = repeatCheckBox.isChecked();
-            if (descriptionBox.getText().toString() != null && descriptionBox.getText().toString().length() > 0) {
-                description = descriptionBox.getText().toString();
+            if(new ConnectivityChecker(this).isOnline()) {
+                title = titleBox.getText().toString();
+                completed = false;
+                repeat = repeatCheckBox.isChecked();
+                if (descriptionBox.getText().toString() != null && descriptionBox.getText().toString().length() > 0) {
+                    description = descriptionBox.getText().toString();
+                } else {
+                    description = "";
+                }
+                // days is already set through dialog
+                // proximity is already set through dialog
+                toggleAirplane = airplaneCheckBox.isChecked();
+                silencePhone = silenceCheckBox.isChecked();
+                timeCreated = System.currentTimeMillis();
+                timeCompleted = Constants.TIME_COMPLETED_DEFAULT;
+                if (enterRadioButton.isChecked()) {
+                    transition = Constants.TRANSITION_ENTER;
+                } else {
+                    transition = Constants.TRANSITION_EXIT;
+                }
+                if (specificRadioButton.isChecked()) {
+                    createSpecificReminder();
+                } else if (dynamicRadioButton.isChecked()) {
+                    createDynamicReminder();
+                }
             } else {
-                description = "";
-            }
-            // days is already set through dialog
-            // proximity is already set through dialog
-            toggleAirplane = airplaneCheckBox.isChecked();
-            silencePhone = silenceCheckBox.isChecked();
-            timeCreated = System.currentTimeMillis();
-            timeCompleted = Constants.TIME_COMPLETED_DEFAULT;
-            if (enterRadioButton.isChecked()) {
-                transition = Constants.TRANSITION_ENTER;
-            } else {
-                transition = Constants.TRANSITION_EXIT;
-            }
-            if (specificRadioButton.isChecked()) {
-                createSpecificReminder();
-            } else if (dynamicRadioButton.isChecked()) {
-                createDynamicReminder();
+                Toast.makeText(this, getString(R.string.toast_connect_internet_create_reminder), Toast.LENGTH_SHORT).show();
             }
         } else {
             Toast.makeText(this, getString(R.string.toast_fill_info), Toast.LENGTH_SHORT).show();
