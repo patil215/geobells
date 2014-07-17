@@ -120,5 +120,19 @@
     <string name="toast_no_map_reminders">No reminders to show on map.</string>
     <string name="toast_connect_internet_map">Connect to the internet to view the map.</string>
     <string name="toast_connect_internet_create_reminder">Connect to the internet to create a reminder.</string>
+    <string name="title_activity_view_reminder">View Reminder</string>
+    <string name="text_description_default">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent venenatis odio massa, volutpat ornare dui pretium eleifend. Quisque ac varius mi, quis eleifend nibh. Sed in lorem dictum lorem bibendum ultrices. Suspendisse viverra lorem enim, at congue lectus imperdiet eu. Aenean mauris dui, feugiat at nulla nec, tempor iaculis erat. In porttitor, mi eget consequat mattis, lacus felis pretium urna, a pharetra orci tellus vel risus</string>
+    <string name="text_proximity_default">When closer than 1/2 mi.</string>
+    <string name="text_days_default">Reminds on Monday, Tuesday, Friday</string>
+    <string name="text_repeat_default">Resets every day</string>
+    <string name="text_toggle_default">Toggles airplane mode and silences phone upon reminder</string>
+    <string name="toast_error_occurred">An error occured.</string>
+    <string name="text_when_closer_than">When closer than&#160;</string>
+    <string name="text_when_farther_than">When farther than&#160;</string>
+    <string name="text_reminds_on">Reminds on&#160;</string>
+    <string name="text_repeats">Resets every day</string>
+    <string name="text_silence_and_airplane">Silences phone and toggles airplane mode upon reminder</string>
+    <string name="text_silence">Silences phone upon reminder</string>
+    <string name="text_airplane">Toggles airplane mode upon reminder</string>
 
 </resources>

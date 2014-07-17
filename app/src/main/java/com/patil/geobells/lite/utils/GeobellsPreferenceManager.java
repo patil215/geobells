@@ -44,6 +44,6 @@ public class GeobellsPreferenceManager {
     }
 
     public boolean isMetricEnabled() {
-        return preferences.getBoolean("preference_metric", false);
+        return preferences.getBoolean("pref_metric", false);
     }
 }

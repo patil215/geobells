@@ -2,6 +2,7 @@ package com.patil.geobells.lite.views;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +13,9 @@ import android.widget.Toast;
 
 import com.patil.geobells.lite.MainActivity;
 import com.patil.geobells.lite.R;
+import com.patil.geobells.lite.ViewReminderActivity;
 import com.patil.geobells.lite.data.Reminder;
+import com.patil.geobells.lite.utils.Constants;
 import com.patil.geobells.lite.utils.GeobellsDataManager;
 
 import java.util.ArrayList;
@@ -48,6 +51,14 @@ public class CompletedRemindersFragment extends Fragment {
                                 Reminder reminder = reminders.get(index);
                                 reminder.completed = false;
                                 dataManager.saveReminders(reminders);
+                            }
+                        });
+                        card.setOnClickListener(new Card.OnCardClickListener() {
+                            @Override
+                            public void onClick(Card card, View view) {
+                                Intent intent = new Intent(getActivity(), ViewReminderActivity.class);
+                                intent.putExtra(Constants.EXTRA_REMINDER_INDEX, index);
+                                startActivity(intent);
                             }
                         });
                         cards.add(card);

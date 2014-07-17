@@ -86,4 +86,9 @@ public class Constants {
     public static final int POLLING_INTERVAL_TILTING = 45000;
     public static final String EXTRA_SPEAKTEXT = "text";
     public static final long POLLING_INTERVAL_ACTIVITY_RECOGNITION = 90000;
+
+    public static final int SIZE_IMAGE_PREVIEW_HORIZONTAL = 200;
+    public static final int SIZE_IMAGE_PREVIEW_VERTICAL = 200;
+    public static final int SIZE_IMAGE_LARGE_HORIZONTAL = 600;
+    public static final int SIZE_IMAGE_LARGE_VERTICAL = 600;
 }

@@ -48,7 +48,7 @@ public class ReminderCard extends Card {
         if(completed) {
             date = GeobellsUtils.getRelativeTime(reminder.timeCompleted);
         } else {
-            date = GeobellsUtils.getRelativeTime(reminder.timeCreated); // TODO make relative time
+            date = GeobellsUtils.getRelativeTime(reminder.timeCreated);
         }
         if(reminder.type == Constants.TYPE_FIXED) {
             location = reminder.address;
@@ -76,13 +76,13 @@ public class ReminderCard extends Card {
         if(mapImage.getDrawable() == null) {
             if (reminder.type == Constants.TYPE_FIXED) {
                 positions.add(new LatLng(reminder.latitude, reminder.longitude));
-                String url = GeobellsUtils.constructMapImageURL(positions, Color.parseColor(color));
+                String url = GeobellsUtils.constructMapImageURL(positions, Color.parseColor(color), Constants.SIZE_IMAGE_PREVIEW_HORIZONTAL, Constants.SIZE_IMAGE_PREVIEW_VERTICAL);
                 new DownloadImageTask(context, mapImage).execute(url);
             } else {
                 for (Place place : reminder.places) {
                     positions.add(new LatLng(place.latitude, place.longitude));
                 }
-                String url = GeobellsUtils.constructMapImageURL(positions, Color.parseColor(color));
+                String url = GeobellsUtils.constructMapImageURL(positions, Color.parseColor(color), Constants.SIZE_IMAGE_PREVIEW_HORIZONTAL, Constants.SIZE_IMAGE_PREVIEW_VERTICAL);
                 new DownloadImageTask(context, mapImage).execute(url);
             }
         }

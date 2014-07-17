@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.patil.geobells.lite.MainActivity;
 import com.patil.geobells.lite.R;
+import com.patil.geobells.lite.ViewReminderActivity;
 import com.patil.geobells.lite.data.Reminder;
 import com.patil.geobells.lite.utils.Constants;
 import com.patil.geobells.lite.utils.GeobellsDataManager;
@@ -59,10 +60,9 @@ public class UpcomingRemindersFragment extends Fragment {
                     card.setOnClickListener(new Card.OnCardClickListener() {
                         @Override
                         public void onClick(Card card, View view) {
-                            Reminder reminder = reminders.get(index);
-                            //Intent intent = new Intent(getActivity(), ViewEditReminderActivity.class);
-                            //intent.putExtra(Constants.EXTRA_REMINDER_INDEX, index);
-                            //startActivity(intent);
+                            Intent intent = new Intent(getActivity(), ViewReminderActivity.class);
+                            intent.putExtra(Constants.EXTRA_REMINDER_INDEX, index);
+                            startActivity(intent);
                         }
                     });
                     cards.add(card);

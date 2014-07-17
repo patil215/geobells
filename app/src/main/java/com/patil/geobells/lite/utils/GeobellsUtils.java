@@ -13,9 +13,9 @@ public class GeobellsUtils {
         return p.format(new Date(timeMillis));
     }
 
-    public static String constructMapImageURL(ArrayList<LatLng> markerPositions, int markerColor) {
+    public static String constructMapImageURL(ArrayList<LatLng> markerPositions, int markerColor, int horizontalSize, int verticalSize) {
         StringBuilder sb = new StringBuilder(Constants.STATIC_MAP_API_BASE);
-        sb.append("?size=200x200");
+        sb.append("?size=" + horizontalSize + "x" + verticalSize);
         sb.append("&format=roadmap");
         sb.append("&scale=2");
         String strColor = String.format("#%06X", 0xFFFFCC & markerColor);

@@ -245,7 +245,7 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
     }
 
     public void onChooseDaysClick(View v) {
-        final CharSequence[] displayDays = {getString(R.string.day_sunday), getString(R.string.day_monday), getString(R.string.day_tuesday), getString(R.string.day_wednesday), getString(R.string.day_thursday), getString(R.string.day_friday), getString(R.string.day_saturday)};
+        final CharSequence[] displayDays = getResources().getStringArray(R.array.days);
         // arraylist to keep the selected items
         final boolean[] selectedItems = days;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
