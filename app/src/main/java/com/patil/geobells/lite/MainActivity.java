@@ -181,7 +181,7 @@ public class MainActivity extends Activity
                 if(new GeobellsDataManager(this).getSavedReminders().size() > 0) {
                     if(new ConnectivityChecker(this).isOnline()) {
                         Intent intent1 = new Intent(this, ViewRemindersMapActivity.class);
-                        startActivity(intent1);
+                        startActivityForResult(intent1, Constants.ACTIVITY_REQUEST_CODE_VIEW_REMINDER);
                     } else {
                         Toast.makeText(this, getString(R.string.toast_connect_internet_map), Toast.LENGTH_SHORT).show();
                     }

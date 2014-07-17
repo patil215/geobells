@@ -92,4 +92,6 @@ public class Constants {
     public static final int SIZE_IMAGE_LARGE_HORIZONTAL = 600;
     public static final int SIZE_IMAGE_LARGE_VERTICAL = 600;
     public static final String EXTRA_EDIT_REMINDER = "editreminder";
+    public static final int ACTIVITY_REQUEST_CODE_EDIT_REMINDER = 1;
+    public static final int ACTIVITY_REQUEST_CODE_VIEW_REMINDER = 9;
 }

@@ -20,6 +20,7 @@ import com.patil.geobells.lite.utils.Constants;
 import com.patil.geobells.lite.utils.GeobellsDataManager;
 import com.patil.geobells.lite.utils.GeobellsPreferenceManager;
 import com.patil.geobells.lite.utils.GeobellsUtils;
+import com.patil.geobells.lite.views.UpcomingRemindersFragment;
 
 import java.util.ArrayList;
 
@@ -55,14 +56,14 @@ public class ViewReminderActivity extends Activity {
         if (reminderIndex != -1) {
             reminders = dataManager.getSavedReminders();
             reminder = reminders.get(reminderIndex);
-            makeText(reminder);
+            displayDetails(reminder);
         } else {
             Toast.makeText(this, getString(R.string.toast_error_occurred), Toast.LENGTH_SHORT).show();
             finish();
         }
     }
 
-    public void makeText(Reminder reminder) {
+    public void displayDetails(Reminder reminder) {
         titleBox.setText(reminder.title);
         setVolatileText(descriptionBox, reminder.description);
         if (reminder.type == Constants.TYPE_FIXED) {
@@ -166,6 +167,13 @@ public class ViewReminderActivity extends Activity {
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        reminder = dataManager.getSavedReminders().get(reminderIndex);
+        displayDetails(reminder);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
@@ -175,7 +183,7 @@ public class ViewReminderActivity extends Activity {
                 Intent intent = new Intent(this, CreateReminderActivity.class);
                 intent.putExtra(Constants.EXTRA_EDIT_REMINDER, true);
                 intent.putExtra(Constants.EXTRA_REMINDER_INDEX, reminderIndex);
-                startActivity(intent);
+                startActivityForResult(intent, Constants.ACTIVITY_REQUEST_CODE_EDIT_REMINDER);
                 return true;
         }
         return super.onOptionsItemSelected(item);
