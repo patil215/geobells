@@ -3,7 +3,6 @@ package com.patil.geobells.lite.service;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.location.Location;
 import android.media.AudioManager;
@@ -338,29 +337,21 @@ public class LocationService extends Service implements GooglePlayServicesClient
         Log.d("BackgroundService", "Toggling airplane mode");
         if (Build.VERSION.SDK_INT >= 17) {
             WifiManager wifiManager = (WifiManager) getSystemService(WIFI_SERVICE);
-            if (!wifiManager.isWifiEnabled())
+            if (!wifiManager.isWifiEnabled()) {
                 wifiManager.setWifiEnabled(true);
-            else
+            } else {
                 wifiManager.setWifiEnabled(false);
+            }
         } else {
-            int j;
-            if (Settings.System.getInt(getContentResolver(), "airplane_mode_on", 0) != 1)
-                j = 0;
-            else
-                j = 1;
-            ContentResolver localContentResolver = getContentResolver();
-            int k;
-            if (j == 0)
-                k = 1;
-            else
-                k = 0;
-            Settings.System.putInt(localContentResolver, "airplane_mode_on", k);
-            Intent localIntent = new Intent("android.intent.action.AIRPLANE_MODE");
-            boolean bool = false;
-            if (j == 0)
-                bool = true;
-            localIntent.putExtra("state", bool);
-            sendBroadcast(localIntent);
+            boolean isEnabled = Settings.System.getInt(
+                    getContentResolver(),
+                    Settings.System.AIRPLANE_MODE_ON, 0) == 1;
+            Settings.System.putInt(
+                    getContentResolver(),
+                    Settings.System.AIRPLANE_MODE_ON, isEnabled ? 0 : 1);
+            Intent intent = new Intent(Intent.ACTION_AIRPLANE_MODE_CHANGED);
+            intent.putExtra("state", !isEnabled);
+            sendBroadcast(intent);
         }
     }
 
