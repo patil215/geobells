@@ -105,6 +105,9 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
 
     LocationClient locationClient;
 
+    boolean editingReminder;
+    int reminderIndex;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,9 +119,69 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
         locationClient = new LocationClient(this, this, this);
         preferenceManager = new GeobellsPreferenceManager(this);
         dataManager = new GeobellsDataManager(this);
+        editingReminder = getIntent().getBooleanExtra(Constants.EXTRA_EDIT_REMINDER, false);
+        if (editingReminder) {
+            getActionBar().setTitle(getString(R.string.title_activity_edit_reminder));
+            reminderIndex = getIntent().getIntExtra(Constants.EXTRA_REMINDER_INDEX, -1);
+            if (reminderIndex == -1) {
+                Toast.makeText(this, getString(R.string.toast_error_occurred), Toast.LENGTH_SHORT).show();
+                finish();
+            } else {
+                setData();
+            }
+        } else {
+            reminderIndex = -1;
+        }
         getActionBar().setDisplayHomeAsUpEnabled(true);
         setupSpinner();
         setupAutocomplete();
+    }
+
+    public void setData() {
+
+        Reminder reminder = dataManager.getSavedReminders().get(reminderIndex);
+        title = reminder.title;
+        completed = reminder.completed;
+        repeat = reminder.repeat;
+        days = reminder.days;
+        proximity = reminder.proximity;
+        toggleAirplane = reminder.toggleAirplane;
+        silencePhone = reminder.silencePhone;
+        timeCreated = reminder.timeCreated;
+        timeCompleted = reminder.timeCompleted;
+        transition = reminder.transition;
+        description = reminder.description;
+        titleBox.setText(reminder.title);
+        descriptionBox.setText(reminder.description);
+        if (reminder.type == Constants.TYPE_FIXED) {
+            specificRadioButton.setChecked(true);
+            latitude = reminder.latitude;
+            longitude = reminder.longitude;
+            address = reminder.address;
+            addressBox.setText(reminder.address);
+        } else {
+            dynamicRadioButton.setChecked(true);
+            businessBox.setText(reminder.business);
+        }
+        if (reminder.transition == Constants.TRANSITION_ENTER) {
+            enterRadioButton.setChecked(true);
+        } else {
+            exitRadioButton.setChecked(true);
+        }
+        repeatCheckBox.setChecked(reminder.repeat);
+        airplaneCheckBox.setChecked(reminder.toggleAirplane);
+        silenceCheckBox.setChecked(reminder.silencePhone);
+
+        int[] proximities = Constants.PROXIMITY_DISTANCES;
+        int index = Constants.PROXIMITY_DISTANCES_DEFAULT_INDEX;
+        for (int i = 0; i < proximities.length; i++) {
+            if (proximity == proximities[i]) {
+                index = i;
+                break;
+            }
+        }
+        proximitySpinner.setSelection(index);
+
     }
 
     @Override
@@ -372,7 +435,11 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
         reminder.address = address;
         reminder.latitude = latitude;
         reminder.longitude = longitude;
-        reminders.add(reminder);
+        if(editingReminder) {
+            reminders.set(reminderIndex, reminder);
+        } else {
+            reminders.add(reminder);
+        }
         dataManager.saveReminders(reminders);
         Toast.makeText(this, getString(R.string.toast_reminder_created), Toast.LENGTH_SHORT).show();
         Intent returnIntent = new Intent();
@@ -406,7 +473,11 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
         reminder.type = Constants.TYPE_DYNAMIC;
         reminder.business = business;
         reminder.places = places;
-        reminders.add(reminder);
+        if(editingReminder) {
+            reminders.set(reminderIndex, reminder);
+        } else {
+            reminders.add(reminder);
+        }
         dataManager.saveReminders(reminders);
         Toast.makeText(this, getString(R.string.toast_reminder_created), Toast.LENGTH_SHORT).show();
         Intent serviceIntent = new Intent(this, LocationService.class);
@@ -416,7 +487,7 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
 
     public void createReminder() {
         if (isNecessaryFieldsCompleted()) {
-            if(new ConnectivityChecker(this).isOnline()) {
+            if (new ConnectivityChecker(this).isOnline()) {
                 title = titleBox.getText().toString();
                 completed = false;
                 repeat = repeatCheckBox.isChecked();

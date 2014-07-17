@@ -134,5 +134,7 @@
     <string name="text_silence_and_airplane">Silences phone and toggles airplane mode upon reminder</string>
     <string name="text_silence">Silences phone upon reminder</string>
     <string name="text_airplane">Toggles airplane mode upon reminder</string>
+    <string name="action_edit">Edit reminder</string>
+    <string name="title_activity_edit_reminder">Edit Reminder</string>
 
 </resources>

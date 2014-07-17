@@ -147,6 +147,7 @@ public class MainActivity extends Activity
 
     public void startCreateReminderActivity() {
         Intent intent = new Intent(this, CreateReminderActivity.class);
+        intent.putExtra(Constants.EXTRA_EDIT_REMINDER, false);
         startActivityForResult(intent, Constants.ACTIVITY_REQUEST_CODE_CREATE_REMINDER);
     }
 

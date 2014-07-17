@@ -1,6 +1,7 @@
 package com.patil.geobells.lite;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
@@ -12,7 +13,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.patil.geobells.lite.R;
 import com.patil.geobells.lite.asynctask.DownloadImageTask;
 import com.patil.geobells.lite.data.Place;
 import com.patil.geobells.lite.data.Reminder;
@@ -35,6 +35,9 @@ public class ViewReminderActivity extends Activity {
     TextView toggleBox;
     ImageView mapImage;
 
+    Reminder reminder;
+    int reminderIndex;
+
     ArrayList<Reminder> reminders;
 
     GeobellsDataManager dataManager;
@@ -46,77 +49,82 @@ public class ViewReminderActivity extends Activity {
         setContentView(R.layout.activity_view_reminder);
         getActionBar().setDisplayHomeAsUpEnabled(true);
         setupViews();
-        int reminderIndex = getIntent().getIntExtra(Constants.EXTRA_REMINDER_INDEX, -1);
+        reminderIndex = getIntent().getIntExtra(Constants.EXTRA_REMINDER_INDEX, -1);
         dataManager = new GeobellsDataManager(this);
         preferenceManager = new GeobellsPreferenceManager(this);
-        if(reminderIndex != -1) {
+        if (reminderIndex != -1) {
             reminders = dataManager.getSavedReminders();
-            Reminder reminder = reminders.get(reminderIndex);
-            titleBox.setText(reminder.title);
-            setVolatileText(descriptionBox, reminder.description);
-            if(reminder.type == Constants.TYPE_FIXED) {
-                locationBox.setText(reminder.address);
-            } else {
-                locationBox.setText(reminder.business);
-            }
-            if(reminder.transition == Constants.TRANSITION_ENTER) {
-                setVolatileText(proximityBox, getString(R.string.text_when_closer_than) + proximityToWord(reminder.proximity));
-            } else {
-                setVolatileText(proximityBox, getString(R.string.text_when_farther_than) + proximityToWord(reminder.proximity));
-            }
-            String[] displayDays = getResources().getStringArray(R.array.days);
-            boolean[] days = reminder.days;
-            String daysString = " ";
-            for(int i = 0; i < days.length; i++) {
-                if(days[i]) {
-                    daysString += displayDays[i] + ", ";
-                }
-            }
-            daysString = daysString.substring(0, daysString.length() - 2);
-            setVolatileText(daysBox, getString(R.string.text_reminds_on) + daysString);
-            if(reminder.repeat) {
-                setVolatileText(repeatBox, getString(R.string.text_repeats));
-            }
-
-            if(reminder.silencePhone && reminder.toggleAirplane) {
-                setVolatileText(toggleBox, getString(R.string.text_silence_and_airplane));
-            } else if(reminder.silencePhone) {
-                setVolatileText(toggleBox, getString(R.string.text_silence));
-            } else if(reminder.toggleAirplane) {
-                setVolatileText(toggleBox, getString(R.string.text_airplane));
-            } else {
-                setVolatileText(toggleBox, "");
-            }
-
-
-            ArrayList<LatLng> positions = new ArrayList<LatLng>();
-            if (reminder.type == Constants.TYPE_FIXED) {
-                positions.add(new LatLng(reminder.latitude, reminder.longitude));
-                String url = GeobellsUtils.constructMapImageURL(positions, Color.parseColor(Constants.COLORS[reminderIndex % reminders.size()]), Constants.SIZE_IMAGE_LARGE_HORIZONTAL, Constants.SIZE_IMAGE_LARGE_VERTICAL);
-                new DownloadImageTask(this, mapImage).execute(url);
-            } else {
-                for (Place place : reminder.places) {
-                    positions.add(new LatLng(place.latitude, place.longitude));
-                }
-                String url = GeobellsUtils.constructMapImageURL(positions, Color.parseColor(Constants.COLORS[reminderIndex % reminders.size()]), Constants.SIZE_IMAGE_LARGE_HORIZONTAL, Constants.SIZE_IMAGE_LARGE_VERTICAL);
-                new DownloadImageTask(this, mapImage).execute(url);
-            }
+            reminder = reminders.get(reminderIndex);
+            makeText(reminder);
         } else {
             Toast.makeText(this, getString(R.string.toast_error_occurred), Toast.LENGTH_SHORT).show();
             finish();
         }
     }
 
+    public void makeText(Reminder reminder) {
+        titleBox.setText(reminder.title);
+        setVolatileText(descriptionBox, reminder.description);
+        if (reminder.type == Constants.TYPE_FIXED) {
+            locationBox.setText(reminder.address);
+        } else {
+            locationBox.setText(reminder.business);
+        }
+        if (reminder.transition == Constants.TRANSITION_ENTER) {
+            setVolatileText(proximityBox, getString(R.string.text_when_closer_than) + proximityToWord(reminder.proximity));
+        } else {
+            setVolatileText(proximityBox, getString(R.string.text_when_farther_than) + proximityToWord(reminder.proximity));
+        }
+        String[] displayDays = getResources().getStringArray(R.array.days);
+        boolean[] days = reminder.days;
+        String daysString = " ";
+        for (int i = 0; i < days.length; i++) {
+            if (days[i]) {
+                daysString += displayDays[i] + ", ";
+            }
+        }
+        daysString = daysString.substring(0, daysString.length() - 2);
+        setVolatileText(daysBox, getString(R.string.text_reminds_on) + daysString);
+        if (reminder.repeat) {
+            setVolatileText(repeatBox, getString(R.string.text_repeats));
+        }
+
+        if (reminder.silencePhone && reminder.toggleAirplane) {
+            setVolatileText(toggleBox, getString(R.string.text_silence_and_airplane));
+        } else if (reminder.silencePhone) {
+            setVolatileText(toggleBox, getString(R.string.text_silence));
+        } else if (reminder.toggleAirplane) {
+            setVolatileText(toggleBox, getString(R.string.text_airplane));
+        } else {
+            setVolatileText(toggleBox, "");
+        }
+
+
+        ArrayList<LatLng> positions = new ArrayList<LatLng>();
+        if (reminder.type == Constants.TYPE_FIXED) {
+            positions.add(new LatLng(reminder.latitude, reminder.longitude));
+            String url = GeobellsUtils.constructMapImageURL(positions, Color.parseColor(Constants.COLORS[reminderIndex % reminders.size()]), Constants.SIZE_IMAGE_LARGE_HORIZONTAL, Constants.SIZE_IMAGE_LARGE_VERTICAL);
+            new DownloadImageTask(this, mapImage).execute(url);
+        } else {
+            for (Place place : reminder.places) {
+                positions.add(new LatLng(place.latitude, place.longitude));
+            }
+            String url = GeobellsUtils.constructMapImageURL(positions, Color.parseColor(Constants.COLORS[reminderIndex % reminders.size()]), Constants.SIZE_IMAGE_LARGE_HORIZONTAL, Constants.SIZE_IMAGE_LARGE_VERTICAL);
+            new DownloadImageTask(this, mapImage).execute(url);
+        }
+    }
+
+
     public String proximityToWord(int proximity) {
         int[] proximities = Constants.PROXIMITY_DISTANCES;
         int index = Constants.PROXIMITY_DISTANCES_DEFAULT_INDEX;
-        for(int i = 0; i < proximities.length; i++) {
-            if(proximity == proximities[i]) {
+        for (int i = 0; i < proximities.length; i++) {
+            if (proximity == proximities[i]) {
                 index = i;
                 break;
             }
         }
-        if(preferenceManager.isMetricEnabled()) {
+        if (preferenceManager.isMetricEnabled()) {
             String[] metricArray = getResources().getStringArray(R.array.spinner_proximity_metric);
             return metricArray[index];
         } else {
@@ -126,7 +134,7 @@ public class ViewReminderActivity extends Activity {
     }
 
     public void setVolatileText(TextView textBox, String text) {
-        if(text.length() > 0) {
+        if (text.length() > 0) {
             textBox.setText(text);
         } else {
             textBox.setVisibility(View.GONE);
@@ -159,9 +167,15 @@ public class ViewReminderActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
+                return true;
+            case R.id.action_edit:
+                Intent intent = new Intent(this, CreateReminderActivity.class);
+                intent.putExtra(Constants.EXTRA_EDIT_REMINDER, true);
+                intent.putExtra(Constants.EXTRA_REMINDER_INDEX, reminderIndex);
+                startActivity(intent);
                 return true;
         }
         return super.onOptionsItemSelected(item);
