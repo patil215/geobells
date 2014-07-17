@@ -71,6 +71,7 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
     CheckBox airplaneCheckBox;
     CheckBox silenceCheckBox;
     TextView proximityPrompt;
+    TextView transitionPrompt;
     RelativeLayout specificLayout;
     RelativeLayout dynamicLayout;
     RelativeLayout advancedLayout;
@@ -194,6 +195,7 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
         airplaneCheckBox = (CheckBox) findViewById(R.id.checkbox_reminder_airplane);
         silenceCheckBox = (CheckBox) findViewById(R.id.checkbox_reminder_silence);
         proximityPrompt = (TextView) findViewById(R.id.prompt_reminder_proximity);
+        transitionPrompt = (TextView) findViewById(R.id.prompt_reminder_transition);
         specificLayout = (RelativeLayout) findViewById(R.id.layout_reminder_specific);
         dynamicLayout = (RelativeLayout) findViewById(R.id.layout_reminder_dynamic);
         advancedLayout = (RelativeLayout) findViewById(R.id.layout_advanced_options);
@@ -206,6 +208,7 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
         specificLayout.setVisibility(View.VISIBLE);
         advancedButton.setVisibility(View.VISIBLE);
         transitionRadioGroup.setVisibility(View.VISIBLE);
+        transitionPrompt.setVisibility(View.VISIBLE);
         addressBox.setFocusableInTouchMode(true);
         addressBox.requestFocus();
         final InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -217,6 +220,7 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
         dynamicLayout.setVisibility(View.VISIBLE);
         advancedButton.setVisibility(View.VISIBLE);
         transitionRadioGroup.setVisibility(View.GONE);
+        transitionPrompt.setVisibility(View.GONE);
         businessBox.setFocusableInTouchMode(true);
         businessBox.requestFocus();
         final InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
