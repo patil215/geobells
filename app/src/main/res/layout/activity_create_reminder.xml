@@ -32,6 +32,8 @@
                 android:id="@+id/reminder_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:maxLines="1"
                 android:layout_below="@id/prompt_reminder_title"
                 android:capitalize="words"
                 android:hint="@string/hint_reminder_title" />
@@ -179,6 +181,8 @@
                     android:id="@+id/reminder_business"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:maxLines="1"
                     android:layout_below="@id/layout_business_options"
                     android:capitalize="sentences"
                     android:hint="@string/hint_reminder_business" />
