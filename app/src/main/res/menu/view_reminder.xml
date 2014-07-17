@@ -1,6 +1,19 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.patil.geobells.lite.ViewReminderActivity" >
+    <item android:id="@+id/action_set_uncompleted"
+        android:icon="@drawable/ic_action_undo"
+        android:showAsAction="always"
+        android:title="@string/action_set_uncompleted" />
+
+    <item android:id="@+id/action_set_completed"
+        android:icon="@drawable/ic_action_undo"
+        android:showAsAction="always"
+        android:title="@string/action_set_completed" />
+    <item android:id="@+id/action_delete"
+        android:icon="@drawable/ic_action_discard"
+        android:showAsAction="always"
+        android:title="@string/action_delete" />
     <item
         android:id="@+id/action_edit"
         android:showAsAction="always"

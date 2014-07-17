@@ -62,7 +62,7 @@ public class UpcomingRemindersFragment extends Fragment {
                         public void onClick(Card card, View view) {
                             Intent intent = new Intent(getActivity(), ViewReminderActivity.class);
                             intent.putExtra(Constants.EXTRA_REMINDER_INDEX, index);
-                            startActivity(intent);
+                            startActivityForResult(intent, 12);
                         }
                     });
                     cards.add(card);

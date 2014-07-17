@@ -136,5 +136,9 @@
     <string name="text_airplane">Toggles airplane mode upon reminder</string>
     <string name="action_edit">Edit reminder</string>
     <string name="title_activity_edit_reminder">Edit Reminder</string>
+    <string name="action_delete">Delete reminder</string>
+    <string name="action_set_uncompleted">Set as uncompleted</string>
+    <string name="action_set_completed">Set as completed</string>
+    <string name="toast_reminder_deleted">Reminder deleted.</string>
 
 </resources>

@@ -38,6 +38,8 @@ public class ViewReminderActivity extends Activity {
 
     Reminder reminder;
     int reminderIndex;
+    MenuItem setUncompletedItem;
+    MenuItem setCompletedItem;
 
     ArrayList<Reminder> reminders;
 
@@ -159,6 +161,16 @@ public class ViewReminderActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.view_reminder, menu);
+        setUncompletedItem = menu.findItem(R.id.action_set_uncompleted);
+        setCompletedItem = menu.findItem(R.id.action_set_completed);
+
+        if(reminder.completed) {
+            setCompletedItem.setVisible(false);
+            setUncompletedItem.setVisible(true);
+        } else {
+            setCompletedItem.setVisible(true);
+            setUncompletedItem.setVisible(false);
+        }
         return true;
     }
 
@@ -177,14 +189,47 @@ public class ViewReminderActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+                Intent returnIntent = new Intent();
+                setResult(RESULT_OK, returnIntent);
                 finish();
-                return true;
+                break;
             case R.id.action_edit:
                 Intent intent = new Intent(this, CreateReminderActivity.class);
                 intent.putExtra(Constants.EXTRA_EDIT_REMINDER, true);
                 intent.putExtra(Constants.EXTRA_REMINDER_INDEX, reminderIndex);
                 startActivityForResult(intent, Constants.ACTIVITY_REQUEST_CODE_EDIT_REMINDER);
-                return true;
+                Intent returnIntent1 = new Intent();
+                setResult(RESULT_OK, returnIntent1);
+                finish();
+                break;
+            case R.id.action_delete:
+                reminders.remove(reminderIndex);
+                dataManager.saveReminders(reminders);
+                Intent returnIntent2 = new Intent();
+                setResult(RESULT_OK, returnIntent2);
+                finish();
+                Toast.makeText(this, getString(R.string.toast_reminder_deleted), Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.action_set_completed:
+                if(!reminder.completed) {
+                    reminder.completed = true;
+                }
+                dataManager.saveReminders(reminders);
+                Toast.makeText(this, getString(R.string.toast_reminder_swipe_completed), Toast.LENGTH_SHORT).show();
+                Intent returnIntent3 = new Intent();
+                setResult(RESULT_OK, returnIntent3);
+                finish();
+                break;
+            case R.id.action_set_uncompleted:
+                if(reminder.completed) {
+                    reminder.completed = false;
+                }
+                dataManager.saveReminders(reminders);
+                Toast.makeText(this, getString(R.string.toast_reminder_swipe_uncompleted), Toast.LENGTH_SHORT).show();
+                Intent returnIntent4 = new Intent();
+                setResult(RESULT_OK, returnIntent4);
+                finish();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
