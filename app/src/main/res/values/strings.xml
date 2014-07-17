@@ -116,5 +116,6 @@
     <string name="notification_message_approaching">Approaching</string>
     <string name="notification_message_dontforget">don\'t forget to</string>
     <string name="notification_message_exiting">Leaving</string>
+    <string name="dialog_title_about">About</string>
 
 </resources>

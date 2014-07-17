@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -204,6 +205,10 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
         specificLayout.setVisibility(View.VISIBLE);
         advancedButton.setVisibility(View.VISIBLE);
         transitionRadioGroup.setVisibility(View.VISIBLE);
+        addressBox.setFocusableInTouchMode(true);
+        addressBox.requestFocus();
+        final InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.showSoftInput(addressBox, InputMethodManager.SHOW_IMPLICIT);
     }
 
     public void onTypeDynamicClick(View v) {
@@ -211,14 +216,27 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
         dynamicLayout.setVisibility(View.VISIBLE);
         advancedButton.setVisibility(View.VISIBLE);
         transitionRadioGroup.setVisibility(View.GONE);
+        businessBox.setFocusableInTouchMode(true);
+        businessBox.requestFocus();
+        final InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.showSoftInput(businessBox, InputMethodManager.SHOW_IMPLICIT);
     }
 
     public void onAdvancedOptionsClick(View v) {
+        hideKeyboard();
         if (advancedLayout.getVisibility() == View.VISIBLE) {
             advancedLayout.setVisibility(View.GONE);
         } else {
             advancedLayout.setVisibility(View.VISIBLE);
         }
+    }
+
+    public void hideKeyboard() {
+        InputMethodManager inputManager = (InputMethodManager)
+                getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
+                InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
     public void onChooseDaysClick(View v) {

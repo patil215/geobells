@@ -15,6 +15,7 @@ import android.view.View;
 import com.patil.geobells.lite.service.ActivityRecognitionService;
 import com.patil.geobells.lite.service.LocationService;
 import com.patil.geobells.lite.utils.Constants;
+import com.patil.geobells.lite.views.AboutDialog;
 import com.patil.geobells.lite.views.CompletedRemindersFragment;
 import com.patil.geobells.lite.views.NavigationDrawerFragment;
 import com.patil.geobells.lite.views.UpcomingRemindersFragment;
@@ -182,7 +183,10 @@ public class MainActivity extends Activity
     }
 
     public void onAboutClick(View v) {
-
+        mNavigationDrawerFragment.mDrawerLayout.closeDrawer(mNavigationDrawerFragment.mFragmentContainerView);
+        AboutDialog about = new AboutDialog(this);
+        about.setTitle(getString(R.string.dialog_title_about));
+        about.show();
     }
 
     public void onHelpClick(View v) {
