@@ -272,10 +272,12 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
         advancedButton.setVisibility(View.VISIBLE);
         transitionRadioGroup.setVisibility(View.VISIBLE);
         transitionPrompt.setVisibility(View.VISIBLE);
-        addressBox.setFocusableInTouchMode(true);
-        addressBox.requestFocus();
-        final InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputMethodManager.showSoftInput(addressBox, InputMethodManager.SHOW_IMPLICIT);
+        if(addressBox.getText() == null || addressBox.getText().length() == 0) {
+            addressBox.setFocusableInTouchMode(true);
+            addressBox.requestFocus();
+            final InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.showSoftInput(addressBox, InputMethodManager.SHOW_IMPLICIT);
+        }
     }
 
     public void onTypeDynamicClick(View v) {
@@ -284,10 +286,20 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
         advancedButton.setVisibility(View.VISIBLE);
         transitionRadioGroup.setVisibility(View.GONE);
         transitionPrompt.setVisibility(View.GONE);
-        businessBox.setFocusableInTouchMode(true);
-        businessBox.requestFocus();
-        final InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputMethodManager.showSoftInput(businessBox, InputMethodManager.SHOW_IMPLICIT);
+        if(businessBox.getText() == null || businessBox.getText().length() == 0) {
+            businessBox.setFocusableInTouchMode(true);
+            businessBox.requestFocus();
+            final InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.showSoftInput(businessBox, InputMethodManager.SHOW_IMPLICIT);
+        }
+    }
+
+    public void onTransitionEnterClick(View v) {
+        proximityPrompt.setText(getString(R.string.prompt_reminder_transition));
+    }
+
+    public void onTransitionExitClick(View v) {
+        proximityPrompt.setText(getString(R.string.prompt_reminder_transition_exit));
     }
 
     public void onAdvancedOptionsClick(View v) {

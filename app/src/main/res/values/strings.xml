@@ -140,5 +140,6 @@
     <string name="action_set_uncompleted">Set as uncompleted</string>
     <string name="action_set_completed">Set as completed</string>
     <string name="toast_reminder_deleted">Reminder deleted.</string>
+    <string name="prompt_reminder_transition_exit">Trigger when farther than</string>
 
 </resources>

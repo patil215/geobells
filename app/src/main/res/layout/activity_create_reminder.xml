@@ -248,6 +248,7 @@
                 <RadioButton
                     android:id="@+id/radiobutton_reminder_transition_enter"
                     android:layout_width="match_parent"
+                    android:onClick="onTransitionEnterClick"
                     android:layout_height="wrap_content"
                     android:checked="true"
                     android:text="@string/reminder_transition_enter" />
@@ -255,6 +256,7 @@
                 <RadioButton
                     android:id="@+id/radiobutton_reminder_transition_exit"
                     android:layout_width="match_parent"
+                    android:onClick="onTransitionExitClick"
                     android:layout_height="wrap_content"
                     android:text="@string/reminder_transition_exit" />
             </RadioGroup>
