@@ -295,11 +295,11 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
     }
 
     public void onTransitionEnterClick(View v) {
-        proximityPrompt.setText(getString(R.string.prompt_reminder_transition));
+        proximityPrompt.setText(getString(R.string.prompt_reminder_proximity));
     }
 
     public void onTransitionExitClick(View v) {
-        proximityPrompt.setText(getString(R.string.prompt_reminder_transition_exit));
+        proximityPrompt.setText(getString(R.string.prompt_reminder_proximity_exit));
     }
 
     public void onAdvancedOptionsClick(View v) {
