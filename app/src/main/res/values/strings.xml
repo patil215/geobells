@@ -141,5 +141,6 @@
     <string name="action_set_completed">Set as completed</string>
     <string name="toast_reminder_deleted">Reminder deleted.</string>
     <string name="prompt_reminder_proximity_exit">Trigger when farther than</string>
+    <string name="navigation_upgrade_title">Upgrade</string>
 
 </resources>

@@ -84,4 +84,25 @@
         android:layout_width="match_parent"
         android:background="@color/navigation_deactivated"
         />
+
+    <Button
+        android:id="@+id/navigation_upgrade"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/navigation_upgrade_title"
+        android:textColor="@color/navigation_deactivated"
+        android:textSize="13sp"
+        android:textAllCaps="true"
+        android:paddingLeft="12dp"
+        android:onClick="onUpgradeClick"
+        android:drawablePadding="12dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:drawableLeft="@drawable/ic_action_upload"
+        android:gravity="left|center_vertical" />
+
+    <View
+        android:layout_height="1px"
+        android:layout_width="match_parent"
+        android:background="@color/navigation_deactivated"
+        />
 </LinearLayout>
