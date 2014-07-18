@@ -150,5 +150,9 @@
     <string name="dialog_message_interval">Adjust this by changing the multiplier. A multiplier of 1 means Geobells will check for a new location every 60 seconds, 0.5 is 30 seconds, etc. A higher multiplier is less accurate, but better for battery life.</string>
     <string name="dialog_title_interval">Change polling interval</string>
     <string name="toast_multiplier_length">Please fill out all info.</string>
+    <string name="dialog_message_enable_locationservices">To use Geobells, you must enable location services.</string>
+    <string name="dialog_title_enable_locationservices">Enable location</string>
+    <string name="dialog_button_open_location_settings">Open settings</string>
+    <string name="dialog_button_nothanks">No thanks</string>
 
 </resources>
