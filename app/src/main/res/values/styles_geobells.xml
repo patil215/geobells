@@ -19,7 +19,7 @@
 
 <resources>
 
-    <style name="Theme.Geobells" parent="@android:style/Theme.Holo.Light.DarkActionBar">
+    <style name="Theme.Geobells" parent="@style/Geobells">
         <item name="android:actionBarItemBackground">@drawable/selectable_background_geobells</item>
         <item name="android:popupMenuStyle">@style/PopupMenu.Geobells</item>
         <item name="android:dropDownListViewStyle">@style/DropDownListView.Geobells</item>
@@ -84,5 +84,12 @@
         <item name="android:popupMenuStyle">@style/PopupMenu.Geobells</item>
         <item name="android:dropDownListViewStyle">@style/DropDownListView.Geobells</item>
     </style>
+
+
+    <style name="AutoCompleteTextViewGeobells" parent="android:Widget.Holo.Light.AutoCompleteTextView">
+        <item name="android:dropDownSelector">@drawable/geobells_list_selector_holo_light</item>
+        <item name="android:background">@drawable/geobells_edit_text_holo_light</item>
+    </style>
+
 
 </resources>
