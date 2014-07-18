@@ -41,6 +41,10 @@
         android:title="@string/preference_category_other"
         android:key="pref_category_other" >
         <CheckBoxPreference
+            android:title="@string/preference_disable"
+            android:summary="@string/preference_disable_summary"
+            android:key="pref_disable"/>
+        <CheckBoxPreference
             android:title="@string/preference_low_power"
             android:summary="@string/preference_low_power_summary"
             android:key="pref_low_power"/>

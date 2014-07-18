@@ -46,4 +46,16 @@ public class GeobellsPreferenceManager {
     public boolean isMetricEnabled() {
         return preferences.getBoolean("pref_metric", false);
     }
+
+    public boolean isDisabled() {
+        return preferences.getBoolean("pref_disable", false);
+    }
+
+    public void saveDisabled(boolean disabled) {
+        SharedPreferences.Editor edit = preferences.edit();
+        edit.putBoolean("pref_disable", disabled);
+        edit.commit();
+    }
+
+
 }

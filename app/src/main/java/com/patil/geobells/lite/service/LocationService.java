@@ -24,6 +24,7 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.patil.geobells.lite.MainActivity;
 import com.patil.geobells.lite.R;
+import com.patil.geobells.lite.SettingsActivity;
 import com.patil.geobells.lite.ViewReminderActivity;
 import com.patil.geobells.lite.data.Place;
 import com.patil.geobells.lite.data.Reminder;
@@ -63,6 +64,20 @@ public class LocationService extends Service implements GooglePlayServicesClient
         builder.setOnlyAlertOnce(true);
         startForeground(1, builder.build());
     }
+
+    public void showDisabledNotification() {
+        Log.d("BackgroundService", "Notification service being made foreground");
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, SettingsActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+        builder.setSmallIcon(R.drawable.ic_launcher);
+        builder.setContentTitle(getString(R.string.notification_disabled_title));
+        builder.setContentText(getString(R.string.notification_disabled_message));
+        builder.setContentIntent(pendingIntent);
+        builder.setPriority(NotificationCompat.PRIORITY_MIN);
+        builder.setOnlyAlertOnce(true);
+        startForeground(1, builder.build());
+    }
+
 
     public void makeUseOfLocation(Location currentLocation) {
         Log.d("BackgroundService", "Making use of new location");
@@ -215,47 +230,51 @@ public class LocationService extends Service implements GooglePlayServicesClient
         preferenceManager = new GeobellsPreferenceManager(this);
         dataManager = new GeobellsDataManager(this);
         reminders = dataManager.getSavedReminders();
-        boolean showNotification = preferenceManager.isShowBackgroundNotificationEnabled();
-        if (reminders.size() > 0) {
-            if (intent == null) {
-                Log.d("BackgroundService", "Set polling interval to default");
-                startLocationListening(Constants.POLLING_INTERVAL_DEFAULT);
-            } else {
-                Bundle bundle = intent.getExtras();
-                if (bundle != null) {
-                    int intentActivity = bundle.getInt(Constants.EXTRA_ACTIVITY);
-                    Log.d("BackgroundService", "Set polling interval for activity " + String.valueOf(intentActivity));
-                    activity = intentActivity;
-                    switch (intentActivity) {
-                        case Constants.ACTIVITY_STANDING:
-                            startLocationListening(Constants.POLLING_INTERVAL_STANDING);
-                            break;
-                        case Constants.ACTIVITY_BIKING:
-                            startLocationListening(Constants.POLLING_INTERVAL_BIKING);
-                            break;
-                        case Constants.ACTIVITY_WALKING:
-                            startLocationListening(Constants.POLLING_INTERVAL_WALKING);
-                            break;
-                        case Constants.ACTIVITY_DRIVING:
-                            startLocationListening(Constants.POLLING_INTERVAL_DRIVING);
-                            break;
-                        case Constants.ACTIVITY_UNKNOWN:
-                            startLocationListening(Constants.POLLING_INTERVAL_UNKNOWN);
-                            break;
-                        case Constants.ACTIVITY_TILTING:
-                            startLocationListening(Constants.POLLING_INTERVAL_TILTING);
-                            break;
-                    }
+        if(!preferenceManager.isDisabled()) {
+            boolean showNotification = preferenceManager.isShowBackgroundNotificationEnabled();
+            if (reminders.size() > 0) {
+                if (intent == null) {
+                    Log.d("BackgroundService", "Set polling interval to default");
+                    startLocationListening(Constants.POLLING_INTERVAL_DEFAULT);
                 } else {
-                    Log.d("BackgroundService", "No bundle, starting with unknown default polling interval");
-                    startLocationListening(Constants.POLLING_INTERVAL_UNKNOWN);
+                    Bundle bundle = intent.getExtras();
+                    if (bundle != null) {
+                        int intentActivity = bundle.getInt(Constants.EXTRA_ACTIVITY);
+                        Log.d("BackgroundService", "Set polling interval for activity " + String.valueOf(intentActivity));
+                        activity = intentActivity;
+                        switch (intentActivity) {
+                            case Constants.ACTIVITY_STANDING:
+                                startLocationListening(Constants.POLLING_INTERVAL_STANDING);
+                                break;
+                            case Constants.ACTIVITY_BIKING:
+                                startLocationListening(Constants.POLLING_INTERVAL_BIKING);
+                                break;
+                            case Constants.ACTIVITY_WALKING:
+                                startLocationListening(Constants.POLLING_INTERVAL_WALKING);
+                                break;
+                            case Constants.ACTIVITY_DRIVING:
+                                startLocationListening(Constants.POLLING_INTERVAL_DRIVING);
+                                break;
+                            case Constants.ACTIVITY_UNKNOWN:
+                                startLocationListening(Constants.POLLING_INTERVAL_UNKNOWN);
+                                break;
+                            case Constants.ACTIVITY_TILTING:
+                                startLocationListening(Constants.POLLING_INTERVAL_TILTING);
+                                break;
+                        }
+                    } else {
+                        Log.d("BackgroundService", "No bundle, starting with unknown default polling interval");
+                        startLocationListening(Constants.POLLING_INTERVAL_UNKNOWN);
+                    }
                 }
+            } else {
+                Log.d("BackgroundService", "Skipping polling because no reminders");
+            }
+            if (showNotification) {
+                makeForeground();
             }
         } else {
-            Log.d("BackgroundService", "Skipping polling because no reminders");
-        }
-        if (showNotification) {
-            makeForeground();
+            showDisabledNotification();
         }
         return START_STICKY;
     }

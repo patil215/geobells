@@ -8,6 +8,7 @@ import android.media.RingtoneManager;
 import android.media.audiofx.BassBoost;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.view.Menu;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 
 import com.patil.geobells.lite.R;
 import com.patil.geobells.lite.data.Reminder;
+import com.patil.geobells.lite.service.LocationService;
 import com.patil.geobells.lite.utils.GeobellsDataManager;
 import com.patil.geobells.lite.utils.GeobellsPreferenceManager;
 
@@ -25,6 +27,7 @@ public class SettingsActivity extends PreferenceActivity {
 
     Preference notificationSoundPreference;
     Preference clearRemindersPreference;
+    CheckBoxPreference disableGeobellsPreference;
     GeobellsPreferenceManager preferenceManager;
     GeobellsDataManager dataManager;
 
@@ -59,6 +62,8 @@ public class SettingsActivity extends PreferenceActivity {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dataManager.saveReminders(new ArrayList<Reminder>());
                         Toast.makeText(SettingsActivity.this, getString(R.string.toast_reminders_cleared), Toast.LENGTH_SHORT).show();
+                        Intent serviceIntent = new Intent(SettingsActivity.this, LocationService.class);
+                        startService(serviceIntent);
                     }
                 }).setNegativeButton(getString(R.string.dialog_button_cancel), new DialogInterface.OnClickListener() {
                     @Override
@@ -67,6 +72,17 @@ public class SettingsActivity extends PreferenceActivity {
                     }
                 }).create();
                 dialog.show();
+                return false;
+            }
+        });
+
+        disableGeobellsPreference = (CheckBoxPreference) findPreference("pref_disable");
+        disableGeobellsPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                preferenceManager.saveDisabled(preference.isEnabled());
+                Intent serviceIntent = new Intent(SettingsActivity.this, LocationService.class);
+                startService(serviceIntent);
                 return false;
             }
         });
