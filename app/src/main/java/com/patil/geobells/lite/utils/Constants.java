@@ -78,14 +78,14 @@ public class Constants {
     public static final int ACTIVITY_UNKNOWN = 4;
     public static final int ACTIVITY_TILTING = 5;
 
-    public static final int POLLING_INTERVAL_STANDING = 60000;
-    public static final int POLLING_INTERVAL_WALKING = 40000;
-    public static final int POLLING_INTERVAL_BIKING = 25000;
-    public static final int POLLING_INTERVAL_DRIVING = 8000;
-    public static final int POLLING_INTERVAL_UNKNOWN = 40000;
-    public static final int POLLING_INTERVAL_TILTING = 45000;
+    public static final int POLLING_INTERVAL_STANDING = 120000;
+    public static final int POLLING_INTERVAL_WALKING = 120000;
+    public static final int POLLING_INTERVAL_BIKING = 40000;
+    public static final int POLLING_INTERVAL_DRIVING = 10000;
+    public static final int POLLING_INTERVAL_UNKNOWN = 60000;
+    public static final int POLLING_INTERVAL_TILTING = 60000;
     public static final String EXTRA_SPEAKTEXT = "text";
-    public static final long POLLING_INTERVAL_ACTIVITY_RECOGNITION = 90000;
+    public static final long POLLING_INTERVAL_ACTIVITY_RECOGNITION = 120000;
 
     public static final int SIZE_IMAGE_PREVIEW_HORIZONTAL = 200;
     public static final int SIZE_IMAGE_PREVIEW_VERTICAL = 200;

@@ -16,15 +16,23 @@ public class ActivityRecognitionService extends Service implements GooglePlaySer
 
     ActivityRecognitionClient activityRecognitionClient;
     PendingIntent activityRecognitionIntent;
+    boolean inProgress;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d("BackgroundService", "onStartCommand for ActivityRecognitionService");
-        activityRecognitionIntent = PendingIntent.getService(this, 0, new Intent(this, ActivityRecognitionIntentService.class), PendingIntent.FLAG_UPDATE_CURRENT);
+        inProgress = false;
         if (activityRecognitionClient != null) {
             activityRecognitionClient.removeActivityUpdates(activityRecognitionIntent);
         }
-        startActivityListening();
+        Log.d("BackgroundService", "Registering activity recognition client");
+        activityRecognitionClient = new ActivityRecognitionClient(this, this, this);
+        Intent activityIntent = new Intent(this, ActivityRecognitionIntentService.class);
+        activityRecognitionIntent = PendingIntent.getService(this, 0, activityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        if(!inProgress) {
+            inProgress = true;
+            activityRecognitionClient.connect();
+        }
         return START_STICKY;
     }
 
@@ -36,21 +44,16 @@ public class ActivityRecognitionService extends Service implements GooglePlaySer
     @Override
     public void onConnected(Bundle bundle) {
         Log.d("BackgroundService", "Activity recognition client connected");
-        activityRecognitionIntent = PendingIntent.getService(this, 0, new Intent(this, ActivityRecognitionIntentService.class), PendingIntent.FLAG_UPDATE_CURRENT);
         activityRecognitionClient.requestActivityUpdates(Constants.POLLING_INTERVAL_ACTIVITY_RECOGNITION, activityRecognitionIntent);
+        inProgress = false;
         activityRecognitionClient.disconnect();
         stopSelf();
-    }
-
-    public void startActivityListening() {
-        Log.d("BackgroundService", "Registering activity recognition client");
-        activityRecognitionClient = new ActivityRecognitionClient(this, this, this);
-        activityRecognitionClient.connect();
     }
 
     @Override
     public void onDisconnected() {
         Log.d("BackgroundService", "Activity recognition client disconnected");
+        inProgress = false;
         activityRecognitionClient = null;
     }
 

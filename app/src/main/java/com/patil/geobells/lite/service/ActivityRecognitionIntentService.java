@@ -33,25 +33,27 @@ public class ActivityRecognitionIntentService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         if (ActivityRecognitionResult.hasResult(intent)) {
+            ActivityRecognitionResult result = ActivityRecognitionResult.extractResult(intent);
+            DetectedActivity mostProbableActivity = result.getMostProbableActivity();
+            int activityType = mostProbableActivity.getType();
+            
             bindService(new Intent(this, LocationService.class), connection, BIND_AUTO_CREATE);
             int currentActivity = -1;
             if(locationService != null) {
                 Log.d("BackgroundService", "LocationService successfully bound to ActivityRecognitionIntentService");
                 currentActivity = locationService.getActivity();
             }
-            DetectedActivity detectedActivity = ActivityRecognitionResult.extractResult(intent).getMostProbableActivity();
-            int type = detectedActivity.getType();
             if(currentActivity == -1) {
                 Log.d("BackgroundService", "current activity not gotten, restarting LocationService");
                 Intent locationIntent = new Intent(this, LocationService.class);
-                locationIntent.putExtra(Constants.EXTRA_ACTIVITY, type);
+                locationIntent.putExtra(Constants.EXTRA_ACTIVITY, activityType);
                 unbindService(connection);
                 stopService(new Intent(this, LocationService.class));
                 startService(locationIntent);
-            } else if(currentActivity != type) {
+            } else if(currentActivity != activityType) {
                 Log.d("BackgroundService", "current activity different, restarting LocationService");
                 Intent locationIntent = new Intent(this, LocationService.class);
-                locationIntent.putExtra(Constants.EXTRA_ACTIVITY, type);
+                locationIntent.putExtra(Constants.EXTRA_ACTIVITY, activityType);
                 unbindService(connection);
                 stopService(new Intent(this, LocationService.class));
                 startService(locationIntent);
