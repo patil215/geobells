@@ -24,6 +24,7 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.patil.geobells.lite.MainActivity;
 import com.patil.geobells.lite.R;
+import com.patil.geobells.lite.ViewReminderActivity;
 import com.patil.geobells.lite.data.Place;
 import com.patil.geobells.lite.data.Reminder;
 import com.patil.geobells.lite.utils.Constants;
@@ -91,7 +92,7 @@ public class LocationService extends Service implements GooglePlayServicesClient
                                     reminder.timeCompleted = System.currentTimeMillis();
                                     dataManager.saveReminders(reminders);
                                     reminders = dataManager.getSavedReminders();
-                                    sendNotification(reminder.title, place.title, Constants.TRANSITION_ENTER, currentLocation, place.latitude, place.longitude, reminder.silencePhone);
+                                    sendNotification(reminder.title, place.title, Constants.TRANSITION_ENTER, currentLocation, place.latitude, place.longitude, reminder.silencePhone, reminderIndex);
                                     if (reminder.toggleAirplane) {
                                         toggleAirplaneMode();
                                     }
@@ -113,7 +114,7 @@ public class LocationService extends Service implements GooglePlayServicesClient
                                     reminder.timeCompleted = System.currentTimeMillis();
                                     dataManager.saveReminders(reminders);
                                     reminders = dataManager.getSavedReminders();
-                                    sendNotification(reminder.title, reminder.address, Constants.TRANSITION_ENTER, currentLocation, reminder.latitude, reminder.longitude, reminder.silencePhone);
+                                    sendNotification(reminder.title, reminder.address, Constants.TRANSITION_ENTER, currentLocation, reminder.latitude, reminder.longitude, reminder.silencePhone, reminderIndex);
                                     if (reminder.toggleAirplane) {
                                         toggleAirplaneMode();
                                     }
@@ -134,7 +135,7 @@ public class LocationService extends Service implements GooglePlayServicesClient
                                     reminder.transition = Constants.TRANSITION_EXIT;
                                     dataManager.saveReminders(reminders);
                                     reminders = dataManager.getSavedReminders();
-                                    sendNotification(reminder.title, reminder.address, Constants.TRANSITION_EXIT, currentLocation, reminder.latitude, reminder.longitude, reminder.silencePhone);
+                                    sendNotification(reminder.title, reminder.address, Constants.TRANSITION_EXIT, currentLocation, reminder.latitude, reminder.longitude, reminder.silencePhone, reminderIndex);
                                     if (reminder.toggleAirplane) {
                                         toggleAirplaneMode();
                                     }
@@ -146,7 +147,7 @@ public class LocationService extends Service implements GooglePlayServicesClient
                         }
                     }
                 } else {
-                    // Reminder completed. Check if it's a new day since the time the reminder was completed. If it is, reset.
+                    // Reminder completed. Check if it's a new day since the time the reminder was completed. If it is and the reminder is set to repeat, reset.
                     long timeCompleted = reminder.timeCompleted;
                     long currentTime = System.currentTimeMillis();
                     Date completedDate = new Date(timeCompleted);
@@ -157,7 +158,7 @@ public class LocationService extends Service implements GooglePlayServicesClient
                     currentCalendar.setTime(currentDate);
                     boolean sameDay = completedCalendar.get(Calendar.YEAR) == currentCalendar.get(Calendar.YEAR) &&
                             completedCalendar.get(Calendar.DAY_OF_YEAR) == currentCalendar.get(Calendar.DAY_OF_YEAR);
-                    if (sameDay) {
+                    if (!sameDay && reminder.repeat) {
                         reminder.completed = false;
                         dataManager.saveReminders(reminders);
                     }
@@ -259,7 +260,7 @@ public class LocationService extends Service implements GooglePlayServicesClient
         return START_STICKY;
     }
 
-    public void sendNotification(String title, String message, int transition, Location currentLocation, double latitude, double longitude, boolean silencePhone) {
+    public void sendNotification(String title, String message, int transition, Location currentLocation, double latitude, double longitude, boolean silencePhone, int index) {
         Log.d("BackgroundService", "Sending notification");
         String uri = preferenceManager.getNotificationSoundUri();
         Intent mapsIntent = new Intent("android.intent.action.VIEW", Uri.parse("http://maps.google.com/maps?saddr=" + currentLocation.getLatitude() + "," + currentLocation.getLongitude() + "&daddr=" + latitude + "," + longitude));
@@ -295,7 +296,7 @@ public class LocationService extends Service implements GooglePlayServicesClient
 
         Log.d("BackgroundService", "Text to speak is " + totalText);
         if (preferenceManager.isPopupReminderEnabled()) {
-            // TODO: showPopup();
+            showPopup(index);
             Log.d("BackgroundService", "Popup reminders enabled");
         }
         if (silencePhone) {
@@ -308,6 +309,13 @@ public class LocationService extends Service implements GooglePlayServicesClient
         } else {
             Log.d("BackgroundService", "Voice reminders are not enabled");
         }
+    }
+
+    public void showPopup(int index) {
+        Intent intent = new Intent(this, ViewReminderActivity.class);
+        intent.putExtra(Constants.EXTRA_REMINDER_INDEX, index);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 
     public void silencePhone() {
