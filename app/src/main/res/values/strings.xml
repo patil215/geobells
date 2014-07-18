@@ -146,5 +146,9 @@
     <string name="preference_disable_summary">All location polling and reminders will be disabled</string>
     <string name="notification_disabled_title">Geobells is disabled</string>
     <string name="notification_disabled_message">Tap to go to settings.</string>
+    <string name="preference_interval">Change polling interval</string>
+    <string name="dialog_message_interval">Adjust this by changing the multiplier. A multiplier of 1 means Geobells will check for a new location every 60 seconds, 0.5 is 30 seconds, etc. A higher multiplier is less accurate, but better for battery life.</string>
+    <string name="dialog_title_interval">Change polling interval</string>
+    <string name="toast_multiplier_length">Please fill out all info.</string>
 
 </resources>

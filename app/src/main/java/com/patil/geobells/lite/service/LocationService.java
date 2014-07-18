@@ -343,18 +343,19 @@ public class LocationService extends Service implements GooglePlayServicesClient
     }
 
     public void startLocationListening(int interval) {
+        double multiplier = preferenceManager.getIntervalMultiplier();
         boolean lowPowerEnabled = preferenceManager.isLowPowerEnabled();
         locationRequest = LocationRequest.create();
         if (lowPowerEnabled) {
             locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-            locationRequest.setInterval(interval * 2);
+            locationRequest.setInterval((int)((interval * 2 * multiplier)));
             Log.d("BackgroundService", "Starting location listening with interval " + String.valueOf(interval * 2));
-            locationRequest.setFastestInterval(interval);
+            locationRequest.setFastestInterval((int)(interval * multiplier));
         } else {
             locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-            locationRequest.setInterval(interval);
+            locationRequest.setInterval((int)(interval * multiplier));
             Log.d("BackgroundService", "Starting location listening with interval " + String.valueOf(interval));
-            locationRequest.setFastestInterval(interval / 2);
+            locationRequest.setFastestInterval((int)((interval / 2) * multiplier));
         }
         locationClient = new LocationClient(this, this, this);
         locationClient.connect();

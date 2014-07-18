@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.media.RingtoneManager;
 import android.media.audiofx.BassBoost;
 import android.net.Uri;
@@ -11,8 +12,12 @@ import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.text.InputType;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.patil.geobells.lite.R;
@@ -27,6 +32,7 @@ public class SettingsActivity extends PreferenceActivity {
 
     Preference notificationSoundPreference;
     Preference clearRemindersPreference;
+    Preference intervalPreference;
     CheckBoxPreference disableGeobellsPreference;
     GeobellsPreferenceManager preferenceManager;
     GeobellsDataManager dataManager;
@@ -80,9 +86,38 @@ public class SettingsActivity extends PreferenceActivity {
         disableGeobellsPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                preferenceManager.saveDisabled(preference.isEnabled());
                 Intent serviceIntent = new Intent(SettingsActivity.this, LocationService.class);
                 startService(serviceIntent);
+                return false;
+            }
+        });
+
+        intervalPreference = (Preference) findPreference("pref_interval");
+        intervalPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                LayoutInflater inflater = getLayoutInflater();
+                View dialogLayout = inflater.inflate(R.layout.dialog_preference_interval, null);
+                final EditText input = (EditText)dialogLayout.findViewById(R.id.text_multiplier);
+                input.setText(String.valueOf(preferenceManager.getIntervalMultiplier()));
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this).setMessage(getString(R.string.dialog_message_interval)).setView(dialogLayout).setTitle(getString(R.string.dialog_title_interval)).setPositiveButton(getString(R.string.dialog_button_ok), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if(input.getText().toString().length() > 0) {
+                            preferenceManager.saveIntervalMultiplier(Double.valueOf(input.getText().toString()));
+                        } else {
+                            Toast.makeText(SettingsActivity.this, getString(R.string.toast_multiplier_length), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }).setNegativeButton(getString(R.string.dialog_button_cancel), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
                 return false;
             }
         });

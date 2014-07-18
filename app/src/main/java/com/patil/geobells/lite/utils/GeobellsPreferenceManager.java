@@ -51,10 +51,15 @@ public class GeobellsPreferenceManager {
         return preferences.getBoolean("pref_disable", false);
     }
 
-    public void saveDisabled(boolean disabled) {
+
+    public void saveIntervalMultiplier(double interval) {
         SharedPreferences.Editor edit = preferences.edit();
-        edit.putBoolean("pref_disable", disabled);
+        edit.putFloat("pref_multiplier", (float)interval);
         edit.commit();
+    }
+
+    public double getIntervalMultiplier() {
+        return preferences.getFloat("pref_multiplier", 1);
     }
 
 
