@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.patil.geobells.lite.data.Reminder;
 import com.patil.geobells.lite.service.ActivityRecognitionService;
 import com.patil.geobells.lite.service.LocationService;
 import com.patil.geobells.lite.utils.Config;
@@ -32,7 +33,9 @@ import com.patil.geobells.lite.views.AboutDialog;
 import com.patil.geobells.lite.views.CompletedRemindersFragment;
 import com.patil.geobells.lite.views.NavigationDrawerFragment;
 import com.patil.geobells.lite.views.UpcomingRemindersFragment;
+import com.patil.geobells.lite.views.UpgradeDialog;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 
@@ -49,12 +52,15 @@ public class MainActivity extends Activity
      */
     private CharSequence title;
 
+    GeobellsDataManager dataManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         checkGooglePlayServicesEnabled();
+        dataManager = new GeobellsDataManager(this);
 
         if(!isLocationServiceRunning()) {
             Intent serviceIntent = new Intent(this, LocationService.class);
@@ -135,7 +141,7 @@ public class MainActivity extends Activity
             network_enabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
         }catch(Exception ex){}
 
-        if(!gps_enabled && !network_enabled){
+        if(!gps_enabled || !network_enabled){
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
             dialog.setTitle(R.string.dialog_title_enable_locationservices);
             dialog.setMessage(getString(R.string.dialog_message_enable_locationservices));
@@ -236,9 +242,16 @@ public class MainActivity extends Activity
     }
 
     public void startCreateReminderActivity() {
-        Intent intent = new Intent(this, CreateReminderActivity.class);
-        intent.putExtra(Constants.EXTRA_EDIT_REMINDER, false);
-        startActivityForResult(intent, Constants.ACTIVITY_REQUEST_CODE_CREATE_REMINDER);
+        if(Config.IS_LITE_VERSION) {
+            ArrayList<Reminder> reminders = dataManager.getSavedReminders();
+            if(reminders.size() < Constants.REMINDER_LIMIT) {
+                Intent intent = new Intent(this, CreateReminderActivity.class);
+                intent.putExtra(Constants.EXTRA_EDIT_REMINDER, false);
+                startActivityForResult(intent, Constants.ACTIVITY_REQUEST_CODE_CREATE_REMINDER);
+            } else {
+                new UpgradeDialog(this).showUpgradeDialog(getString(R.string.upgrade_numreminders));
+            }
+        }
     }
 
     @Override

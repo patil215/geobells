@@ -198,7 +198,11 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
 
     public double[] getLatLong() {
         Location lastLocation = locationClient.getLastLocation();
-        return new double[]{lastLocation.getLatitude(), lastLocation.getLongitude()};
+        if (lastLocation != null) {
+            return new double[]{lastLocation.getLatitude(), lastLocation.getLongitude()};
+        } else {
+            return null;
+        }
     }
 
     public void setupSpinner() {
@@ -272,7 +276,7 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
         advancedButton.setVisibility(View.VISIBLE);
         transitionRadioGroup.setVisibility(View.VISIBLE);
         transitionPrompt.setVisibility(View.VISIBLE);
-        if(addressBox.getText() == null || addressBox.getText().length() == 0) {
+        if (addressBox.getText() == null || addressBox.getText().length() == 0) {
             addressBox.setFocusableInTouchMode(true);
             addressBox.requestFocus();
             final InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -286,7 +290,7 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
         advancedButton.setVisibility(View.VISIBLE);
         transitionRadioGroup.setVisibility(View.GONE);
         transitionPrompt.setVisibility(View.GONE);
-        if(businessBox.getText() == null || businessBox.getText().length() == 0) {
+        if (businessBox.getText() == null || businessBox.getText().length() == 0) {
             businessBox.setFocusableInTouchMode(true);
             businessBox.requestFocus();
             final InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -356,7 +360,11 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
     public void onBusinessViewPlacesClick(View v) {
         if (businessBox.getText() != null && businessBox.getText().length() > 0) {
             double[] latLong = getLatLong();
-            new PlacesAPIAsyncTask(this, this, Constants.METHOD_PLACES_DIALOG_VIEW).execute(businessBox.getText().toString(), String.valueOf(latLong[0]), String.valueOf(latLong[1]));
+            if (latLong != null) {
+                new PlacesAPIAsyncTask(this, this, Constants.METHOD_PLACES_DIALOG_VIEW).execute(businessBox.getText().toString(), String.valueOf(latLong[0]), String.valueOf(latLong[1]));
+            } else {
+                Toast.makeText(this, getString(R.string.toast_location_error), Toast.LENGTH_SHORT).show();
+            }
         } else {
             Toast.makeText(this, getString(R.string.toast_fill_business), Toast.LENGTH_SHORT).show();
         }
@@ -377,7 +385,11 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
             public void onClick(DialogInterface dialog, int whichButton) {
                 String value = input.getText().toString();
                 double[] latLong = getLatLong();
-                new PlacesAPIAsyncTask(CreateReminderActivity.this, CreateReminderActivity.this, Constants.METHOD_PLACES_DIALOG_ADDRESS).execute(value, String.valueOf(latLong[0]), String.valueOf(latLong[1]));
+                if (latLong != null) {
+                    new PlacesAPIAsyncTask(CreateReminderActivity.this, CreateReminderActivity.this, Constants.METHOD_PLACES_DIALOG_ADDRESS).execute(value, String.valueOf(latLong[0]), String.valueOf(latLong[1]));
+                } else {
+                    Toast.makeText(CreateReminderActivity.this, getString(R.string.toast_location_error), Toast.LENGTH_SHORT).show();
+                }
             }
         });
         alert.setCancelable(false);
@@ -447,7 +459,7 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
         reminder.address = address;
         reminder.latitude = latitude;
         reminder.longitude = longitude;
-        if(editingReminder) {
+        if (editingReminder) {
             reminders.set(reminderIndex, reminder);
         } else {
             reminders.add(reminder);
@@ -464,7 +476,11 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
     public void createDynamicReminder() {
         double[] latLng = getLatLong();
         business = businessBox.getText().toString();
-        new PlacesAPIAsyncTask(this, this, Constants.METHOD_PLACES_CREATE).execute(business, String.valueOf(latLng[0]), String.valueOf(latLng[1]));
+        if (latLng != null) {
+            new PlacesAPIAsyncTask(this, this, Constants.METHOD_PLACES_CREATE).execute(business, String.valueOf(latLng[0]), String.valueOf(latLng[1]));
+        } else {
+            Toast.makeText(this, getString(R.string.toast_location_error), Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void finishCreatingDynamicReminder(ArrayList<Place> places) {
@@ -485,7 +501,7 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
         reminder.type = Constants.TYPE_DYNAMIC;
         reminder.business = business;
         reminder.places = places;
-        if(editingReminder) {
+        if (editingReminder) {
             reminders.set(reminderIndex, reminder);
         } else {
             reminders.add(reminder);
@@ -553,19 +569,24 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
             } else {
                 sb.append("?key=" + Constants.PLACES_API_KEY_AUTOCOMPLETE_PRO);
             }
-            sb.append("&location=" + getLatLong()[0] + "," + getLatLong()[1]);
-            sb.append("&input=" + URLEncoder.encode(input, "utf8"));
-            sb.append("&type=" + type);
+            double[] latLng = getLatLong();
+            if (latLng != null) {
+                sb.append("&location=" + latLng[0] + "," + latLng[1]);
+                sb.append("&input=" + URLEncoder.encode(input, "utf8"));
+                sb.append("&type=" + type);
 
-            URL url = new URL(sb.toString());
-            conn = (HttpURLConnection) url.openConnection();
-            InputStreamReader in = new InputStreamReader(conn.getInputStream());
+                URL url = new URL(sb.toString());
+                conn = (HttpURLConnection) url.openConnection();
+                InputStreamReader in = new InputStreamReader(conn.getInputStream());
 
-            // Load the results into a StringBuilder
-            int read;
-            char[] buff = new char[1024];
-            while ((read = in.read(buff)) != -1) {
-                jsonResults.append(buff, 0, read);
+                // Load the results into a StringBuilder
+                int read;
+                char[] buff = new char[1024];
+                while ((read = in.read(buff)) != -1) {
+                    jsonResults.append(buff, 0, read);
+                }
+            } else {
+                Toast.makeText(this, getString(R.string.toast_location_error), Toast.LENGTH_SHORT).show();
             }
         } catch (MalformedURLException e) {
             Log.e("Autocomplete", "Error processing Places API URL", e);
@@ -592,6 +613,7 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
         } catch (JSONException e) {
             Log.e("Autocomplete", "Cannot process JSON results", e);
         }
+
 
         return resultList;
     }

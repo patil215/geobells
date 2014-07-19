@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.patil.geobells.lite.R;
 import com.patil.geobells.lite.data.Reminder;
 import com.patil.geobells.lite.service.LocationService;
+import com.patil.geobells.lite.utils.Config;
 import com.patil.geobells.lite.utils.GeobellsDataManager;
 import com.patil.geobells.lite.utils.GeobellsPreferenceManager;
 
@@ -33,6 +34,7 @@ public class SettingsActivity extends PreferenceActivity {
     Preference notificationSoundPreference;
     Preference clearRemindersPreference;
     Preference intervalPreference;
+    CheckBoxPreference popupRemindersPreference;
     CheckBoxPreference disableGeobellsPreference;
     GeobellsPreferenceManager preferenceManager;
     GeobellsDataManager dataManager;
@@ -121,6 +123,12 @@ public class SettingsActivity extends PreferenceActivity {
                 return false;
             }
         });
+
+        popupRemindersPreference = (CheckBoxPreference) findPreference("pref_popup");
+        if(Config.IS_LITE_VERSION) {
+            popupRemindersPreference.setEnabled(false);
+            popupRemindersPreference.setSummary(getString(R.string.preference_popup_summary_lite));
+        }
     }
 
     @Override

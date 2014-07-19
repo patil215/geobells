@@ -150,7 +150,7 @@
     <string name="dialog_message_interval">Adjust this by changing the multiplier. A multiplier of 1 means Geobells will check for a new location every 60 seconds, 0.5 is 30 seconds, etc. A higher multiplier is less accurate, but better for battery life.</string>
     <string name="dialog_title_interval">Change polling interval</string>
     <string name="toast_multiplier_length">Please fill out all info.</string>
-    <string name="dialog_message_enable_locationservices">To use Geobells, you must enable location services.</string>
+    <string name="dialog_message_enable_locationservices">To use Geobells, you must enable location services. \n\nPlease enable both GPS and network location.</string>
     <string name="dialog_title_enable_locationservices">Enable location</string>
     <string name="dialog_button_open_location_settings">Open settings</string>
     <string name="dialog_button_nothanks">No thanks</string>
@@ -159,5 +159,10 @@
     <string name="dialog_title_google_play_services">Google Play Services</string>
     <string name="dialog_message_update_google">You need to update your version of Google Play services to use Geobells.</string>
     <string name="dialog_message_no_google">You must have Google Play Services to use Geobells.</string>
+    <string name="preference_popup_summary_lite">Popup reminders disabled in free version</string>
+    <string name="dialog_title_upgrade">Upgrade to Geobells Pro</string>
+    <string name="dialog_button_upgrade">Upgrade</string>
+    <string name="upgrade_numreminders">You can only have three concurrent reminders in the free version. \n \nUpgrade to Pro and create unlimited reminders, and gain access to other features!</string>
+    <string name="toast_location_error">Couldn\'t get your location. Make sure both GPS and network location are enabled.</string>
 
 </resources>
