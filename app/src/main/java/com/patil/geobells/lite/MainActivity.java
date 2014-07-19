@@ -19,12 +19,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.patil.geobells.lite.service.ActivityRecognitionService;
 import com.patil.geobells.lite.service.LocationService;
 import com.patil.geobells.lite.utils.ConnectivityChecker;
 import com.patil.geobells.lite.utils.Constants;
 import com.patil.geobells.lite.utils.GeobellsDataManager;
-import com.patil.geobells.lite.utils.GeobellsPreferenceManager;
 import com.patil.geobells.lite.views.AboutDialog;
 import com.patil.geobells.lite.views.CompletedRemindersFragment;
 import com.patil.geobells.lite.views.NavigationDrawerFragment;
@@ -51,6 +52,8 @@ public class MainActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        checkGooglePlayServicesEnabled();
+
         if(!isLocationServiceRunning()) {
             Intent serviceIntent = new Intent(this, LocationService.class);
             serviceIntent.putExtra(Constants.EXTRA_ACTIVITY, Constants.ACTIVITY_UNKNOWN);
@@ -75,6 +78,27 @@ public class MainActivity extends Activity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+    }
+
+    public void checkGooglePlayServicesEnabled() {
+        int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getApplicationContext());
+        if(status == ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED) {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this).setTitle(getString(R.string.dialog_title_google_play_services)).setMessage(getString(R.string.dialog_message_update_google)).setPositiveButton(getString(R.string.dialog_button_ok), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    finish();
+                }
+            });
+            dialog.create().show();
+        } else if(status != ConnectionResult.SUCCESS) {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this).setTitle(getString(R.string.dialog_title_google_play_services)).setMessage(getString(R.string.dialog_message_no_google)).setPositiveButton(getString(R.string.dialog_button_ok), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    finish();
+                }
+            });
+            dialog.create().show();
+        }
     }
 
     @Override
@@ -243,6 +267,11 @@ public class MainActivity extends Activity
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
     public void onSettingsClick(View v) {
         mNavigationDrawerFragment.mDrawerLayout.closeDrawer(mNavigationDrawerFragment.mFragmentContainerView);
         Intent intent = new Intent(this, SettingsActivity.class);
@@ -266,4 +295,5 @@ public class MainActivity extends Activity
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(intent);
     }
+
 }

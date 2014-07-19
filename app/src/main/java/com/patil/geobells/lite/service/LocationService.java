@@ -1,10 +1,14 @@
 package com.patil.geobells.lite.service;
 
+import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
+import android.location.LocationManager;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
@@ -230,52 +234,52 @@ public class LocationService extends Service implements GooglePlayServicesClient
         preferenceManager = new GeobellsPreferenceManager(this);
         dataManager = new GeobellsDataManager(this);
         reminders = dataManager.getSavedReminders();
-        if(!preferenceManager.isDisabled()) {
-            boolean showNotification = preferenceManager.isShowBackgroundNotificationEnabled();
-            if (reminders.size() > 0) {
-                if (intent == null) {
-                    Log.d("BackgroundService", "Set polling interval to default");
-                    startLocationListening(Constants.POLLING_INTERVAL_DEFAULT);
-                } else {
-                    Bundle bundle = intent.getExtras();
-                    if (bundle != null) {
-                        int intentActivity = bundle.getInt(Constants.EXTRA_ACTIVITY);
-                        Log.d("BackgroundService", "Set polling interval for activity " + String.valueOf(intentActivity));
-                        activity = intentActivity;
-                        switch (intentActivity) {
-                            case Constants.ACTIVITY_STANDING:
-                                startLocationListening(Constants.POLLING_INTERVAL_STANDING);
-                                break;
-                            case Constants.ACTIVITY_BIKING:
-                                startLocationListening(Constants.POLLING_INTERVAL_BIKING);
-                                break;
-                            case Constants.ACTIVITY_WALKING:
-                                startLocationListening(Constants.POLLING_INTERVAL_WALKING);
-                                break;
-                            case Constants.ACTIVITY_DRIVING:
-                                startLocationListening(Constants.POLLING_INTERVAL_DRIVING);
-                                break;
-                            case Constants.ACTIVITY_UNKNOWN:
-                                startLocationListening(Constants.POLLING_INTERVAL_UNKNOWN);
-                                break;
-                            case Constants.ACTIVITY_TILTING:
-                                startLocationListening(Constants.POLLING_INTERVAL_TILTING);
-                                break;
-                        }
+            if (!preferenceManager.isDisabled()) {
+                boolean showNotification = preferenceManager.isShowBackgroundNotificationEnabled();
+                if (reminders.size() > 0) {
+                    if (intent == null) {
+                        Log.d("BackgroundService", "Set polling interval to default");
+                        startLocationListening(Constants.POLLING_INTERVAL_DEFAULT);
                     } else {
-                        Log.d("BackgroundService", "No bundle, starting with unknown default polling interval");
-                        startLocationListening(Constants.POLLING_INTERVAL_UNKNOWN);
+                        Bundle bundle = intent.getExtras();
+                        if (bundle != null) {
+                            int intentActivity = bundle.getInt(Constants.EXTRA_ACTIVITY);
+                            Log.d("BackgroundService", "Set polling interval for activity " + String.valueOf(intentActivity));
+                            activity = intentActivity;
+                            switch (intentActivity) {
+                                case Constants.ACTIVITY_STANDING:
+                                    startLocationListening(Constants.POLLING_INTERVAL_STANDING);
+                                    break;
+                                case Constants.ACTIVITY_BIKING:
+                                    startLocationListening(Constants.POLLING_INTERVAL_BIKING);
+                                    break;
+                                case Constants.ACTIVITY_WALKING:
+                                    startLocationListening(Constants.POLLING_INTERVAL_WALKING);
+                                    break;
+                                case Constants.ACTIVITY_DRIVING:
+                                    startLocationListening(Constants.POLLING_INTERVAL_DRIVING);
+                                    break;
+                                case Constants.ACTIVITY_UNKNOWN:
+                                    startLocationListening(Constants.POLLING_INTERVAL_UNKNOWN);
+                                    break;
+                                case Constants.ACTIVITY_TILTING:
+                                    startLocationListening(Constants.POLLING_INTERVAL_TILTING);
+                                    break;
+                            }
+                        } else {
+                            Log.d("BackgroundService", "No bundle, starting with unknown default polling interval");
+                            startLocationListening(Constants.POLLING_INTERVAL_UNKNOWN);
+                        }
                     }
+                } else {
+                    Log.d("BackgroundService", "Skipping polling because no reminders");
+                }
+                if (showNotification) {
+                    makeForeground();
                 }
             } else {
-                Log.d("BackgroundService", "Skipping polling because no reminders");
+                showDisabledNotification();
             }
-            if (showNotification) {
-                makeForeground();
-            }
-        } else {
-            showDisabledNotification();
-        }
         return START_STICKY;
     }
 

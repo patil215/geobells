@@ -154,5 +154,10 @@
     <string name="dialog_title_enable_locationservices">Enable location</string>
     <string name="dialog_button_open_location_settings">Open settings</string>
     <string name="dialog_button_nothanks">No thanks</string>
+    <string name="notification_disabled_location">Location is disabled</string>
+    <string name="notification_disabled_location_message">Tap to go to location settings.</string>
+    <string name="dialog_title_google_play_services">Google Play Services</string>
+    <string name="dialog_message_update_google">You need to update your version of Google Play services to use Geobells.</string>
+    <string name="dialog_message_no_google">You must have Google Play Services to use Geobells.</string>
 
 </resources>
