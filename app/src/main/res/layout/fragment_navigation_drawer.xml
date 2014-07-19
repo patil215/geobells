@@ -102,6 +102,7 @@
 
     <View
         android:layout_height="1px"
+        android:id="@+id/navigation_upgrade_line"
         android:layout_width="match_parent"
         android:background="@color/navigation_deactivated"
         />

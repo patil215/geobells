@@ -17,12 +17,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.patil.geobells.lite.service.ActivityRecognitionService;
 import com.patil.geobells.lite.service.LocationService;
+import com.patil.geobells.lite.utils.Config;
 import com.patil.geobells.lite.utils.ConnectivityChecker;
 import com.patil.geobells.lite.utils.Constants;
 import com.patil.geobells.lite.utils.GeobellsDataManager;
@@ -72,6 +74,13 @@ public class MainActivity extends Activity
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.navigation_drawer);
+        // Hide the upgrade button if it's the pro version
+        if(!Config.IS_LITE_VERSION) {
+            Button upgradeButton = (Button) mNavigationDrawerFragment.getView().findViewById(R.id.navigation_upgrade);
+            View upgradeLine = (View) mNavigationDrawerFragment.getView().findViewById(R.id.navigation_upgrade_line);
+            upgradeButton.setVisibility(View.GONE);
+            upgradeLine.setVisibility(View.GONE);
+        }
         title = getTitle();
 
         // Set up the drawer.
@@ -105,6 +114,13 @@ public class MainActivity extends Activity
     protected void onResume() {
         super.onResume();
         checkLocationServicesEnabled();
+        // Hide the upgrade button if it's the pro version
+        if(!Config.IS_LITE_VERSION && mNavigationDrawerFragment != null) {
+            Button upgradeButton = (Button) mNavigationDrawerFragment.getView().findViewById(R.id.navigation_upgrade);
+            View upgradeLine = (View) mNavigationDrawerFragment.getView().findViewById(R.id.navigation_upgrade_line);
+            upgradeButton.setVisibility(View.GONE);
+            upgradeLine.setVisibility(View.GONE);
+        }
     }
 
     public void checkLocationServicesEnabled() {
@@ -273,6 +289,7 @@ public class MainActivity extends Activity
     }
 
     public void onSettingsClick(View v) {
+        mNavigationDrawerFragment.mDrawerLayout.closeDrawer(mNavigationDrawerFragment.mFragmentContainerView);
         mNavigationDrawerFragment.mDrawerLayout.closeDrawer(mNavigationDrawerFragment.mFragmentContainerView);
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivityForResult(intent, Constants.ACTIVITY_REQUEST_CODE_SETTINGS);
