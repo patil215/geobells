@@ -77,6 +77,12 @@ public class UpcomingRemindersFragment extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d("Dibby", "OnActivityResult called");
+        ((MainActivity)getActivity()).refreshUpcoming();
+    }
+
     public int numUpcomingReminders(ArrayList<Reminder> reminders) {
         int sum = 0;
         for(Reminder reminder : reminders) {

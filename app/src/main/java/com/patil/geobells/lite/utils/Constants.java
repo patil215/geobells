@@ -87,6 +87,8 @@ public class Constants {
     public static final String EXTRA_SPEAKTEXT = "text";
     public static final long POLLING_INTERVAL_ACTIVITY_RECOGNITION = 120000;
 
+    public static final double MULTIPLIER_LOW_POWER = 2;
+
     public static final int SIZE_IMAGE_PREVIEW_HORIZONTAL = 200;
     public static final int SIZE_IMAGE_PREVIEW_VERTICAL = 200;
     public static final int SIZE_IMAGE_LARGE_HORIZONTAL = 600;
@@ -95,4 +97,5 @@ public class Constants {
     public static final int ACTIVITY_REQUEST_CODE_EDIT_REMINDER = 1;
     public static final int ACTIVITY_REQUEST_CODE_VIEW_REMINDER = 9;
     public static final int REMINDER_LIMIT = 3;
+    public static int  POLLING_INTERVAL_ACTIVITY_RECOGNITION_MINIMUM = 30000;
 }

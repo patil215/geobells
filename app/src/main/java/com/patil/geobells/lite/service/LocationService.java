@@ -1,14 +1,10 @@
 package com.patil.geobells.lite.service;
 
-import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
-import android.location.LocationManager;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
@@ -85,7 +81,7 @@ public class LocationService extends Service implements GooglePlayServicesClient
 
     public void makeUseOfLocation(Location currentLocation) {
         Log.d("BackgroundService", "Making use of new location");
-        if (reminders.size() > 0) {
+        if (numUpcomingReminders(reminders) > 0) {
             for (int reminderIndex = 0; reminderIndex < reminders.size(); reminderIndex++) {
                 Reminder reminder = reminders.get(reminderIndex);
                 if (!reminder.completed) {
@@ -234,53 +230,63 @@ public class LocationService extends Service implements GooglePlayServicesClient
         preferenceManager = new GeobellsPreferenceManager(this);
         dataManager = new GeobellsDataManager(this);
         reminders = dataManager.getSavedReminders();
-            if (!preferenceManager.isDisabled()) {
-                boolean showNotification = preferenceManager.isShowBackgroundNotificationEnabled();
-                if (reminders.size() > 0) {
-                    if (intent == null) {
-                        Log.d("BackgroundService", "Set polling interval to default");
-                        startLocationListening(Constants.POLLING_INTERVAL_DEFAULT);
-                    } else {
-                        Bundle bundle = intent.getExtras();
-                        if (bundle != null) {
-                            int intentActivity = bundle.getInt(Constants.EXTRA_ACTIVITY);
-                            Log.d("BackgroundService", "Set polling interval for activity " + String.valueOf(intentActivity));
-                            activity = intentActivity;
-                            switch (intentActivity) {
-                                case Constants.ACTIVITY_STANDING:
-                                    startLocationListening(Constants.POLLING_INTERVAL_STANDING);
-                                    break;
-                                case Constants.ACTIVITY_BIKING:
-                                    startLocationListening(Constants.POLLING_INTERVAL_BIKING);
-                                    break;
-                                case Constants.ACTIVITY_WALKING:
-                                    startLocationListening(Constants.POLLING_INTERVAL_WALKING);
-                                    break;
-                                case Constants.ACTIVITY_DRIVING:
-                                    startLocationListening(Constants.POLLING_INTERVAL_DRIVING);
-                                    break;
-                                case Constants.ACTIVITY_UNKNOWN:
-                                    startLocationListening(Constants.POLLING_INTERVAL_UNKNOWN);
-                                    break;
-                                case Constants.ACTIVITY_TILTING:
-                                    startLocationListening(Constants.POLLING_INTERVAL_TILTING);
-                                    break;
-                            }
-                        } else {
-                            Log.d("BackgroundService", "No bundle, starting with unknown default polling interval");
-                            startLocationListening(Constants.POLLING_INTERVAL_UNKNOWN);
-                        }
-                    }
+        if (!preferenceManager.isDisabled()) {
+            boolean showNotification = preferenceManager.isShowBackgroundNotificationEnabled();
+            if (numUpcomingReminders(reminders) > 0) {
+                if (intent == null) {
+                    Log.d("BackgroundService", "Set polling interval to default");
+                    startLocationListening(Constants.POLLING_INTERVAL_DEFAULT);
                 } else {
-                    Log.d("BackgroundService", "Skipping polling because no reminders");
+                    Bundle bundle = intent.getExtras();
+                    if (bundle != null) {
+                        int intentActivity = bundle.getInt(Constants.EXTRA_ACTIVITY);
+                        Log.d("BackgroundService", "Set polling interval for activity " + String.valueOf(intentActivity));
+                        activity = intentActivity;
+                        switch (intentActivity) {
+                            case Constants.ACTIVITY_STANDING:
+                                startLocationListening(Constants.POLLING_INTERVAL_STANDING);
+                                break;
+                            case Constants.ACTIVITY_BIKING:
+                                startLocationListening(Constants.POLLING_INTERVAL_BIKING);
+                                break;
+                            case Constants.ACTIVITY_WALKING:
+                                startLocationListening(Constants.POLLING_INTERVAL_WALKING);
+                                break;
+                            case Constants.ACTIVITY_DRIVING:
+                                startLocationListening(Constants.POLLING_INTERVAL_DRIVING);
+                                break;
+                            case Constants.ACTIVITY_UNKNOWN:
+                                startLocationListening(Constants.POLLING_INTERVAL_UNKNOWN);
+                                break;
+                            case Constants.ACTIVITY_TILTING:
+                                startLocationListening(Constants.POLLING_INTERVAL_TILTING);
+                                break;
+                        }
+                    } else {
+                        Log.d("BackgroundService", "No bundle, starting with unknown default polling interval");
+                        startLocationListening(Constants.POLLING_INTERVAL_UNKNOWN);
+                    }
                 }
                 if (showNotification) {
                     makeForeground();
                 }
             } else {
-                showDisabledNotification();
+                Log.d("BackgroundService", "Skipping polling because no reminders");
             }
+        } else {
+            showDisabledNotification();
+        }
         return START_STICKY;
+    }
+
+    public int numUpcomingReminders(ArrayList<Reminder> reminders) {
+        int count = 0;
+        for(Reminder reminder : reminders) {
+            if(!reminder.completed) {
+                count++;
+            }
+        }
+        return count;
     }
 
     public void sendNotification(String title, String message, int transition, Location currentLocation, double latitude, double longitude, boolean silencePhone, int index) {
@@ -352,14 +358,14 @@ public class LocationService extends Service implements GooglePlayServicesClient
         locationRequest = LocationRequest.create();
         if (lowPowerEnabled) {
             locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-            locationRequest.setInterval((int)((interval * 2 * multiplier)));
+            locationRequest.setInterval((int) ((interval * 2 * multiplier)));
             Log.d("BackgroundService", "Starting location listening with interval " + String.valueOf(interval * 2));
-            locationRequest.setFastestInterval((int)(interval * multiplier));
+            locationRequest.setFastestInterval((int) (interval * multiplier));
         } else {
             locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-            locationRequest.setInterval((int)(interval * multiplier));
+            locationRequest.setInterval((int) (interval * multiplier));
             Log.d("BackgroundService", "Starting location listening with interval " + String.valueOf(interval));
-            locationRequest.setFastestInterval((int)((interval / 2) * multiplier));
+            locationRequest.setFastestInterval((int) ((interval / 2) * multiplier));
         }
         locationClient = new LocationClient(this, this, this);
         locationClient.connect();

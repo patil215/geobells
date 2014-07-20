@@ -62,5 +62,13 @@ public class GeobellsPreferenceManager {
         return preferences.getFloat("pref_multiplier", 1);
     }
 
+    public void saveLastActivityRecognitionTime(long time) {
+        SharedPreferences.Editor edit = preferences.edit();
+        edit.putLong("activity_time", time);
+        edit.commit();
+    }
 
+    public long getLastActivityRecognitionTime() {
+        return preferences.getLong("activity_time", 0);
+    }
 }

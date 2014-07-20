@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,11 +27,14 @@ import it.gmariotti.cardslib.library.view.CardListView;
 
 public class CompletedRemindersFragment extends Fragment {
 
+    CardListView listView;
+    CardArrayAdapter cardArrayAdapter;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_completed, container, false);
-        CardListView listView = (CardListView) rootView.findViewById(R.id.cardList);
+        listView = (CardListView) rootView.findViewById(R.id.cardList);
         RelativeLayout noReminderLayout = (RelativeLayout) rootView.findViewById(R.id.layout_noreminders);
         final GeobellsDataManager dataManager = new GeobellsDataManager(rootView.getContext());
         final ArrayList<Reminder> reminders = dataManager.getSavedReminders();
@@ -65,13 +69,19 @@ public class CompletedRemindersFragment extends Fragment {
                     }
                 }
             }
-            CardArrayAdapter cardArrayAdapter = new CardArrayAdapter(rootView.getContext(), cards);
+            cardArrayAdapter = new CardArrayAdapter(rootView.getContext(), cards);
             listView.setAdapter(cardArrayAdapter);
         } else {
             listView.setVisibility(View.GONE);
             noReminderLayout.setVisibility(View.VISIBLE);
         }
         return rootView;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d("Dibby", "OnActivityResult called");
+        ((MainActivity)getActivity()).refreshCompleted();
     }
 
     public int numCompletedReminders(ArrayList<Reminder> reminders) {

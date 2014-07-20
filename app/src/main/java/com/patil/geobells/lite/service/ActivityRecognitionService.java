@@ -11,11 +11,13 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.location.ActivityRecognitionClient;
 import com.patil.geobells.lite.utils.Constants;
+import com.patil.geobells.lite.utils.GeobellsPreferenceManager;
 
 public class ActivityRecognitionService extends Service implements GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener {
 
     ActivityRecognitionClient activityRecognitionClient;
     PendingIntent activityRecognitionIntent;
+    GeobellsPreferenceManager preferenceManager = null;
     boolean inProgress;
 
     @Override
@@ -29,7 +31,7 @@ public class ActivityRecognitionService extends Service implements GooglePlaySer
         activityRecognitionClient = new ActivityRecognitionClient(this, this, this);
         Intent activityIntent = new Intent(this, ActivityRecognitionIntentService.class);
         activityRecognitionIntent = PendingIntent.getService(this, 0, activityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        if(!inProgress) {
+        if (!inProgress) {
             inProgress = true;
             activityRecognitionClient.connect();
         }
@@ -44,7 +46,20 @@ public class ActivityRecognitionService extends Service implements GooglePlaySer
     @Override
     public void onConnected(Bundle bundle) {
         Log.d("BackgroundService", "Activity recognition client connected");
-        activityRecognitionClient.requestActivityUpdates(Constants.POLLING_INTERVAL_ACTIVITY_RECOGNITION, activityRecognitionIntent);
+        if (preferenceManager == null) {
+            preferenceManager = new GeobellsPreferenceManager(this);
+        }
+        long interval = Constants.POLLING_INTERVAL_ACTIVITY_RECOGNITION;
+        double multiplier = preferenceManager.getIntervalMultiplier();
+        boolean lowPowerEnabled = preferenceManager.isLowPowerEnabled();
+        if (lowPowerEnabled) {
+            long time = (long) (interval * multiplier * Constants.MULTIPLIER_LOW_POWER);
+            activityRecognitionClient.requestActivityUpdates(time, activityRecognitionIntent);
+        } else {
+            long time = (long) (interval * multiplier);
+            activityRecognitionClient.requestActivityUpdates(time, activityRecognitionIntent);
+
+        }
         inProgress = false;
         activityRecognitionClient.disconnect();
         stopSelf();
@@ -60,5 +75,13 @@ public class ActivityRecognitionService extends Service implements GooglePlaySer
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
         Log.d("BackgroundService", "Activity recognition client connection failed");
+    }
+
+    @Override
+    public void onDestroy() {
+        if (activityRecognitionClient != null) {
+            activityRecognitionClient.disconnect();
+        }
+        super.onDestroy();
     }
 }

@@ -469,6 +469,7 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
         Intent returnIntent = new Intent();
         setResult(RESULT_OK, returnIntent);
         Intent serviceIntent = new Intent(this, LocationService.class);
+        stopService(serviceIntent);
         startService(serviceIntent);
         finish();
     }
@@ -509,6 +510,7 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
         dataManager.saveReminders(reminders);
         Toast.makeText(this, getString(R.string.toast_reminder_created), Toast.LENGTH_SHORT).show();
         Intent serviceIntent = new Intent(this, LocationService.class);
+        stopService(serviceIntent);
         startService(serviceIntent);
         finish();
     }

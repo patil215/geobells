@@ -64,6 +64,7 @@ public class MainActivity extends Activity
 
         if(!isLocationServiceRunning()) {
             Intent serviceIntent = new Intent(this, LocationService.class);
+            stopService(serviceIntent);
             serviceIntent.putExtra(Constants.EXTRA_ACTIVITY, Constants.ACTIVITY_UNKNOWN);
             Log.d("BackgroundService", "Started LocationService from MainActivity");
             startService(serviceIntent);
@@ -73,6 +74,7 @@ public class MainActivity extends Activity
         if(!isActivityServiceRunning()) {
             Intent serviceIntent = new Intent(this, ActivityRecognitionService.class);
             Log.d("BackgroundService", "Started ActivityRecognitionService from MainActivity");
+            stopService(serviceIntent);
             startService(serviceIntent);
         } else {
             Log.d("BackgroundService", "ActivityRecognitionService already running");
@@ -231,9 +233,20 @@ public class MainActivity extends Activity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        refreshUpcoming();
+    }
+
+    public void refreshUpcoming() {
         UpcomingRemindersFragment upcomingFragment = new UpcomingRemindersFragment();
         getFragmentManager().beginTransaction()
                 .replace(R.id.container, upcomingFragment)
+                .commit();
+    }
+
+    public void refreshCompleted() {
+        CompletedRemindersFragment completedFragments = new CompletedRemindersFragment();
+        getFragmentManager().beginTransaction()
+                .replace(R.id.container, completedFragments)
                 .commit();
     }
 
@@ -251,6 +264,10 @@ public class MainActivity extends Activity
             } else {
                 new UpgradeDialog(this).showUpgradeDialog(getString(R.string.upgrade_numreminders));
             }
+        } else {
+            Intent intent = new Intent(this, CreateReminderActivity.class);
+            intent.putExtra(Constants.EXTRA_EDIT_REMINDER, false);
+            startActivityForResult(intent, Constants.ACTIVITY_REQUEST_CODE_CREATE_REMINDER);
         }
     }
 
@@ -316,7 +333,8 @@ public class MainActivity extends Activity
     }
 
     public void onHelpClick(View v) {
-
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://geobells.com/help.html"));
+        startActivity(browserIntent);
     }
 
     public void onUpgradeClick(View v) {
