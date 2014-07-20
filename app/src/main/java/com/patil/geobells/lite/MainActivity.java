@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.patil.geobells.lite.data.Reminder;
@@ -59,6 +60,9 @@ public class MainActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Get a Tracker (should auto-report)
+        ((GeobellsApplication) getApplication()).getTracker(GeobellsApplication.TrackerName.APP_TRACKER);
+
         checkGooglePlayServicesEnabled();
         dataManager = new GeobellsDataManager(this);
 
@@ -95,6 +99,21 @@ public class MainActivity extends Activity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //Get an Analytics tracker to report app starts and uncaught exceptions etc.
+        GoogleAnalytics.getInstance(this).reportActivityStart(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        //Stop the analytics tracking
+        GoogleAnalytics.getInstance(this).reportActivityStop(this);
+
     }
 
     public void checkGooglePlayServicesEnabled() {

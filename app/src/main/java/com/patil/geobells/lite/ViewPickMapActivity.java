@@ -16,6 +16,7 @@ import android.view.animation.Interpolator;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.location.LocationClient;
@@ -91,11 +92,15 @@ public class ViewPickMapActivity extends Activity implements AsyncTaskCompleteLi
     protected void onStart() {
         super.onStart();
         locationClient.connect();
+        //Get an Analytics tracker to report app starts and uncaught exceptions etc.
+        GoogleAnalytics.getInstance(this).reportActivityStart(this);
     }
 
     @Override
     protected void onStop() {
         locationClient.disconnect();
+        //Stop the analytics tracking
+        GoogleAnalytics.getInstance(this).reportActivityStop(this);
         super.onStop();
     }
 
@@ -154,6 +159,8 @@ public class ViewPickMapActivity extends Activity implements AsyncTaskCompleteLi
     public void onDisconnected() {
 
     }
+
+
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {

@@ -30,6 +30,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.location.LocationClient;
@@ -188,12 +189,16 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
     @Override
     protected void onStart() {
         super.onStart();
+        //Get an Analytics tracker to report app starts and uncaught exceptions etc.
+        GoogleAnalytics.getInstance(this).reportActivityStart(this);
         locationClient.connect();
     }
 
     @Override
     protected void onStop() {
         locationClient.disconnect();
+        //Stop the analytics tracking
+        GoogleAnalytics.getInstance(this).reportActivityStop(this);
         super.onStop();
     }
 
