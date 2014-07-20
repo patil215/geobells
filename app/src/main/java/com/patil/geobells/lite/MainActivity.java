@@ -8,6 +8,7 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -59,6 +60,18 @@ public class MainActivity extends Activity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if(isAppInstalled("com.patil.geobells")) {
+            if(Config.IS_LITE_VERSION) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this).setTitle(getString(R.string.dialog_title_uninstall_lite)).setMessage(getString(R.string.dialog_message_uninstall_lite));
+                builder.create().show();
+            } else {
+                if(isAppInstalled("com.patil.geobells.lite")) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this).setTitle(getString(R.string.dialog_title_uninstall_pro)).setMessage(getString(R.string.dialog_message_uninstall_pro));
+                    builder.create().show();
+                }
+            }
+        }
 
         //Get a Tracker (should auto-report)
         ((GeobellsApplication) getApplication()).getTracker(GeobellsApplication.TrackerName.APP_TRACKER);
@@ -135,6 +148,18 @@ public class MainActivity extends Activity
             });
             dialog.create().show();
         }
+    }
+
+    private boolean isAppInstalled(String packageName) {
+        PackageManager pm = getPackageManager();
+        boolean installed = false;
+        try {
+            pm.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES);
+            installed = true;
+        } catch (PackageManager.NameNotFoundException e) {
+            installed = false;
+        }
+        return installed;
     }
 
     @Override
