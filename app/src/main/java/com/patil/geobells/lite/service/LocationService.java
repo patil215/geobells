@@ -60,7 +60,7 @@ public class LocationService extends Service implements GooglePlayServicesClient
         Log.d("BackgroundService", "Notification service being made foreground");
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-        builder.setSmallIcon(R.drawable.ic_launcher);
+        builder.setSmallIcon(R.drawable.ic_notification);
         builder.setContentTitle(getString(R.string.notification_listening_title));
         builder.setContentText(getString(R.string.notification_listening_message));
         builder.setContentIntent(pendingIntent);
@@ -73,7 +73,7 @@ public class LocationService extends Service implements GooglePlayServicesClient
         Log.d("BackgroundService", "Notification service being made foreground");
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, SettingsActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-        builder.setSmallIcon(R.drawable.ic_launcher);
+        builder.setSmallIcon(R.drawable.ic_notification);
         builder.setContentTitle(getString(R.string.notification_disabled_title));
         builder.setContentText(getString(R.string.notification_disabled_message));
         builder.setContentIntent(pendingIntent);
@@ -291,7 +291,7 @@ public class LocationService extends Service implements GooglePlayServicesClient
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, mapsIntent, 0);
         Uri ringtoneUri = Uri.parse(uri);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-        builder.setSmallIcon(R.drawable.ic_launcher).setContentTitle(title).setContentText(message).setSound(ringtoneUri).setDefaults(-1).addAction(R.drawable.ic_action_map, getString(R.string.notification_action_navigate), pendingIntent).setPriority(2);
+        builder.setSmallIcon(R.drawable.ic_notification).setContentTitle(title).setContentText(message).setSound(ringtoneUri).setDefaults(-1).addAction(R.drawable.ic_action_map, getString(R.string.notification_action_navigate), pendingIntent).setPriority(2);
         Intent classIntent = new Intent(this, MainActivity.class);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         stackBuilder.addParentStack(MainActivity.class);
