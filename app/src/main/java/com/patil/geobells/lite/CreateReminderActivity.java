@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -202,6 +203,18 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
             return new double[]{lastLocation.getLatitude(), lastLocation.getLongitude()};
         } else {
             return null;
+        }
+    }
+
+    public void onCheckboxAirplaneClick(View v) {
+        if (Build.VERSION.SDK_INT >= 17) {
+            AlertDialog dialog = new AlertDialog.Builder(this).setTitle(getString(R.string.dialog_title_airplane_mode)).setMessage(getString(R.string.dialog_message_airplane_mode)).setPositiveButton(getString(R.string.dialog_button_ok), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                }
+            }).create();
+            dialog.show();
         }
     }
 
