@@ -67,7 +67,12 @@ public class MainActivity extends Activity
                 builder.create().show();
             } else {
                 if(isAppInstalled("com.patil.geobells.lite")) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(this).setTitle(getString(R.string.dialog_title_uninstall_pro)).setMessage(getString(R.string.dialog_message_uninstall_pro));
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this).setTitle(getString(R.string.dialog_title_uninstall_pro)).setMessage(getString(R.string.dialog_message_uninstall_pro)).setPositiveButton(getString(R.string.dialog_button_ok), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    });
                     builder.create().show();
                 }
             }
