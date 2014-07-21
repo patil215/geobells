@@ -4,17 +4,13 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.media.RingtoneManager;
-import android.media.audiofx.BassBoost;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.text.InputType;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -27,19 +23,18 @@ import com.patil.geobells.lite.service.LocationService;
 import com.patil.geobells.lite.utils.Config;
 import com.patil.geobells.lite.utils.GeobellsDataManager;
 import com.patil.geobells.lite.utils.GeobellsPreferenceManager;
-import com.patil.geobells.lite.views.UpgradeDialog;
 
 import java.util.ArrayList;
 
 public class SettingsActivity extends PreferenceActivity {
 
-    Preference notificationSoundPreference;
-    Preference clearRemindersPreference;
-    Preference intervalPreference;
-    CheckBoxPreference popupRemindersPreference;
-    CheckBoxPreference disableGeobellsPreference;
-    GeobellsPreferenceManager preferenceManager;
-    GeobellsDataManager dataManager;
+    private Preference notificationSoundPreference;
+    private Preference clearRemindersPreference;
+    private Preference intervalPreference;
+    private CheckBoxPreference popupRemindersPreference;
+    private CheckBoxPreference disableGeobellsPreference;
+    private GeobellsPreferenceManager preferenceManager;
+    private GeobellsDataManager dataManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

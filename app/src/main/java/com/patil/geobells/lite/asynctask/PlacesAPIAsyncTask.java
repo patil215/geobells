@@ -39,8 +39,7 @@ public class PlacesAPIAsyncTask extends AsyncTask<String, String, ArrayList<Plac
     @Override
     protected ArrayList<Place> doInBackground(String... data) {
         String json = getPlaceJson(data[0], data[1], data[2]);
-        ArrayList<Place> places = parseJsonForPlaces(json);
-        return places;
+        return parseJsonForPlaces(json);
     }
 
     public ArrayList<Place> parseJsonForPlaces(String json) {

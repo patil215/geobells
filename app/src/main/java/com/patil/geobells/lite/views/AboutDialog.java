@@ -32,7 +32,7 @@ public class AboutDialog extends Dialog {
         Linkify.addLinks(tv, Linkify.ALL);
     }
 
-    public static String readRawTextFile(int id) {
+    private static String readRawTextFile(int id) {
         InputStream inputStream = mContext.getResources().openRawResource(id);
         InputStreamReader in = new InputStreamReader(inputStream);
         BufferedReader buf = new BufferedReader(in);

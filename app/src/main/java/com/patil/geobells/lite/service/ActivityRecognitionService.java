@@ -15,10 +15,10 @@ import com.patil.geobells.lite.utils.GeobellsPreferenceManager;
 
 public class ActivityRecognitionService extends Service implements GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener {
 
-    ActivityRecognitionClient activityRecognitionClient;
-    PendingIntent activityRecognitionIntent;
-    GeobellsPreferenceManager preferenceManager = null;
-    boolean inProgress;
+    private ActivityRecognitionClient activityRecognitionClient;
+    private PendingIntent activityRecognitionIntent;
+    private GeobellsPreferenceManager preferenceManager = null;
+    private boolean inProgress;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {

@@ -16,8 +16,8 @@ import android.widget.ImageView;
 import java.io.InputStream;
 
 public class DownloadImageTask extends AsyncTask<String, Void, Bitmap>  {
-    ImageView bmImage;
-    Context context;
+    private ImageView bmImage;
+    private Context context;
 
     public DownloadImageTask(Context context, ImageView bmImage) {
         this.context = context; this.bmImage = bmImage;

@@ -20,19 +20,19 @@ import java.util.ArrayList;
 import it.gmariotti.cardslib.library.internal.Card;
 
 public class ReminderCard extends Card {
-    TextView titleBox;
-    TextView locationBox;
-    TextView dateBox;
-    ImageView colorStripe;
-    ImageView mapImage;
-    String title;
-    String location;
-    String date;
-    boolean completed;
-    int positionInList;
-    Reminder reminder;
+    private TextView titleBox;
+    private TextView locationBox;
+    private TextView dateBox;
+    private ImageView colorStripe;
+    private ImageView mapImage;
+    private String title;
+    private String location;
+    private String date;
+    private boolean completed;
+    private int positionInList;
+    private Reminder reminder;
     ArrayList<String> additionalInfo; // Days to trigger on, settings to change, etc
-    Context context;
+    private Context context;
 
     public ReminderCard(Context context, int innerLayout, Reminder reminder, int positionInList) {
         super(context, innerLayout);

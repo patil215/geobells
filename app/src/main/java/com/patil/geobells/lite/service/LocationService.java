@@ -38,15 +38,15 @@ import java.util.Date;
 
 public class LocationService extends Service implements GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {
 
-    int activity = -2;
+    private int activity = -2;
     private final IBinder binder = new LocationBinder();
     int currentVolume;
-    ArrayList<Reminder> reminders;
+    private ArrayList<Reminder> reminders;
     String lastEventFile;
-    LocationClient locationClient = null;
-    LocationRequest locationRequest;
-    GeobellsDataManager dataManager;
-    GeobellsPreferenceManager preferenceManager;
+    private LocationClient locationClient = null;
+    private LocationRequest locationRequest;
+    private GeobellsDataManager dataManager;
+    private GeobellsPreferenceManager preferenceManager;
 
     public int getActivity() {
         return this.activity;
@@ -95,8 +95,7 @@ public class LocationService extends Service implements GooglePlayServicesClient
                         if (type == Constants.TYPE_DYNAMIC) {
                             Log.d("BackgroundService", "Scanning dynamic reminder");
                             ArrayList<Place> places = reminder.places;
-                            for (int placeIndex = 0; placeIndex < places.size(); placeIndex++) {
-                                Place place = places.get(placeIndex);
+                            for (Place place : places) {
                                 Location placeLocation = new Location("");
                                 placeLocation.setLatitude(place.latitude);
                                 placeLocation.setLongitude(place.longitude);
@@ -312,8 +311,8 @@ public class LocationService extends Service implements GooglePlayServicesClient
         if (words.length <= 3) {
             backerText = message;
         } else {
-            for (int i = 0; i < words.length; i++) {
-                backerText = backerText + words[i] + " ";
+            for (String word : words) {
+                backerText = backerText + word + " ";
             }
             backerText = backerText.substring(0, backerText.length() - 1);
         }

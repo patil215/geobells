@@ -55,7 +55,6 @@ public class NavigationDrawerFragment extends Fragment {
     public DrawerLayout mDrawerLayout;
     private ListView mDrawerListView;
     public View mFragmentContainerView;
-    private LinearLayout mDrawerLinearLayout;
 
     private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
@@ -93,7 +92,7 @@ public class NavigationDrawerFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        mDrawerLinearLayout = (LinearLayout) inflater.inflate(
+        LinearLayout mDrawerLinearLayout = (LinearLayout) inflater.inflate(
                 R.layout.fragment_navigation_drawer, container, false);
         mDrawerListView = (ListView) mDrawerLinearLayout.findViewById(R.id.navigation_listview);
 
@@ -202,14 +201,6 @@ public class NavigationDrawerFragment extends Fragment {
         if (mDrawerLayout != null) {
             mDrawerLayout.closeDrawer(mFragmentContainerView);
         }
-    }
-
-    public void onAboutClick(View v) {
-
-    }
-
-    public void onHelpClick(View v) {
-
     }
 
     @Override

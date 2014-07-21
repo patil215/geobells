@@ -37,9 +37,9 @@ import java.util.ArrayList;
 
 public class ViewRemindersMapActivity extends Activity {
 
-    GeobellsDataManager dataManager;
-    GoogleMap mapView;
-    LinearLayout keyLayout;
+    private GeobellsDataManager dataManager;
+    private GoogleMap mapView;
+    private LinearLayout keyLayout;
 
 
     @Override

@@ -54,7 +54,7 @@ public class MainActivity extends Activity
      */
     private CharSequence title;
 
-    GeobellsDataManager dataManager;
+    private GeobellsDataManager dataManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

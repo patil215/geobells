@@ -21,31 +21,30 @@ import com.patil.geobells.lite.utils.Constants;
 import com.patil.geobells.lite.utils.GeobellsDataManager;
 import com.patil.geobells.lite.utils.GeobellsPreferenceManager;
 import com.patil.geobells.lite.utils.GeobellsUtils;
-import com.patil.geobells.lite.views.UpcomingRemindersFragment;
 
 import java.util.ArrayList;
 
 public class ViewReminderActivity extends Activity {
 
-    TextView titleBox;
-    TextView locationBox;
-    ImageButton viewPlacesButton;
-    TextView descriptionBox;
-    TextView proximityBox;
-    TextView daysBox;
-    TextView repeatBox;
-    TextView toggleBox;
-    ImageView mapImage;
+    private TextView titleBox;
+    private TextView locationBox;
+    private ImageButton viewPlacesButton;
+    private TextView descriptionBox;
+    private TextView proximityBox;
+    private TextView daysBox;
+    private TextView repeatBox;
+    private TextView toggleBox;
+    private ImageView mapImage;
 
-    Reminder reminder;
-    int reminderIndex;
-    MenuItem setUncompletedItem;
-    MenuItem setCompletedItem;
+    private Reminder reminder;
+    private int reminderIndex;
+    private MenuItem setUncompletedItem;
+    private MenuItem setCompletedItem;
 
-    ArrayList<Reminder> reminders;
+    private ArrayList<Reminder> reminders;
 
-    GeobellsDataManager dataManager;
-    GeobellsPreferenceManager preferenceManager;
+    private GeobellsDataManager dataManager;
+    private GeobellsPreferenceManager preferenceManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

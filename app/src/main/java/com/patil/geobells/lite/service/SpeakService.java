@@ -6,7 +6,6 @@ import android.media.AudioManager;
 import android.os.IBinder;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
-import android.widget.TextView;
 
 import com.patil.geobells.lite.utils.Constants;
 

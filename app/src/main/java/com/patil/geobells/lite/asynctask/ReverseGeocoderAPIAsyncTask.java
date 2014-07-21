@@ -34,8 +34,7 @@ public class ReverseGeocoderAPIAsyncTask extends AsyncTask<Double, String, Strin
     @Override
     protected String doInBackground(Double... coords) {
         String json = getGeocodeJson(coords[0], coords[1]);
-        String address = parseJsonForAddress(json);
-        return address;
+        return parseJsonForAddress(json);
     }
 
     public String parseJsonForAddress(String json) {
@@ -46,8 +45,7 @@ public class ReverseGeocoderAPIAsyncTask extends AsyncTask<Double, String, Strin
             if(status.equals(Constants.GEOCODE_STATUS_NORESULTS)) {
                 return Constants.GEOCODE_REVERSE_RESPONSE_NORESULTS;
             }
-            String address = jsonObj.getJSONArray("results").getJSONObject(0).getString("formatted_address");
-            return address;
+            return jsonObj.getJSONArray("results").getJSONObject(0).getString("formatted_address");
         } catch (JSONException e) {
             Log.e("PlacesAPIAsyncTask", "Cannot process JSON results", e);
         }

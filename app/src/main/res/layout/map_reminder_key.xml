@@ -23,6 +23,7 @@
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_alignParentRight="true"
+        android:contentDescription="@string/content_description_colorbox"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop" />
 

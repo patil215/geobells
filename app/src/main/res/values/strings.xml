@@ -8,19 +8,12 @@
     <string name="action_settings">Settings</string>
     <string name="button_address_map">View/Pick from map</string>
     <string name="button_address_search">Search</string>
-    <string name="button_advanced_options">Advanced...</string>
+    <string name="button_advanced_options">Advanced…</string>
     <string name="button_business_view_places">View places</string>
-    <string name="button_choose_days">Choose days...</string>
+    <string name="button_choose_days">Choose days…</string>
     <string name="checkbox_reminder_airplane">Toggle airplane mode upon reminder</string>
     <string name="checkbox_reminder_repeat">Repeat</string>
     <string name="checkbox_reminder_silence">Silence phone upon reminder</string>
-    <string name="day_friday">Friday</string>
-    <string name="day_monday">Monday</string>
-    <string name="day_saturday">Saturday</string>
-    <string name="day_sunday">Sunday</string>
-    <string name="day_thursday">Thursday</string>
-    <string name="day_tuesday">Tuesday</string>
-    <string name="day_wednesday">Wednesday</string>
     <string name="dialog_button_cancel">Cancel</string>
     <string name="dialog_button_ok">OK</string>
     <string name="dialog_button_search">Search</string>
@@ -34,9 +27,9 @@
     <string name="hint_reminder_address">e.g. \"1020 Main Street\"</string>
     <string name="hint_reminder_business">e.g. \"Grocery store\" or \"Costco\"</string>
     <string name="hint_reminder_title">e.g. \"Get Milk\" or \"Pick up Groceries\"</string>
-    <string name="message_creating">Creating reminder...</string>
-    <string name="message_searching">Searching...</string>
-    <string name="message_viewing">Loading places...</string>
+    <string name="message_creating">Creating reminder…</string>
+    <string name="message_searching">Searching…</string>
+    <string name="message_viewing">Loading places…</string>
     <string name="navigation_about_title">About</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -99,7 +92,7 @@
     <string name="text_no_completed_reminders">When a reminder has completed, it will appear here.</string>
     <string name="toast_no_map_geocode_results_begin">Couldn\'t find</string>
     <string name="toast_no_map_geocode_results_end">on the map.</string>
-    <string name="message_loading_map">Loading map...</string>
+    <string name="message_loading_map">Loading map…</string>
     <string name="marker_title_taptopick">Tap to pick:</string>
     <string name="hint_reminder_address_search">enter a search term here</string>
     <string name="toast_reminders_cleared">All reminders deleted.</string>
@@ -122,11 +115,11 @@
     <string name="toast_connect_internet_create_reminder">Connect to the internet to create a reminder.</string>
     <string name="title_activity_view_reminder">View Reminder</string>
     <string name="text_description_default">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent venenatis odio massa, volutpat ornare dui pretium eleifend. Quisque ac varius mi, quis eleifend nibh. Sed in lorem dictum lorem bibendum ultrices. Suspendisse viverra lorem enim, at congue lectus imperdiet eu. Aenean mauris dui, feugiat at nulla nec, tempor iaculis erat. In porttitor, mi eget consequat mattis, lacus felis pretium urna, a pharetra orci tellus vel risus</string>
-    <string name="text_proximity_default">When closer than 1/2 mi.</string>
+    <string name="text_proximity_default"><![CDATA[When closer than &#189; mi.]]></string>
     <string name="text_days_default">Reminds on Monday, Tuesday, Friday</string>
     <string name="text_repeat_default">Resets every day</string>
     <string name="text_toggle_default">Toggles airplane mode and silences phone upon reminder</string>
-    <string name="toast_error_occurred">An error occured.</string>
+    <string name="toast_error_occurred">An error occurred.</string>
     <string name="text_when_closer_than">When closer than&#160;</string>
     <string name="text_when_farther_than">When farther than&#160;</string>
     <string name="text_reminds_on">Reminds on&#160;</string>
@@ -154,15 +147,13 @@
     <string name="dialog_title_enable_locationservices">Enable location</string>
     <string name="dialog_button_open_location_settings">Open settings</string>
     <string name="dialog_button_nothanks">No thanks</string>
-    <string name="notification_disabled_location">Location is disabled</string>
-    <string name="notification_disabled_location_message">Tap to go to location settings.</string>
     <string name="dialog_title_google_play_services">Google Play Services</string>
     <string name="dialog_message_update_google">You need to update your version of Google Play services to use Geobells.</string>
     <string name="dialog_message_no_google">You must have Google Play Services to use Geobells.</string>
     <string name="preference_popup_summary_lite">Popup reminders disabled in free version</string>
     <string name="dialog_title_upgrade">Upgrade to Geobells Pro</string>
     <string name="dialog_button_upgrade">Upgrade</string>
-    <string name="upgrade_numreminders">You can only have three concurrent reminders in the free version. You'll need to delete your completed reminders. \n \nOr upgrade to Pro and create unlimited reminders, as well as gain access to other features.</string>
+    <string name="upgrade_numreminders">You can only have three concurrent reminders in the free version. You\'ll need to delete your completed reminders. \n \nOr upgrade to Pro and create unlimited reminders, as well as gain access to other features.</string>
     <string name="upgrade_popupreminders">Popup reminders are only available in the Pro version. \n \nUpgrade to Pro get this and other features!</string>
     <string name="toast_location_error">Couldn\'t get your location. Make sure both GPS and network location are enabled.</string>
     <string name="dialog_title_airplane_mode">Toggle airplane mode</string>
@@ -171,5 +162,9 @@
     <string name="dialog_message_uninstall_lite">It looks like you have the Pro version of Geobells. \n\nYou should uninstall the this free version so that the apps don\'t interfere.</string>
     <string name="dialog_title_uninstall_pro">Uninstall Geobells Free</string>
     <string name="dialog_message_uninstall_pro">It looks like you\'ve bought the Pro version of Geobells. You should uninstall the free version so the apps don\'t interfere.</string>
+    <string name="content_description_ic_launcher">App icon</string>
+    <string name="content_description_colorbar">Color</string>
+    <string name="content_description_map">Map image</string>
+    <string name="content_description_colorbox">Key color</string>
 
 </resources>

@@ -13,7 +13,7 @@ import com.patil.geobells.lite.utils.Constants;
 import com.patil.geobells.lite.utils.GeobellsPreferenceManager;
 
 public class ActivityRecognitionIntentService extends IntentService {
-    GeobellsPreferenceManager preferenceManager = null;
+    private GeobellsPreferenceManager preferenceManager = null;
     private ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
@@ -26,7 +26,7 @@ public class ActivityRecognitionIntentService extends IntentService {
         }
     };
 
-    LocationService locationService;
+    private LocationService locationService;
 
     public ActivityRecognitionIntentService() {
         super("ActivityRecognitionIntentService");

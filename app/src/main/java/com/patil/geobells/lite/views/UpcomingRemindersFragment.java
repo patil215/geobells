@@ -26,8 +26,8 @@ import it.gmariotti.cardslib.library.view.CardListView;
 
 public class UpcomingRemindersFragment extends Fragment {
 
-    CardListView listView;
-    CardArrayAdapter cardArrayAdapter;
+    private CardListView listView;
+    private CardArrayAdapter cardArrayAdapter;
 
 
     @Override

@@ -6,12 +6,8 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.patil.geobells.lite.R;
-import com.patil.geobells.lite.data.Photo;
-import com.patil.geobells.lite.data.Place;
-import com.patil.geobells.lite.utils.Config;
 import com.patil.geobells.lite.utils.Constants;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -21,7 +17,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 
 public class GeocoderAPIAsyncTask extends AsyncTask<String, String, Double[]>  {
     private AsyncTaskCompleteListener<String> callback;
@@ -38,8 +33,7 @@ public class GeocoderAPIAsyncTask extends AsyncTask<String, String, Double[]>  {
     @Override
     protected Double[] doInBackground(String... addresses) {
         String json = getGeocodeJson(addresses[0]);
-        Double[] coords = parseJsonForCoords(json);
-        return coords;
+        return parseJsonForCoords(json);
     }
 
     public Double[] parseJsonForCoords(String json) {

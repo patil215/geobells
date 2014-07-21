@@ -60,55 +60,55 @@ import java.util.ArrayList;
 
 public class CreateReminderActivity extends Activity implements GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener, AsyncTaskCompleteListener<String> {
 
-    EditText titleBox;
-    EditText descriptionBox;
-    RadioButton specificRadioButton;
-    RadioButton dynamicRadioButton;
-    AutoCompleteTextView businessBox;
-    AutoCompleteTextView addressBox;
-    RadioButton enterRadioButton;
-    RadioButton exitRadioButton;
-    RadioGroup transitionRadioGroup;
-    CheckBox repeatCheckBox;
-    CheckBox airplaneCheckBox;
-    CheckBox silenceCheckBox;
-    TextView proximityPrompt;
-    TextView transitionPrompt;
-    RelativeLayout specificLayout;
-    RelativeLayout dynamicLayout;
-    RelativeLayout advancedLayout;
-    Button advancedButton;
-    Spinner proximitySpinner;
+    private EditText titleBox;
+    private EditText descriptionBox;
+    private RadioButton specificRadioButton;
+    private RadioButton dynamicRadioButton;
+    private AutoCompleteTextView businessBox;
+    private AutoCompleteTextView addressBox;
+    private RadioButton enterRadioButton;
+    private RadioButton exitRadioButton;
+    private RadioGroup transitionRadioGroup;
+    private CheckBox repeatCheckBox;
+    private CheckBox airplaneCheckBox;
+    private CheckBox silenceCheckBox;
+    private TextView proximityPrompt;
+    private TextView transitionPrompt;
+    private RelativeLayout specificLayout;
+    private RelativeLayout dynamicLayout;
+    private RelativeLayout advancedLayout;
+    private Button advancedButton;
+    private Spinner proximitySpinner;
 
-    GeobellsPreferenceManager preferenceManager;
-    GeobellsDataManager dataManager;
+    private GeobellsPreferenceManager preferenceManager;
+    private GeobellsDataManager dataManager;
 
     // Generic Reminder data
-    String title;
-    boolean completed;
-    boolean repeat;
-    boolean[] days = new boolean[7];
-    int proximity;
-    boolean toggleAirplane;
-    boolean silencePhone;
-    long timeCreated;
-    long timeCompleted;
-    int transition;
-    String description;
+    private String title;
+    private boolean completed;
+    private boolean repeat;
+    private boolean[] days = new boolean[7];
+    private int proximity;
+    private boolean toggleAirplane;
+    private boolean silencePhone;
+    private long timeCreated;
+    private long timeCompleted;
+    private int transition;
+    private String description;
 
     // Fixed reminder
-    String address;
-    double latitude;
-    double longitude;
+    private String address;
+    private double latitude;
+    private double longitude;
 
     // Dynamic reminder
-    String business;
+    private String business;
     // Places omitted because it is generated after asynctask
 
-    LocationClient locationClient;
+    private LocationClient locationClient;
 
-    boolean editingReminder;
-    int reminderIndex;
+    private boolean editingReminder;
+    private int reminderIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

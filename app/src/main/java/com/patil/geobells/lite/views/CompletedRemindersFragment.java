@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -27,8 +26,8 @@ import it.gmariotti.cardslib.library.view.CardListView;
 
 public class CompletedRemindersFragment extends Fragment {
 
-    CardListView listView;
-    CardArrayAdapter cardArrayAdapter;
+    private CardListView listView;
+    private CardArrayAdapter cardArrayAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

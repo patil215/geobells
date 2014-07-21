@@ -5,8 +5,6 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import java.util.ArrayList;
-
 public class GeobellsPreferenceManager {
     Context context;
     SharedPreferences preferences;

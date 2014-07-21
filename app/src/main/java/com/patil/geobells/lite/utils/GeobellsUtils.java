@@ -1,7 +1,5 @@
 package com.patil.geobells.lite.utils;
 
-import android.content.Context;
-
 import com.google.android.gms.maps.model.LatLng;
 
 import org.ocpsoft.prettytime.PrettyTime;
@@ -26,7 +24,6 @@ public class GeobellsUtils {
         for(LatLng markerPosition : markerPositions) {
             sb.append("|" + markerPosition.latitude + "," + markerPosition.longitude);
         }
-        String url = sb.toString();
-        return url;
+        return sb.toString();
     }
 }

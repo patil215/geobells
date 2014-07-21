@@ -9,7 +9,7 @@ import android.net.Uri;
 import com.patil.geobells.lite.R;
 
 public class UpgradeDialog {
-    Context context;
+    private Context context;
     public UpgradeDialog(Context context) {
         this.context = context;
     }
