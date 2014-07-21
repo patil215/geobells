@@ -23,6 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.patil.geobells.lite.R;
+import com.patil.geobells.lite.utils.GeobellsDataManager;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -175,7 +176,9 @@ public class NavigationDrawerFragment extends Fragment {
         // If the user hasn't 'learned' about the drawer, open it to introduce them to the drawer,
         // per the navigation drawer design guidelines.
         if (!mUserLearnedDrawer && !mFromSavedInstanceState) {
-            mDrawerLayout.openDrawer(mFragmentContainerView);
+            if(new GeobellsDataManager(getActivity()).getSavedReminders().size() > 0) {
+                mDrawerLayout.openDrawer(mFragmentContainerView);
+            }
         }
 
         // Defer code dependent on restoration of previous instance state.

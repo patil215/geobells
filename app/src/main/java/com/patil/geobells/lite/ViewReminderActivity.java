@@ -81,15 +81,23 @@ public class ViewReminderActivity extends Activity {
         String[] displayDays = getResources().getStringArray(R.array.days);
         boolean[] days = reminder.days;
         String daysString = " ";
+        int daysCount = 0;
         for (int i = 0; i < days.length; i++) {
             if (days[i]) {
+                daysCount++;
                 daysString += displayDays[i] + ", ";
             }
         }
-        daysString = daysString.substring(0, daysString.length() - 2);
+        if(daysCount < 7) {
+            daysString = daysString.substring(0, daysString.length() - 2);
+        } else {
+            daysString = getString(R.string.all_days);
+        }
         setVolatileText(daysBox, getString(R.string.text_reminds_on) + daysString);
         if (reminder.repeat) {
             setVolatileText(repeatBox, getString(R.string.text_repeats));
+        } else {
+            setVolatileText(repeatBox, "");
         }
 
         if (reminder.silencePhone && reminder.toggleAirplane) {

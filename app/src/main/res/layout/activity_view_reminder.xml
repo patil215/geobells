@@ -20,7 +20,7 @@
             android:contentDescription="@string/content_description_map"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
-            android:layout_height="wrap_content"/>
+            android:layout_height="350dp"/>
 
         <TextView
             android:id="@+id/reminder_title"
