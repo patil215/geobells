@@ -162,7 +162,7 @@
     <string name="preference_popup_summary_lite">Popup reminders disabled in free version</string>
     <string name="dialog_title_upgrade">Upgrade to Geobells Pro</string>
     <string name="dialog_button_upgrade">Upgrade</string>
-    <string name="upgrade_numreminders">You can only have three concurrent reminders in the free version. \n \nUpgrade to Pro and create unlimited reminders, and gain access to other features!</string>
+    <string name="upgrade_numreminders">You can only have three concurrent reminders in the free version. You'll need to delete your completed reminders. \n \nOr upgrade to Pro and create unlimited reminders, as well as gain access to other features.</string>
     <string name="upgrade_popupreminders">Popup reminders are only available in the Pro version. \n \nUpgrade to Pro get this and other features!</string>
     <string name="toast_location_error">Couldn\'t get your location. Make sure both GPS and network location are enabled.</string>
     <string name="dialog_title_airplane_mode">Toggle airplane mode</string>
