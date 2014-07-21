@@ -5,5 +5,5 @@
     <item android:state_pressed="true" android:color="@color/navigation_activated" />
     <item android:state_selected="true" android:color="@color/navigation_activated" />
     <item android:state_focused="true" android:color="@color/navigation_activated" />
-    <item android:color="@color/navigation_deactivated" />
+    <item android:color="@color/navigation_activated" />
 </selector>
