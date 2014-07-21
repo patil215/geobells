@@ -40,9 +40,7 @@ public class LocationService extends Service implements GooglePlayServicesClient
 
     private int activity = -2;
     private final IBinder binder = new LocationBinder();
-    int currentVolume;
     private ArrayList<Reminder> reminders;
-    String lastEventFile;
     private LocationClient locationClient = null;
     private LocationRequest locationRequest;
     private GeobellsDataManager dataManager;
@@ -231,15 +229,19 @@ public class LocationService extends Service implements GooglePlayServicesClient
         reminders = dataManager.getSavedReminders();
         if (!preferenceManager.isDisabled()) {
             boolean showNotification = preferenceManager.isShowBackgroundNotificationEnabled();
-            if (numUpcomingReminders(reminders) > 0) {
-                if (intent == null) {
-                    Log.d("BackgroundService", "Set polling interval to default");
+            if (intent == null) {
+                Log.d("BackgroundService", "Set polling interval to default");
+                if (numUpcomingReminders(reminders) > 0) {
                     startLocationListening(Constants.POLLING_INTERVAL_DEFAULT);
                 } else {
-                    Bundle bundle = intent.getExtras();
-                    if (bundle != null) {
-                        int intentActivity = bundle.getInt(Constants.EXTRA_ACTIVITY);
-                        Log.d("BackgroundService", "Set polling interval for activity " + String.valueOf(intentActivity));
+                    Log.d("BackgroundService", "Skipping polling because no reminders");
+                }
+            } else {
+                Bundle bundle = intent.getExtras();
+                if (bundle != null) {
+                    int intentActivity = bundle.getInt(Constants.EXTRA_ACTIVITY);
+                    Log.d("BackgroundService", "Set polling interval for activity " + String.valueOf(intentActivity));
+                    if (numUpcomingReminders(reminders) > 0) {
                         activity = intentActivity;
                         switch (intentActivity) {
                             case Constants.ACTIVITY_STANDING:
@@ -262,26 +264,27 @@ public class LocationService extends Service implements GooglePlayServicesClient
                                 break;
                         }
                     } else {
-                        Log.d("BackgroundService", "No bundle, starting with unknown default polling interval");
-                        startLocationListening(Constants.POLLING_INTERVAL_UNKNOWN);
+                        Log.d("BackgroundService", "Skipping polling because no reminders");
                     }
+                } else {
+                    Log.d("BackgroundService", "No bundle, starting with unknown default polling interval");
+                    startLocationListening(Constants.POLLING_INTERVAL_UNKNOWN);
                 }
-                if (showNotification) {
-                    makeForeground();
-                }
-            } else {
-                Log.d("BackgroundService", "Skipping polling because no reminders");
+            }
+            if (showNotification) {
+                makeForeground();
             }
         } else {
             showDisabledNotification();
         }
+
         return START_STICKY;
     }
 
     public int numUpcomingReminders(ArrayList<Reminder> reminders) {
         int count = 0;
-        for(Reminder reminder : reminders) {
-            if(!reminder.completed) {
+        for (Reminder reminder : reminders) {
+            if (!reminder.completed) {
                 count++;
             }
         }
@@ -399,6 +402,7 @@ public class LocationService extends Service implements GooglePlayServicesClient
         LocationService getService() {
             return LocationService.this;
         }
+
     }
 
     @Override
