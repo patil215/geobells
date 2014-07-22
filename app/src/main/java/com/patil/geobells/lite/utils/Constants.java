@@ -78,11 +78,11 @@ public class Constants {
     public static final int ACTIVITY_UNKNOWN = 4;
     public static final int ACTIVITY_TILTING = 5;
 
-    public static final int POLLING_INTERVAL_STANDING = 120000;
-    public static final int POLLING_INTERVAL_WALKING = 120000;
-    public static final int POLLING_INTERVAL_BIKING = 40000;
+    public static final int POLLING_INTERVAL_STANDING = 240000; // Actually should be infinite
+    public static final int POLLING_INTERVAL_WALKING = 90000;
+    public static final int POLLING_INTERVAL_BIKING = 35000;
     public static final int POLLING_INTERVAL_DRIVING = 10000;
-    public static final int POLLING_INTERVAL_UNKNOWN = 60000;
+    public static final int POLLING_INTERVAL_UNKNOWN = 90000;
     public static final int POLLING_INTERVAL_TILTING = 60000;
     public static final String EXTRA_SPEAKTEXT = "text";
     public static final long POLLING_INTERVAL_ACTIVITY_RECOGNITION = 120000;
@@ -97,5 +97,7 @@ public class Constants {
     public static final int ACTIVITY_REQUEST_CODE_EDIT_REMINDER = 1;
     public static final int ACTIVITY_REQUEST_CODE_VIEW_REMINDER = 9;
     public static final int REMINDER_LIMIT = 3;
-    public static int  POLLING_INTERVAL_ACTIVITY_RECOGNITION_MINIMUM = 90000;
+
+
+    public static int  POLLING_INTERVAL_ACTIVITY_RECOGNITION_MINIMUM = 110000;
 }

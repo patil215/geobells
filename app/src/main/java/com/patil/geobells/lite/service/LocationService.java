@@ -245,7 +245,8 @@ public class LocationService extends Service implements GooglePlayServicesClient
                         activity = intentActivity;
                         switch (intentActivity) {
                             case Constants.ACTIVITY_STANDING:
-                                startLocationListening(Constants.POLLING_INTERVAL_STANDING);
+                                // Don't start location listening
+                                // startLocationListening(Constants.POLLING_INTERVAL_STANDING);
                                 break;
                             case Constants.ACTIVITY_BIKING:
                                 startLocationListening(Constants.POLLING_INTERVAL_BIKING);
