@@ -161,9 +161,11 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
             longitude = reminder.longitude;
             address = reminder.address;
             addressBox.setText(reminder.address);
+            specificLayout.setVisibility(View.VISIBLE);
         } else {
             dynamicRadioButton.setChecked(true);
             businessBox.setText(reminder.business);
+            dynamicLayout.setVisibility(View.VISIBLE);
         }
         if (reminder.transition == Constants.TRANSITION_ENTER) {
             enterRadioButton.setChecked(true);
@@ -390,34 +392,38 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
 
 
     public void onAddressSearchClick(View v) {
-        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        if(new ConnectivityChecker(this).isOnline()) {
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
-        alert.setTitle(getString(R.string.dialog_title_address_search));
+            alert.setTitle(getString(R.string.dialog_title_address_search));
 
-        // Set an EditText view to get user input
-        final EditText input = new EditText(this);
-        input.setHint(getString(R.string.hint_reminder_address_search));
-        alert.setView(input);
+            // Set an EditText view to get user input
+            final EditText input = new EditText(this);
+            input.setHint(getString(R.string.hint_reminder_address_search));
+            alert.setView(input);
 
-        alert.setPositiveButton(getString(R.string.dialog_button_search), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                String value = input.getText().toString();
-                double[] latLong = getLatLong();
-                if (latLong != null) {
-                    new PlacesAPIAsyncTask(CreateReminderActivity.this, CreateReminderActivity.this, Constants.METHOD_PLACES_DIALOG_ADDRESS).execute(value, String.valueOf(latLong[0]), String.valueOf(latLong[1]));
-                } else {
-                    Toast.makeText(CreateReminderActivity.this, getString(R.string.toast_location_error), Toast.LENGTH_SHORT).show();
+            alert.setPositiveButton(getString(R.string.dialog_button_search), new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    String value = input.getText().toString();
+                    double[] latLong = getLatLong();
+                    if (latLong != null) {
+                        new PlacesAPIAsyncTask(CreateReminderActivity.this, CreateReminderActivity.this, Constants.METHOD_PLACES_DIALOG_ADDRESS).execute(value, String.valueOf(latLong[0]), String.valueOf(latLong[1]));
+                    } else {
+                        Toast.makeText(CreateReminderActivity.this, getString(R.string.toast_location_error), Toast.LENGTH_SHORT).show();
+                    }
                 }
-            }
-        });
-        alert.setCancelable(false);
-        alert.setNegativeButton(getString(R.string.dialog_button_cancel), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                dialog.dismiss();
-            }
-        });
+            });
+            alert.setCancelable(false);
+            alert.setNegativeButton(getString(R.string.dialog_button_cancel), new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    dialog.dismiss();
+                }
+            });
 
-        alert.show();
+            alert.show();
+        } else {
+            Toast.makeText(this, getString(R.string.toast_connect_internet_search), Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void onAddressMapClick(View v) {

@@ -314,8 +314,12 @@ public class LocationService extends Service implements GooglePlayServicesClient
         if (words.length <= 3) {
             backerText = message;
         } else {
+            int count = 0;
             for (String word : words) {
-                backerText = backerText + word + " ";
+                if(count < 4) {
+                    count++;
+                    backerText = backerText + word + " ";
+                }
             }
             backerText = backerText.substring(0, backerText.length() - 1);
         }

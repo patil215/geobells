@@ -119,8 +119,8 @@
     <string name="text_repeat_default">Restablece todos los días</string>
     <string name="text_toggle_default">Alterna el modo avión y silencios teléfono al recordatorio</string>
     <string name="toast_error_occurred">Ha ocurrido un error.</string>
-    <string name="text_when_closer_than">Cuando más cerca de lo </string>
-    <string name="text_when_farther_than">Cuando más lejos que </string>
+    <string name="text_when_closer_than">Cuando más cerca de lo&#160;</string>
+    <string name="text_when_farther_than">Cuando más lejos que&#160;</string>
     <string name="text_reminds_on">recuerda el </string>
     <string name="text_repeats">Restablece todos los días</string>
     <string name="text_silence_and_airplane">Modo avión Silencios teléfono y cambia al recordatorio</string>

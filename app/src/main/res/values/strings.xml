@@ -120,6 +120,7 @@
     <string name="text_repeat_default">Resets every day</string>
     <string name="text_toggle_default">Toggles airplane mode and silences phone upon reminder</string>
     <string name="toast_error_occurred">An error occurred.</string>
+    <string name="toast_connect_internet_search">Couldn\'t initiate search. Make sure you\'re still connected to the internet.</string>
     <string name="text_when_closer_than">When closer than&#160;</string>
     <string name="text_when_farther_than">When farther than&#160;</string>
     <string name="text_reminds_on">Reminds on&#160;</string>
