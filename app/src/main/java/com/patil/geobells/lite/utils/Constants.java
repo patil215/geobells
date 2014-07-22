@@ -97,5 +97,5 @@ public class Constants {
     public static final int ACTIVITY_REQUEST_CODE_EDIT_REMINDER = 1;
     public static final int ACTIVITY_REQUEST_CODE_VIEW_REMINDER = 9;
     public static final int REMINDER_LIMIT = 3;
-    public static int  POLLING_INTERVAL_ACTIVITY_RECOGNITION_MINIMUM = 120000;
+    public static int  POLLING_INTERVAL_ACTIVITY_RECOGNITION_MINIMUM = 90000;
 }
