@@ -261,7 +261,8 @@ public class LocationService extends Service implements GooglePlayServicesClient
                                 startLocationListening(Constants.POLLING_INTERVAL_UNKNOWN);
                                 break;
                             case Constants.ACTIVITY_TILTING:
-                                startLocationListening(Constants.POLLING_INTERVAL_TILTING);
+                                // Don't start location listening
+                                // startLocationListening(Constants.POLLING_INTERVAL_TILTING);
                                 break;
                         }
                     } else {
@@ -300,6 +301,7 @@ public class LocationService extends Service implements GooglePlayServicesClient
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, mapsIntent, 0);
         Uri ringtoneUri = Uri.parse(uri);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+        builder.setPriority(NotificationCompat.PRIORITY_MAX);
         builder.setSmallIcon(R.drawable.ic_notification).setContentTitle(title).setContentText(message).setSound(ringtoneUri).setDefaults(-1).addAction(R.drawable.ic_action_map, getString(R.string.notification_action_navigate), pendingIntent).setPriority(2);
         Intent classIntent = new Intent(this, MainActivity.class);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);

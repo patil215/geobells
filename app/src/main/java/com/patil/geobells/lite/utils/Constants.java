@@ -81,11 +81,12 @@ public class Constants {
     public static final int POLLING_INTERVAL_STANDING = 240000; // Actually should be infinite
     public static final int POLLING_INTERVAL_WALKING = 90000;
     public static final int POLLING_INTERVAL_BIKING = 35000;
-    public static final int POLLING_INTERVAL_DRIVING = 10000;
+    public static final int POLLING_INTERVAL_DRIVING = 12000;
     public static final int POLLING_INTERVAL_UNKNOWN = 90000;
-    public static final int POLLING_INTERVAL_TILTING = 60000;
+    public static final int POLLING_INTERVAL_TILTING = 90000; // Actually should be infinite
     public static final String EXTRA_SPEAKTEXT = "text";
     public static final long POLLING_INTERVAL_ACTIVITY_RECOGNITION = 120000;
+    public static int  POLLING_INTERVAL_ACTIVITY_RECOGNITION_MINIMUM = 110000;
 
     public static final double MULTIPLIER_LOW_POWER = 2;
 
@@ -99,5 +100,4 @@ public class Constants {
     public static final int REMINDER_LIMIT = 3;
 
 
-    public static int  POLLING_INTERVAL_ACTIVITY_RECOGNITION_MINIMUM = 110000;
 }

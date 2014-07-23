@@ -24,9 +24,7 @@ public class GeobellsPreferenceManager {
     }
 
     public boolean isVoiceReminderEnabled() {
-        boolean voiceEnabled = preferences.getBoolean("pref_voice", true);
-        Log.d("Preferencies", String.valueOf(voiceEnabled));
-        return preferences.getBoolean("pref_voice", false);
+        return preferences.getBoolean("pref_voice", true);
     }
 
     public boolean isPopupReminderEnabled() {
