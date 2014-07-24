@@ -76,6 +76,7 @@ public class ActivityRecognitionIntentService extends IntentService {
                 } else {
                     Log.d("BackgroundService", "No need to restart LocationService");
                 }
+                unbindService(connection);
             } else {
                 Log.d("BackgroundService", "Not enough time elapsed since last activity recognition time");
             }

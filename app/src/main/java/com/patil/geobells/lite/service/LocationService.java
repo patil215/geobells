@@ -220,6 +220,8 @@ public class LocationService extends Service implements GooglePlayServicesClient
         // If we've waited long enough between requests
         if (System.currentTimeMillis() - lastLocationPollingReset > locationRequest.getInterval()) {
             startLocationListening(location);
+        } else {
+            Log.d("BackgroundService", "Not enough time between location reset");
         }
     }
 
@@ -447,7 +449,7 @@ public class LocationService extends Service implements GooglePlayServicesClient
 
         if (pollInterval > 0) {
             Log.d("BackgroundService", "Activity used for polling was " + String.valueOf(activity));
-            Log.d("LocationAlgo", "Starting polling with pollInterval of " + String.valueOf(pollInterval / 1000) + " seconds");
+            Log.d("BackgroundService", "Starting polling with pollInterval of " + String.valueOf(pollInterval / 1000) + " seconds");
             locationRequest = LocationRequest.create();
             if (preferenceManager.isLowPowerEnabled()) {
                 locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
@@ -468,7 +470,7 @@ public class LocationService extends Service implements GooglePlayServicesClient
                 locationClient.connect();
             }
         } else {
-            Log.d("LocationAlgo", "Not polling location because pollInterval is negative");
+            Log.d("BackgroundService", "Not polling location because pollInterval is negative");
         }
     }
 
