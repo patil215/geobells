@@ -71,13 +71,20 @@ public class Constants {
     public static final int POLLING_INTERVAL_DEFAULT = 30000;
     public static final String EXTRA_ACTIVITY = "activity";
 
-    public static final int ACTIVITY_STANDING = 3;
-    public static final int ACTIVITY_WALKING = 2;
-    public static final int ACTIVITY_BIKING = 1;
+    // Base polling interval of 12 seconds
+    public static final int BASE_POLLING_INTERVAL = 12000;
     public static final int ACTIVITY_DRIVING = 0;
+    public static final int ACTIVITY_BIKING = 1;
+    public static final int ACTIVITY_WALKING = 2;
+    public static final int ACTIVITY_STANDING = 3;
     public static final int ACTIVITY_UNKNOWN = 4;
     public static final int ACTIVITY_TILTING = 5;
+    // In order of activity
+    public static final int[] ACTIVITY_MULTIPLIERS = new int[] {1, 6, 18, -1, 18, -1};
+    public static final int ACTIVITY_MULTIPLIER_DEFAULT = 18;
 
+
+    public static final double MULTIPLIER_LOW_POWER = 1;
     public static final int POLLING_INTERVAL_STANDING = 240000; // Actually should be infinite
     public static final int POLLING_INTERVAL_WALKING = 90000;
     public static final int POLLING_INTERVAL_BIKING = 35000;
@@ -88,7 +95,6 @@ public class Constants {
     public static final long POLLING_INTERVAL_ACTIVITY_RECOGNITION = 120000;
     public static int  POLLING_INTERVAL_ACTIVITY_RECOGNITION_MINIMUM = 110000;
 
-    public static final double MULTIPLIER_LOW_POWER = 2;
 
     public static final int SIZE_IMAGE_PREVIEW_HORIZONTAL = 200;
     public static final int SIZE_IMAGE_PREVIEW_VERTICAL = 200;

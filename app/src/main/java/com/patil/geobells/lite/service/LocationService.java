@@ -45,6 +45,7 @@ public class LocationService extends Service implements GooglePlayServicesClient
     private LocationRequest locationRequest;
     private GeobellsDataManager dataManager;
     private GeobellsPreferenceManager preferenceManager;
+    private long lastLocationPollingReset = 0;
 
     public int getActivity() {
         return this.activity;
@@ -104,13 +105,14 @@ public class LocationService extends Service implements GooglePlayServicesClient
                                     reminder.timeCompleted = System.currentTimeMillis();
                                     dataManager.saveReminders(reminders);
                                     reminders = dataManager.getSavedReminders();
-                                    sendNotification(reminder.title, place.title, Constants.TRANSITION_ENTER, currentLocation, place.latitude, place.longitude, reminder.silencePhone, reminderIndex);
+                                    sendNotification(reminder.title, reminder.business, Constants.TRANSITION_ENTER, currentLocation, place.latitude, place.longitude, reminder.silencePhone, reminderIndex);
                                     if (reminder.toggleAirplane) {
                                         toggleAirplaneMode();
                                     }
                                     if (reminder.silencePhone) {
                                         silencePhone();
                                     }
+                                    break;
                                 }
                             }
                         } else if (type == Constants.TYPE_FIXED) {
@@ -215,6 +217,10 @@ public class LocationService extends Service implements GooglePlayServicesClient
     @Override
     public void onLocationChanged(Location location) {
         makeUseOfLocation(location);
+        // If we've waited long enough between requests
+        if(System.currentTimeMillis() - lastLocationPollingReset > locationRequest.getInterval()) {
+            startLocationListening(location);
+        }
     }
 
     @Override
@@ -232,7 +238,7 @@ public class LocationService extends Service implements GooglePlayServicesClient
             if (intent == null) {
                 Log.d("BackgroundService", "Set polling interval to default");
                 if (numUpcomingReminders(reminders) > 0) {
-                    startLocationListening(Constants.POLLING_INTERVAL_DEFAULT);
+                    startLocationListening(null);
                 } else {
                     Log.d("BackgroundService", "Skipping polling because no reminders");
                 }
@@ -243,34 +249,12 @@ public class LocationService extends Service implements GooglePlayServicesClient
                     Log.d("BackgroundService", "Set polling interval for activity " + String.valueOf(intentActivity));
                     if (numUpcomingReminders(reminders) > 0) {
                         activity = intentActivity;
-                        switch (intentActivity) {
-                            case Constants.ACTIVITY_STANDING:
-                                // Don't start location listening
-                                // startLocationListening(Constants.POLLING_INTERVAL_STANDING);
-                                break;
-                            case Constants.ACTIVITY_BIKING:
-                                startLocationListening(Constants.POLLING_INTERVAL_BIKING);
-                                break;
-                            case Constants.ACTIVITY_WALKING:
-                                startLocationListening(Constants.POLLING_INTERVAL_WALKING);
-                                break;
-                            case Constants.ACTIVITY_DRIVING:
-                                startLocationListening(Constants.POLLING_INTERVAL_DRIVING);
-                                break;
-                            case Constants.ACTIVITY_UNKNOWN:
-                                startLocationListening(Constants.POLLING_INTERVAL_UNKNOWN);
-                                break;
-                            case Constants.ACTIVITY_TILTING:
-                                // Don't start location listening
-                                // startLocationListening(Constants.POLLING_INTERVAL_TILTING);
-                                break;
-                        }
+                        startLocationListening(null);
                     } else {
                         Log.d("BackgroundService", "Skipping polling because no reminders");
                     }
                 } else {
-                    Log.d("BackgroundService", "No bundle, starting with unknown default polling interval");
-                    startLocationListening(Constants.POLLING_INTERVAL_UNKNOWN);
+                    startLocationListening(null);
                 }
             }
             if (showNotification) {
@@ -319,7 +303,7 @@ public class LocationService extends Service implements GooglePlayServicesClient
         } else {
             int count = 0;
             for (String word : words) {
-                if(count < 4) {
+                if (count < 4) {
                     count++;
                     backerText = backerText + word + " ";
                 }
@@ -361,25 +345,6 @@ public class LocationService extends Service implements GooglePlayServicesClient
         ((AudioManager) getSystemService(AUDIO_SERVICE)).setRingerMode(0);
     }
 
-    public void startLocationListening(int interval) {
-        double multiplier = preferenceManager.getIntervalMultiplier();
-        boolean lowPowerEnabled = preferenceManager.isLowPowerEnabled();
-        locationRequest = LocationRequest.create();
-        if (lowPowerEnabled) {
-            locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-            locationRequest.setInterval((int) ((interval * 2 * multiplier)));
-            Log.d("BackgroundService", "Starting location listening with interval " + String.valueOf(interval * 2));
-            locationRequest.setFastestInterval((int) (interval * multiplier));
-        } else {
-            locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-            locationRequest.setInterval((int) (interval * multiplier));
-            Log.d("BackgroundService", "Starting location listening with interval " + String.valueOf(interval));
-            locationRequest.setFastestInterval((int) ((interval / 2) * multiplier));
-        }
-        locationClient = new LocationClient(this, this, this);
-        locationClient.connect();
-    }
-
     public void toggleAirplaneMode() {
         Log.d("BackgroundService", "Toggling airplane mode");
         if (Build.VERSION.SDK_INT >= 17) {
@@ -399,6 +364,101 @@ public class LocationService extends Service implements GooglePlayServicesClient
             Intent intent = new Intent(Intent.ACTION_AIRPLANE_MODE_CHANGED);
             intent.putExtra("state", !isEnabled);
             sendBroadcast(intent);
+        }
+    }
+
+    public int findLargestReminderProximitySetting() {
+        ArrayList<Reminder> reminders = dataManager.getUpcomingReminders();
+        int largestProximity = 0;
+        for(Reminder reminder : reminders) {
+            if(reminder.proximity > largestProximity) {
+                largestProximity = reminder.proximity;
+            }
+        }
+        return largestProximity;
+    }
+
+    public double findClosestReminderDistance(Location currentLocation) {
+        ArrayList<Reminder> reminders = dataManager.getUpcomingReminders();
+        double closestDistance = Double.MAX_VALUE;
+        for(Reminder reminder : reminders) {
+            if(reminder.type == Constants.TYPE_FIXED) {
+                Location location = new Location("");
+                location.setLatitude(reminder.latitude);
+                location.setLongitude(reminder.longitude);
+                if(currentLocation.distanceTo(location) < closestDistance) {
+                    closestDistance = currentLocation.distanceTo(location);
+                }
+            } else if(reminder.type == Constants.TYPE_DYNAMIC) {
+                for(Place place : reminder.places) {
+                    Location location = new Location("");
+                    location.setLatitude(place.latitude);
+                    location.setLongitude(place.longitude);
+                    if(currentLocation.distanceTo(location) < closestDistance) {
+                        closestDistance = currentLocation.distanceTo(location);
+                    }
+                }
+            }
+        }
+        return closestDistance;
+    }
+
+    // Returns negative number if we shouldn't poll interval
+    public void startLocationListening(Location currentLocation) {
+        lastLocationPollingReset = System.currentTimeMillis();
+        int largestReminderProximitySetting = findLargestReminderProximitySetting();
+        long pollInterval = Constants.BASE_POLLING_INTERVAL;
+        if (preferenceManager.isLowPowerEnabled()) {
+            pollInterval *= Constants.MULTIPLIER_LOW_POWER;
+        }
+        pollInterval *= preferenceManager.getIntervalMultiplier();
+        if (currentLocation != null) {
+            double closestReminderDistance = findClosestReminderDistance(currentLocation);
+            // If we are less than 10 times the closest reminder location, then poll, otherwise, we're far enough away we don't need to
+            if (closestReminderDistance < (largestReminderProximitySetting * 10)) {
+                if(activity >= 0) {
+                    pollInterval *= Constants.ACTIVITY_MULTIPLIERS[activity];
+                } else {
+                    pollInterval *= Constants.ACTIVITY_MULTIPLIER_DEFAULT;
+                }
+                Log.d("LocationAlgo", "Within 10x the largest proximity setting, we are polling.");
+            } else {
+                // No need to poll
+                Log.d("LocationAlgo", "Not close enough to destination to bother polling.");
+                pollInterval = -1;
+            }
+        } else {
+            if(activity >= 0) {
+                // Go off of only activity recognition
+                pollInterval *= Constants.ACTIVITY_MULTIPLIERS[activity];
+            } else {
+                pollInterval *= Constants.ACTIVITY_MULTIPLIER_DEFAULT;
+            }
+        }
+
+        if (pollInterval > 0) {
+            Log.d("LocationAlgo", "Starting polling with pollInterval of " + String.valueOf(pollInterval / 1000) + " seconds");
+            locationRequest = LocationRequest.create();
+            if(preferenceManager.isLowPowerEnabled()) {
+                locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+            } else {
+                locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+            }
+            locationRequest.setInterval(pollInterval);
+            locationRequest.setFastestInterval((int) (pollInterval / 15));
+            if (locationClient != null) {
+                locationClient.removeLocationUpdates(this);
+                if (locationClient.isConnected()) {
+                    locationClient.requestLocationUpdates(locationRequest, LocationService.this);
+                } else {
+                    locationClient.connect();
+                }
+            } else {
+                locationClient = new LocationClient(this, this, this);
+                locationClient.connect();
+            }
+        } else {
+            Log.d("LocationAlgo", "Not polling location because pollInterval is negative");
         }
     }
 

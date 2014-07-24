@@ -40,8 +40,6 @@
     <string name="preference_category_saveddata">Saved Data</string>
     <string name="preference_clear_autocomplete">Clear autocomplete data</string>
     <string name="preference_clear_reminders">Clear all reminders</string>
-    <string name="preference_low_power_summary">Use network location instead of GPS. Accuracy will be reduced</string>
-    <string name="preference_low_power">Use low power mode</string>
     <string name="preference_metric">Use metric units</string>
     <string name="preference_notification_sound">Choose notification sound</string>
     <string name="preference_notification_summary">Show notification when Geobells can remind you. It\'s recommended to leave this on. Setting takes effect the next time you create or edit a reminder</string>
@@ -168,5 +166,7 @@
     <string name="content_description_map">Map image</string>
     <string name="content_description_colorbox">Key color</string>
     <string name="all_days">all days</string>
+    <string name="preference_low_power">Enable low power mode</string>
+    <string name="preference_low_power_summary">Check location less frequently. Accuracy will be reduced</string>
 
 </resources>
