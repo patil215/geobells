@@ -80,7 +80,7 @@ public class Constants {
     public static final int ACTIVITY_UNKNOWN = 4;
     public static final int ACTIVITY_TILTING = 5;
     // In order of activity
-    public static final int[] ACTIVITY_MULTIPLIERS = new int[] {1, 6, 18, -1, 18, -1};
+    public static final int[] ACTIVITY_MULTIPLIERS = new int[] {1, 6, 18, -1, 18, 18};
     public static final int ACTIVITY_MULTIPLIER_DEFAULT = 18;
 
 
@@ -92,8 +92,8 @@ public class Constants {
     public static final int POLLING_INTERVAL_UNKNOWN = 90000;
     public static final int POLLING_INTERVAL_TILTING = 90000; // Actually should be infinite
     public static final String EXTRA_SPEAKTEXT = "text";
-    public static final long POLLING_INTERVAL_ACTIVITY_RECOGNITION = 120000;
-    public static int  POLLING_INTERVAL_ACTIVITY_RECOGNITION_MINIMUM = 110000;
+    public static final long POLLING_INTERVAL_ACTIVITY_RECOGNITION = 90000;
+    public static int  POLLING_INTERVAL_ACTIVITY_RECOGNITION_MINIMUM = 80000;
 
 
     public static final int SIZE_IMAGE_PREVIEW_HORIZONTAL = 200;

@@ -105,7 +105,7 @@ public class LocationService extends Service implements GooglePlayServicesClient
                                     reminder.timeCompleted = System.currentTimeMillis();
                                     dataManager.saveReminders(reminders);
                                     reminders = dataManager.getSavedReminders();
-                                    sendNotification(reminder.title, reminder.business, Constants.TRANSITION_ENTER, currentLocation, place.latitude, place.longitude, reminder.silencePhone, reminderIndex);
+                                    sendNotification(reminder.title, place.title, Constants.TRANSITION_ENTER, currentLocation, place.latitude, place.longitude, reminder.silencePhone, reminderIndex);
                                     if (reminder.toggleAirplane) {
                                         toggleAirplaneMode();
                                     }
@@ -218,7 +218,7 @@ public class LocationService extends Service implements GooglePlayServicesClient
     public void onLocationChanged(Location location) {
         makeUseOfLocation(location);
         // If we've waited long enough between requests
-        if(System.currentTimeMillis() - lastLocationPollingReset > locationRequest.getInterval()) {
+        if (System.currentTimeMillis() - lastLocationPollingReset > locationRequest.getInterval()) {
             startLocationListening(location);
         }
     }
@@ -370,8 +370,8 @@ public class LocationService extends Service implements GooglePlayServicesClient
     public int findLargestReminderProximitySetting() {
         ArrayList<Reminder> reminders = dataManager.getUpcomingReminders();
         int largestProximity = 0;
-        for(Reminder reminder : reminders) {
-            if(reminder.proximity > largestProximity) {
+        for (Reminder reminder : reminders) {
+            if (reminder.proximity > largestProximity) {
                 largestProximity = reminder.proximity;
             }
         }
@@ -381,20 +381,20 @@ public class LocationService extends Service implements GooglePlayServicesClient
     public double findClosestReminderDistance(Location currentLocation) {
         ArrayList<Reminder> reminders = dataManager.getUpcomingReminders();
         double closestDistance = Double.MAX_VALUE;
-        for(Reminder reminder : reminders) {
-            if(reminder.type == Constants.TYPE_FIXED) {
+        for (Reminder reminder : reminders) {
+            if (reminder.type == Constants.TYPE_FIXED) {
                 Location location = new Location("");
                 location.setLatitude(reminder.latitude);
                 location.setLongitude(reminder.longitude);
-                if(currentLocation.distanceTo(location) < closestDistance) {
+                if (currentLocation.distanceTo(location) < closestDistance) {
                     closestDistance = currentLocation.distanceTo(location);
                 }
-            } else if(reminder.type == Constants.TYPE_DYNAMIC) {
-                for(Place place : reminder.places) {
+            } else if (reminder.type == Constants.TYPE_DYNAMIC) {
+                for (Place place : reminder.places) {
                     Location location = new Location("");
                     location.setLatitude(place.latitude);
                     location.setLongitude(place.longitude);
-                    if(currentLocation.distanceTo(location) < closestDistance) {
+                    if (currentLocation.distanceTo(location) < closestDistance) {
                         closestDistance = currentLocation.distanceTo(location);
                     }
                 }
@@ -414,21 +414,30 @@ public class LocationService extends Service implements GooglePlayServicesClient
         pollInterval *= preferenceManager.getIntervalMultiplier();
         if (currentLocation != null) {
             double closestReminderDistance = findClosestReminderDistance(currentLocation);
-            // If we are less than 10 times the closest reminder location, then poll, otherwise, we're far enough away we don't need to
-            if (closestReminderDistance < (largestReminderProximitySetting * 10)) {
-                if(activity >= 0) {
+            if (activity >= 0) {
+                // If we are less than 10 times the closest reminder location, then poll, otherwise, we're far enough away we don't need to
+                if (closestReminderDistance < (largestReminderProximitySetting * (100 / Constants.ACTIVITY_MULTIPLIERS[activity]))) {
+                    pollInterval *= Constants.ACTIVITY_MULTIPLIERS[activity];
+                    Log.d("BackgroundService", "Close enough to destination for polling");
+                } else {
+                    // No need to poll
+                    Log.d("BackgroundServices", "Not close enough to destination to bother polling.");
+                    pollInterval = -1;
+                }
+                Log.d("BackgroundService", "Within proximity setting, we are polling.");
+            } else {
+                // If we are less distance than a certain amount, then poll, otherwise don't bother polling
+                if (closestReminderDistance < (largestReminderProximitySetting * (100 / Constants.ACTIVITY_MULTIPLIER_DEFAULT))) {
                     pollInterval *= Constants.ACTIVITY_MULTIPLIERS[activity];
                 } else {
-                    pollInterval *= Constants.ACTIVITY_MULTIPLIER_DEFAULT;
+                    // No need to poll
+                    Log.d("BackgroundService", "Not close enough to destination to bother polling.");
+                    pollInterval = -1;
                 }
-                Log.d("LocationAlgo", "Within 10x the largest proximity setting, we are polling.");
-            } else {
-                // No need to poll
-                Log.d("LocationAlgo", "Not close enough to destination to bother polling.");
-                pollInterval = -1;
+                Log.d("BackgroundService", "Within proximity setting, we are polling.");
             }
         } else {
-            if(activity >= 0) {
+            if (activity >= 0) {
                 // Go off of only activity recognition
                 pollInterval *= Constants.ACTIVITY_MULTIPLIERS[activity];
             } else {
@@ -437,9 +446,10 @@ public class LocationService extends Service implements GooglePlayServicesClient
         }
 
         if (pollInterval > 0) {
+            Log.d("BackgroundService", "Activity used for polling was " + String.valueOf(activity));
             Log.d("LocationAlgo", "Starting polling with pollInterval of " + String.valueOf(pollInterval / 1000) + " seconds");
             locationRequest = LocationRequest.create();
-            if(preferenceManager.isLowPowerEnabled()) {
+            if (preferenceManager.isLowPowerEnabled()) {
                 locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
             } else {
                 locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
