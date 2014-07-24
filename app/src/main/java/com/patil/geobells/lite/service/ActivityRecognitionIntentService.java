@@ -2,6 +2,7 @@ package com.patil.geobells.lite.service;
 
 import android.app.IntentService;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
@@ -14,17 +15,37 @@ import com.patil.geobells.lite.utils.GeobellsPreferenceManager;
 
 public class ActivityRecognitionIntentService extends IntentService {
     private GeobellsPreferenceManager preferenceManager = null;
+    private boolean attemptingToBind = false;
+    private boolean bound = false;
     private ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             ActivityRecognitionIntentService.this.locationService = ((LocationService.LocationBinder) iBinder).getService();
+            attemptingToBind = false;
+            bound = true;
         }
 
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
             ActivityRecognitionIntentService.this.locationService = null;
+            bound = false;
         }
     };
+
+    public void bindToService() {
+        if(!attemptingToBind) {
+            attemptingToBind = true;
+            bindService(new Intent(this, LocationService.class), connection, Context.BIND_AUTO_CREATE);
+        }
+    }
+
+    public void unbindFromService() {
+        attemptingToBind = false;
+        if(bound) {
+            unbindService(connection);
+            bound = false;
+        }
+    }
 
     private LocationService locationService;
 
@@ -53,7 +74,7 @@ public class ActivityRecognitionIntentService extends IntentService {
                 DetectedActivity mostProbableActivity = result.getMostProbableActivity();
                 int activityType = mostProbableActivity.getType();
 
-                bindService(new Intent(this, LocationService.class), connection, BIND_AUTO_CREATE);
+                bindToService();
                 int currentActivity = -1;
                 if (locationService != null) {
                     Log.d("BackgroundService", "LocationService successfully bound to ActivityRecognitionIntentService");
@@ -63,20 +84,20 @@ public class ActivityRecognitionIntentService extends IntentService {
                     Log.d("BackgroundService", "current activity not gotten, restarting LocationService");
                     Intent locationIntent = new Intent(this, LocationService.class);
                     locationIntent.putExtra(Constants.EXTRA_ACTIVITY, activityType);
-                    unbindService(connection);
+                    unbindFromService();
                     stopService(new Intent(this, LocationService.class));
                     startService(locationIntent);
                 } else if (currentActivity != activityType) {
                     Log.d("BackgroundService", "current activity different, restarting LocationService");
                     Intent locationIntent = new Intent(this, LocationService.class);
                     locationIntent.putExtra(Constants.EXTRA_ACTIVITY, activityType);
-                    unbindService(connection);
+                    unbindFromService();
                     stopService(new Intent(this, LocationService.class));
                     startService(locationIntent);
                 } else {
                     Log.d("BackgroundService", "No need to restart LocationService");
                 }
-                unbindService(connection);
+                unbindFromService();
             } else {
                 Log.d("BackgroundService", "Not enough time elapsed since last activity recognition time");
             }
