@@ -167,6 +167,6 @@
     <string name="content_description_colorbox">Key color</string>
     <string name="all_days">all days</string>
     <string name="preference_low_power">Enable low power mode</string>
-    <string name="preference_low_power_summary">Check location less frequently. Accuracy will be reduced</string>
+    <string name="preference_low_power_summary">Don\'t use GPS. Battery usage will be dramatically reduced, but so will accuracy</string>
 
 </resources>

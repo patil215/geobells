@@ -24,7 +24,6 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.patil.geobells.lite.MainActivity;
 import com.patil.geobells.lite.R;
-import com.patil.geobells.lite.SettingsActivity;
 import com.patil.geobells.lite.ViewReminderActivity;
 import com.patil.geobells.lite.data.Place;
 import com.patil.geobells.lite.data.Reminder;
@@ -41,146 +40,55 @@ public class LocationService extends Service implements GooglePlayServicesClient
     private int activity = -2;
     private final IBinder binder = new LocationBinder();
     private ArrayList<Reminder> reminders;
+
     private LocationClient locationClient = null;
     private LocationRequest locationRequest;
+
     private GeobellsDataManager dataManager;
     private GeobellsPreferenceManager preferenceManager;
-    private long lastLocationPollingReset = 0;
+
+    private long lastLocationPollingReset;
 
     public int getActivity() {
         return this.activity;
     }
 
-    public void makeForeground() {
-        Log.d("BackgroundService", "Notification service being made foreground");
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-        builder.setSmallIcon(R.drawable.ic_notification);
-        builder.setContentTitle(getString(R.string.notification_listening_title));
-        builder.setContentText(getString(R.string.notification_listening_message));
-        builder.setContentIntent(pendingIntent);
-        builder.setPriority(NotificationCompat.PRIORITY_MIN);
-        builder.setOnlyAlertOnce(true);
-        startForeground(1, builder.build());
-    }
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        preferenceManager = new GeobellsPreferenceManager(this);
+        dataManager = new GeobellsDataManager(this);
+        reminders = dataManager.getSavedReminders();
 
-    public void showDisabledNotification() {
-        Log.d("BackgroundService", "Notification service being made foreground");
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, SettingsActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-        builder.setSmallIcon(R.drawable.ic_notification);
-        builder.setContentTitle(getString(R.string.notification_disabled_title));
-        builder.setContentText(getString(R.string.notification_disabled_message));
-        builder.setContentIntent(pendingIntent);
-        builder.setPriority(NotificationCompat.PRIORITY_MIN);
-        builder.setOnlyAlertOnce(true);
-        startForeground(1, builder.build());
-    }
+        boolean disabled = preferenceManager.isDisabled();
+        boolean showNotification = preferenceManager.isShowBackgroundNotificationEnabled();
 
-
-    public void makeUseOfLocation(Location currentLocation) {
-        Log.d("BackgroundService", "Making use of new location");
-        if (numUpcomingReminders(reminders) > 0) {
-            for (int reminderIndex = 0; reminderIndex < reminders.size(); reminderIndex++) {
-                Reminder reminder = reminders.get(reminderIndex);
-                if (!reminder.completed) {
-                    // Get the current day. If the current day is one of the days to remind, then proceed, otherwise don't.
-                    Calendar calendar = Calendar.getInstance();
-                    int day = calendar.get(Calendar.DAY_OF_WEEK) - 1; // -1 to make it zero based indexing: 0 = Sunday, 6 = Saturday, etc
-                    if (reminder.days[day]) {
-                        Log.d("BackgroundService", "Scanning reminder " + reminder.title);
-                        int triggerDistance = reminder.proximity;
-                        int type = reminder.type;
-                        if (type == Constants.TYPE_DYNAMIC) {
-                            Log.d("BackgroundService", "Scanning dynamic reminder");
-                            ArrayList<Place> places = reminder.places;
-                            for (Place place : places) {
-                                Location placeLocation = new Location("");
-                                placeLocation.setLatitude(place.latitude);
-                                placeLocation.setLongitude(place.longitude);
-                                double placeDistance = currentLocation.distanceTo(placeLocation);
-                                if (placeDistance <= triggerDistance) {
-                                    Log.d("BackgroundService", "Reminder triggered");
-                                    reminder.completed = true;
-                                    reminder.timeCompleted = System.currentTimeMillis();
-                                    dataManager.saveReminders(reminders);
-                                    reminders = dataManager.getSavedReminders();
-                                    sendNotification(reminder.title, place.title, Constants.TRANSITION_ENTER, currentLocation, place.latitude, place.longitude, reminder.silencePhone, reminderIndex);
-                                    if (reminder.toggleAirplane) {
-                                        toggleAirplaneMode();
-                                    }
-                                    if (reminder.silencePhone) {
-                                        silencePhone();
-                                    }
-                                    break;
-                                }
-                            }
-                        } else if (type == Constants.TYPE_FIXED) {
-                            Log.d("BackgroundService", "Scanning fixed reminder");
-                            Location reminderLocation = new Location("");
-                            reminderLocation.setLatitude(reminder.latitude);
-                            reminderLocation.setLongitude(reminder.longitude);
-                            double reminderDistance = currentLocation.distanceTo(reminderLocation);
-                            if (reminderDistance <= triggerDistance) {
-                                if (reminder.transition == Constants.TRANSITION_ENTER) {
-                                    Log.d("BackgroundService", "Reminder triggered on enter");
-                                    reminder.completed = true;
-                                    reminder.timeCompleted = System.currentTimeMillis();
-                                    dataManager.saveReminders(reminders);
-                                    reminders = dataManager.getSavedReminders();
-                                    sendNotification(reminder.title, reminder.address, Constants.TRANSITION_ENTER, currentLocation, reminder.latitude, reminder.longitude, reminder.silencePhone, reminderIndex);
-                                    if (reminder.toggleAirplane) {
-                                        toggleAirplaneMode();
-                                    }
-                                    if (reminder.silencePhone) {
-                                        silencePhone();
-                                    }
-                                } else if (reminder.transition == Constants.TRANSITION_EXIT) {
-                                    Log.d("BackgroundService", "Reminder triggered on enter but is for exit, setting transition");
-                                    reminder.transition = Constants.TRANSITION_ENTER_TO_EXIT;
-                                    dataManager.saveReminders(reminders);
-                                    reminders = dataManager.getSavedReminders();
-                                }
-                            } else if (reminderDistance > triggerDistance) {
-                                Log.d("BackgroundService", "Reminder triggered from exit");
-                                if (reminder.transition == Constants.TRANSITION_ENTER_TO_EXIT) {
-                                    reminder.completed = true;
-                                    reminder.timeCompleted = System.currentTimeMillis();
-                                    reminder.transition = Constants.TRANSITION_EXIT;
-                                    dataManager.saveReminders(reminders);
-                                    reminders = dataManager.getSavedReminders();
-                                    sendNotification(reminder.title, reminder.address, Constants.TRANSITION_EXIT, currentLocation, reminder.latitude, reminder.longitude, reminder.silencePhone, reminderIndex);
-                                    if (reminder.toggleAirplane) {
-                                        toggleAirplaneMode();
-                                    }
-                                    if (reminder.silencePhone) {
-                                        silencePhone();
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    // Reminder completed. Check if it's a new day since the time the reminder was completed. If it is and the reminder is set to repeat, reset.
-                    long timeCompleted = reminder.timeCompleted;
-                    long currentTime = System.currentTimeMillis();
-                    Date completedDate = new Date(timeCompleted);
-                    Date currentDate = new Date(currentTime);
-                    Calendar completedCalendar = Calendar.getInstance();
-                    Calendar currentCalendar = Calendar.getInstance();
-                    completedCalendar.setTime(completedDate);
-                    currentCalendar.setTime(currentDate);
-                    boolean sameDay = completedCalendar.get(Calendar.YEAR) == currentCalendar.get(Calendar.YEAR) &&
-                            completedCalendar.get(Calendar.DAY_OF_YEAR) == currentCalendar.get(Calendar.DAY_OF_YEAR);
-                    if (!sameDay && reminder.repeat) {
-                        reminder.completed = false;
-                        dataManager.saveReminders(reminders);
-                    }
+        if (!disabled) {
+            if (intent != null) {
+                Bundle bundle = intent.getExtras();
+                if (bundle != null) {
+                    activity = bundle.getInt(Constants.EXTRA_ACTIVITY);
                 }
             }
+            startLocationListening();
+
+            if (showNotification) {
+                makeForegroundNotification(getString(R.string.notification_listening_title), getString(R.string.notification_listening_message));
+            }
         } else {
-            Log.d("BackgroundService", "Skipping scan because no reminders");
+            makeForegroundNotification(getString(R.string.notification_disabled_title), getString(R.string.notification_disabled_message));
         }
+
+        return START_STICKY;
+    }
+
+    public class LocationBinder extends Binder {
+        public LocationBinder() {
+        }
+
+        LocationService getService() {
+            return LocationService.this;
+        }
+
     }
 
     public LocationService() {
@@ -195,9 +103,8 @@ public class LocationService extends Service implements GooglePlayServicesClient
 
     @Override
     public void onConnected(Bundle bundle) {
-        if (locationClient != null && locationRequest != null) {
-            Log.d("BackgroundService", "LocationClient onConnected called");
-            locationClient.requestLocationUpdates(locationRequest, LocationService.this);
+        if(locationClient != null && locationRequest != null) {
+            locationClient.requestLocationUpdates(locationRequest, this);
         }
     }
 
@@ -216,86 +123,166 @@ public class LocationService extends Service implements GooglePlayServicesClient
 
     @Override
     public void onLocationChanged(Location location) {
+        Log.d("BackgroundService", "Making use of new location");
         makeUseOfLocation(location);
         // If we've waited long enough between requests
         if (System.currentTimeMillis() - lastLocationPollingReset > locationRequest.getInterval()) {
-            startLocationListening(location);
+            Log.d("BackgroundService", "Recalibrating location polling intervals");
+            startLocationListening();
         } else {
-            Log.d("BackgroundService", "Not enough time between location reset");
+            Log.d("BackgroundService", "Not enough time elapsed to recalibrate location polling intervals");
         }
     }
 
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d("BackgroundService", "onStartCommand for LocationService called");
-        if (locationClient != null && locationClient.isConnected()) {
-            Log.d("BackgroundService", "Removing updates for locationclients");
-            locationClient.removeLocationUpdates(this);
-        }
-        preferenceManager = new GeobellsPreferenceManager(this);
-        dataManager = new GeobellsDataManager(this);
-        reminders = dataManager.getSavedReminders();
-        if (!preferenceManager.isDisabled()) {
-            boolean showNotification = preferenceManager.isShowBackgroundNotificationEnabled();
-            if (intent == null) {
-                Log.d("BackgroundService", "Set polling interval to default");
-                if (numUpcomingReminders(reminders) > 0) {
-                    startLocationListening(null);
-                } else {
-                    Log.d("BackgroundService", "Skipping polling because no reminders");
+    public void makeForegroundNotification(String title, String message) {
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+        builder.setSmallIcon(R.drawable.ic_notification);
+        builder.setContentTitle(title);
+        builder.setContentText(message);
+        builder.setContentIntent(pendingIntent);
+        builder.setPriority(NotificationCompat.PRIORITY_MIN);
+        builder.setOnlyAlertOnce(true);
+        startForeground(1, builder.build());
+    }
+
+    public void makeUseOfLocation(Location currentLocation) {
+        for (int reminderIndex = 0; reminderIndex < reminders.size(); reminderIndex++) {
+
+            Reminder reminder = reminders.get(reminderIndex);
+
+            if (!reminder.completed) {
+                // Get the current day. If the current day is one of the days to remind, then proceed, otherwise don't.
+                Calendar calendar = Calendar.getInstance();
+                int day = calendar.get(Calendar.DAY_OF_WEEK) - 1; // -1 to make it zero based indexing: 0 = Sunday, 6 = Saturday, etc
+
+                if (reminder.days[day]) {
+
+                    int triggerDistance = reminder.proximity;
+                    int type = reminder.type;
+
+                    if (type == Constants.TYPE_DYNAMIC) {
+                        ArrayList<Place> places = reminder.places;
+                        for (int placeIndex = 0; placeIndex < reminder.places.size(); placeIndex++) {
+                            Place place = places.get(placeIndex);
+
+                            Location placeLocation = new Location("");
+                            placeLocation.setLatitude(place.latitude);
+                            placeLocation.setLongitude(place.longitude);
+
+                            double placeDistance = currentLocation.distanceTo(placeLocation);
+                            if (placeDistance <= triggerDistance) {
+                                handleTrigger(currentLocation, reminderIndex, placeIndex);
+                                break;
+                            }
+                        }
+                    } else if (type == Constants.TYPE_FIXED) {
+                        Location reminderLocation = new Location("");
+
+                        reminderLocation.setLatitude(reminder.latitude);
+                        reminderLocation.setLongitude(reminder.longitude);
+
+                        double reminderDistance = currentLocation.distanceTo(reminderLocation);
+                        if (reminderDistance <= triggerDistance) {
+                            if (reminder.transition == Constants.TRANSITION_ENTER) {
+                                handleTrigger(currentLocation, reminderIndex, 0);
+                            } else if (reminder.transition == Constants.TRANSITION_EXIT) {
+                                reminder.transition = Constants.TRANSITION_ENTER_TO_EXIT;
+                                dataManager.saveReminders(reminders);
+                                reminders = dataManager.getSavedReminders();
+                            }
+                        } else if (reminderDistance > triggerDistance) {
+                            if (reminder.transition == Constants.TRANSITION_ENTER_TO_EXIT) {
+                                handleTrigger(currentLocation, reminderIndex, 0);
+                            }
+                        }
+                    }
                 }
             } else {
-                Bundle bundle = intent.getExtras();
-                if (bundle != null) {
-                    int intentActivity = bundle.getInt(Constants.EXTRA_ACTIVITY);
-                    Log.d("BackgroundService", "Set polling interval for activity " + String.valueOf(intentActivity));
-                    if (numUpcomingReminders(reminders) > 0) {
-                        activity = intentActivity;
-                        startLocationListening(null);
-                    } else {
-                        Log.d("BackgroundService", "Skipping polling because no reminders");
-                    }
-                } else {
-                    startLocationListening(null);
+                // Reminder completed. Check if it's a new day since the time the reminder was completed. If it is and the reminder is set to repeat, reset.
+                long timeCompleted = reminder.timeCompleted;
+                long currentTime = System.currentTimeMillis();
+
+                Date completedDate = new Date(timeCompleted);
+                Date currentDate = new Date(currentTime);
+
+                Calendar completedCalendar = Calendar.getInstance();
+                completedCalendar.setTime(completedDate);
+
+                Calendar currentCalendar = Calendar.getInstance();
+                currentCalendar.setTime(currentDate);
+
+                boolean sameDay = completedCalendar.get(Calendar.YEAR) == currentCalendar.get(Calendar.YEAR) &&
+                        completedCalendar.get(Calendar.DAY_OF_YEAR) == currentCalendar.get(Calendar.DAY_OF_YEAR);
+
+                if (!sameDay && reminder.repeat) {
+                    reminder.completed = false;
+                    dataManager.saveReminders(reminders);
                 }
             }
-            if (showNotification) {
-                makeForeground();
-            }
-        } else {
-            showDisabledNotification();
         }
 
-        return START_STICKY;
     }
 
-    public int numUpcomingReminders(ArrayList<Reminder> reminders) {
-        int count = 0;
-        for (Reminder reminder : reminders) {
-            if (!reminder.completed) {
-                count++;
-            }
+
+
+
+    public void handleTrigger(Location currentLocation, int reminderIndex, int placeIndex) {
+        Reminder reminder = reminders.get(reminderIndex);
+
+        reminder.completed = true;
+        reminder.timeCompleted = System.currentTimeMillis();
+        dataManager.saveReminders(reminders);
+        reminders = dataManager.getSavedReminders();
+
+        String notificationTitle = reminder.title;
+        String notificationMessage = "";
+        double reminderLatitude = 0;
+        double reminderLongitude = 0;
+        if (reminder.type == Constants.TYPE_FIXED) {
+            notificationMessage = reminder.address;
+            reminderLatitude = reminder.latitude;
+            reminderLongitude = reminder.longitude;
+        } else if (reminder.type == Constants.TYPE_DYNAMIC) {
+            Place place = reminder.places.get(placeIndex);
+            notificationMessage = place.title;
+            reminderLatitude = place.latitude;
+            reminderLongitude = place.longitude;
         }
-        return count;
-    }
 
-    public void sendNotification(String title, String message, int transition, Location currentLocation, double latitude, double longitude, boolean silencePhone, int index) {
-        Log.d("BackgroundService", "Sending notification");
-        String uri = preferenceManager.getNotificationSoundUri();
-        Intent mapsIntent = new Intent("android.intent.action.VIEW", Uri.parse("http://maps.google.com/maps?saddr=" + currentLocation.getLatitude() + "," + currentLocation.getLongitude() + "&daddr=" + latitude + "," + longitude));
-        mapsIntent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, mapsIntent, 0);
-        Uri ringtoneUri = Uri.parse(uri);
+        Uri ringtoneUri = Uri.parse(preferenceManager.getNotificationSoundUri());
+        PendingIntent directionsIntent = makeDirectionsIntent(currentLocation, reminderLatitude, reminderLongitude);
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
         builder.setPriority(NotificationCompat.PRIORITY_MAX);
-        builder.setSmallIcon(R.drawable.ic_notification).setContentTitle(title).setContentText(message).setSound(ringtoneUri).setDefaults(-1).addAction(R.drawable.ic_action_map, getString(R.string.notification_action_navigate), pendingIntent).setPriority(2);
-        Intent classIntent = new Intent(this, MainActivity.class);
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        stackBuilder.addParentStack(MainActivity.class);
-        stackBuilder.addNextIntent(classIntent);
-        builder.setContentIntent(stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT));
+        builder.setSmallIcon(R.drawable.ic_notification);
+        builder.setContentTitle(notificationTitle);
+        builder.setContentText(notificationMessage);
+        builder.setSound(ringtoneUri);
+        builder.setDefaults(-1);
+        builder.addAction(R.drawable.ic_action_map, getString(R.string.notification_action_navigate), directionsIntent);
+        builder.setContentIntent(getViewReminderIntent(reminderIndex));
         ((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).notify(7, builder.build());
-        Log.d("BackgroundService", "Making text to speak");
+
+        if (preferenceManager.isPopupReminderEnabled()) {
+            showPopup(reminderIndex);
+        }
+
+        if (reminder.silencePhone) {
+            silencePhone();
+        } else if (preferenceManager.isVoiceReminderEnabled()) {
+            String textToSpeak = makeSpeakText(notificationTitle, notificationMessage, reminder.transition);
+            Intent intent = new Intent(this, SpeakService.class);
+            intent.putExtra(Constants.EXTRA_SPEAKTEXT, textToSpeak);
+            startService(intent);
+        }
+
+        if (reminder.toggleAirplane) {
+            toggleAirplaneMode();
+        }
+    }
+
+    public String makeSpeakText(String title, String message, int transition) {
         // Make text to speak
         String totalText = "";
         String[] words = message.split(" ");
@@ -317,22 +304,22 @@ public class LocationService extends Service implements GooglePlayServicesClient
         } else {
             totalText = getString(R.string.notification_message_exiting) + " " + backerText + ", " + getString(R.string.notification_message_dontforget) + " " + title;
         }
+        return totalText;
+    }
 
-        Log.d("BackgroundService", "Text to speak is " + totalText);
-        if (preferenceManager.isPopupReminderEnabled()) {
-            showPopup(index);
-            Log.d("BackgroundService", "Popup reminders enabled");
-        }
-        if (silencePhone) {
-            silencePhone();
-        } else if (preferenceManager.isVoiceReminderEnabled()) {
-            Log.d("BackgroundService", "Voice reminders enabled, starting speakservice");
-            Intent intent = new Intent(this, SpeakService.class);
-            intent.putExtra(Constants.EXTRA_SPEAKTEXT, totalText);
-            startService(intent);
-        } else {
-            Log.d("BackgroundService", "Voice reminders are not enabled");
-        }
+    public PendingIntent getViewReminderIntent(int reminderIndex) {
+        Intent viewReminderIntent = new Intent(this, ViewReminderActivity.class);
+        viewReminderIntent.putExtra(Constants.EXTRA_REMINDER_INDEX, reminderIndex);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addParentStack(MainActivity.class);
+        stackBuilder.addNextIntent(viewReminderIntent);
+        return stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+    public PendingIntent makeDirectionsIntent(Location currentLocation, double reminderLatitude, double reminderLongitude) {
+        Intent directionsIntent = new Intent("android.intent.action.VIEW", Uri.parse("http://maps.google.com/maps?saddr=" + currentLocation.getLatitude() + "," + currentLocation.getLongitude() + "&daddr=" + reminderLatitude + "," + reminderLongitude));
+        directionsIntent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
+        return PendingIntent.getActivity(this, 0, directionsIntent, 0);
     }
 
     public void showPopup(int index) {
@@ -343,12 +330,10 @@ public class LocationService extends Service implements GooglePlayServicesClient
     }
 
     public void silencePhone() {
-        Log.d("BackgroundService", "Silencing phone");
         ((AudioManager) getSystemService(AUDIO_SERVICE)).setRingerMode(0);
     }
 
     public void toggleAirplaneMode() {
-        Log.d("BackgroundService", "Toggling airplane mode");
         if (Build.VERSION.SDK_INT >= 17) {
             WifiManager wifiManager = (WifiManager) getSystemService(WIFI_SERVICE);
             if (!wifiManager.isWifiEnabled()) {
@@ -381,23 +366,25 @@ public class LocationService extends Service implements GooglePlayServicesClient
     }
 
     public double findClosestReminderDistance(Location currentLocation) {
-        ArrayList<Reminder> reminders = dataManager.getUpcomingReminders();
+        ArrayList<Reminder> remindersList = dataManager.getSavedReminders();
         double closestDistance = Double.MAX_VALUE;
-        for (Reminder reminder : reminders) {
+        for (Reminder reminder : remindersList) {
             if (reminder.type == Constants.TYPE_FIXED) {
-                Location location = new Location("");
-                location.setLatitude(reminder.latitude);
-                location.setLongitude(reminder.longitude);
-                if (currentLocation.distanceTo(location) < closestDistance) {
-                    closestDistance = currentLocation.distanceTo(location);
+                Location reminderLocation = new Location("");
+                reminderLocation.setLatitude(reminder.latitude);
+                reminderLocation.setLongitude(reminder.longitude);
+                double distanceTo = currentLocation.distanceTo(reminderLocation);
+                if (distanceTo < closestDistance) {
+                    closestDistance = distanceTo;
                 }
             } else if (reminder.type == Constants.TYPE_DYNAMIC) {
                 for (Place place : reminder.places) {
-                    Location location = new Location("");
-                    location.setLatitude(place.latitude);
-                    location.setLongitude(place.longitude);
-                    if (currentLocation.distanceTo(location) < closestDistance) {
-                        closestDistance = currentLocation.distanceTo(location);
+                    Location placeLocation = new Location("");
+                    placeLocation.setLatitude(place.latitude);
+                    placeLocation.setLongitude(place.longitude);
+                    double distanceTo = currentLocation.distanceTo(placeLocation);
+                    if (distanceTo < closestDistance) {
+                        closestDistance = distanceTo;
                     }
                 }
             }
@@ -405,59 +392,70 @@ public class LocationService extends Service implements GooglePlayServicesClient
         return closestDistance;
     }
 
-    // Returns negative number if we shouldn't poll interval
-    public void startLocationListening(Location currentLocation) {
+    public void startLocationListening() {
+        Log.d("BackgroundService", "Starting location listening");
         lastLocationPollingReset = System.currentTimeMillis();
-        int largestReminderProximitySetting = findLargestReminderProximitySetting();
-        long pollInterval = Constants.BASE_POLLING_INTERVAL;
-        if (preferenceManager.isLowPowerEnabled()) {
-            pollInterval *= Constants.MULTIPLIER_LOW_POWER;
+        boolean lowPowerEnabled = preferenceManager.isLowPowerEnabled(); // Is low power enabled?
+        double multiplier = preferenceManager.getIntervalMultiplier();   // Multiplier specified in settings
+
+        boolean startLocationListening = true;                           // Whether or not to start location listening.
+
+        int numReminders = dataManager.getUpcomingReminders().size();
+
+        if (numReminders == 0) {
+            Log.d("BackgroundService", "No upcoming reminders");
+            startLocationListening = false;
         }
-        pollInterval *= preferenceManager.getIntervalMultiplier();
+
+        Location currentLocation = null;
+        if (locationClient != null && locationClient.isConnected()) {
+            currentLocation = locationClient.getLastLocation();
+        }
+
         if (currentLocation != null) {
             double closestReminderDistance = findClosestReminderDistance(currentLocation);
-            if (activity >= 0) {
-                // If we are less than 10 times the closest reminder location, then poll, otherwise, we're far enough away we don't need to
-                if (closestReminderDistance < (largestReminderProximitySetting * (100 / Constants.ACTIVITY_MULTIPLIERS[activity]))) {
-                    pollInterval *= Constants.ACTIVITY_MULTIPLIERS[activity];
-                    Log.d("BackgroundService", "Close enough to destination for polling");
-                } else {
-                    // No need to poll
-                    Log.d("BackgroundServices", "Not close enough to destination to bother polling.");
-                    pollInterval = -1;
-                }
-                Log.d("BackgroundService", "Within proximity setting, we are polling.");
-            } else {
-                // If we are less distance than a certain amount, then poll, otherwise don't bother polling
-                if (closestReminderDistance < (largestReminderProximitySetting * (100 / Constants.ACTIVITY_MULTIPLIER_DEFAULT))) {
-                    pollInterval *= Constants.ACTIVITY_MULTIPLIERS[activity];
-                } else {
-                    // No need to poll
-                    Log.d("BackgroundService", "Not close enough to destination to bother polling.");
-                    pollInterval = -1;
-                }
-                Log.d("BackgroundService", "Within proximity setting, we are polling.");
-            }
-        } else {
-            if (activity >= 0) {
-                // Go off of only activity recognition
-                pollInterval *= Constants.ACTIVITY_MULTIPLIERS[activity];
-            } else {
-                pollInterval *= Constants.ACTIVITY_MULTIPLIER_DEFAULT;
+            int largestProximitySetting = findLargestReminderProximitySetting();
+            // If we're 10x the distance from the largest reminder proximity setting
+            // Ex: Largest proximity setting is 1/2 mi, and we're more than 5 miles away
+            // Don't bother polling location (we're too far away).
+            if (largestProximitySetting * 10 < closestReminderDistance) {
+                Log.d("BackgroundService", "Far away from reminder");
+                startLocationListening = false;
             }
         }
 
-        if (pollInterval > 0) {
-            Log.d("BackgroundService", "Activity used for polling was " + String.valueOf(activity));
-            Log.d("BackgroundService", "Starting polling with pollInterval of " + String.valueOf(pollInterval / 1000) + " seconds");
+        long interval = Constants.BASE_POLLING_INTERVAL;
+
+        interval *= multiplier;
+        if (lowPowerEnabled) {
+            Log.d("BackgroundService", "Applying low power");
+            interval *= Constants.MULTIPLIER_LOW_POWER;
+        }
+        // If the activity is actually known
+        if (activity >= 0) {
+            Log.d("BackgroundService", "Activity known, applying multiplier for activity " + String.valueOf(activity));
+            interval *= Constants.ACTIVITY_MULTIPLIERS[activity];
+        } else {
+            Log.d("BackgroundService", "Activity not known, using default activity multiplier");
+            interval *= Constants.ACTIVITY_MULTIPLIER_DEFAULT;
+        }
+
+        // If the interval is negative (can happen because of Constants.ACTIVITY_MULTIPLIERS)
+        if (interval <= 0) {
+            Log.d("BackgroundService", "Interval is negative");
+            startLocationListening = false;
+        }
+
+        if (startLocationListening) {
             locationRequest = LocationRequest.create();
-            if (preferenceManager.isLowPowerEnabled()) {
+            if (lowPowerEnabled) {
                 locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
             } else {
                 locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
             }
-            locationRequest.setInterval(pollInterval);
-            locationRequest.setFastestInterval((int) (pollInterval / 15));
+            locationRequest.setInterval(interval);
+            Log.d("BackgroundService", "Starting location listening with interval " + String.valueOf(interval));
+            locationRequest.setFastestInterval(interval / 50);
             if (locationClient != null) {
                 locationClient.removeLocationUpdates(this);
                 if (locationClient.isConnected()) {
@@ -470,19 +468,10 @@ public class LocationService extends Service implements GooglePlayServicesClient
                 locationClient.connect();
             }
         } else {
-            Log.d("BackgroundService", "Not polling location because pollInterval is negative");
+            Log.d("BackgroundService", "Not starting location listening");
         }
     }
 
-    public class LocationBinder extends Binder {
-        public LocationBinder() {
-        }
-
-        LocationService getService() {
-            return LocationService.this;
-        }
-
-    }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {

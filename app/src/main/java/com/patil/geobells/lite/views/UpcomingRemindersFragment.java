@@ -15,6 +15,7 @@ import com.patil.geobells.lite.MainActivity;
 import com.patil.geobells.lite.R;
 import com.patil.geobells.lite.ViewReminderActivity;
 import com.patil.geobells.lite.data.Reminder;
+import com.patil.geobells.lite.service.LocationService;
 import com.patil.geobells.lite.utils.Constants;
 import com.patil.geobells.lite.utils.GeobellsDataManager;
 
@@ -55,6 +56,8 @@ public class UpcomingRemindersFragment extends Fragment {
                             reminder.completed = true;
                             reminder.timeCompleted = System.currentTimeMillis();
                             dataManager.saveReminders(reminders);
+                            getActivity().stopService(new Intent(getActivity(), LocationService.class));
+                            getActivity().startService(new Intent(getActivity(), LocationService.class));
                         }
                     });
                     card.setOnClickListener(new Card.OnCardClickListener() {

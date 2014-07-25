@@ -131,6 +131,7 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
             } else {
                 setData();
             }
+            advancedButton.setVisibility(View.VISIBLE);
         } else {
             reminderIndex = -1;
         }
