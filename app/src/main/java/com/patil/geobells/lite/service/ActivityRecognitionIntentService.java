@@ -68,7 +68,7 @@ public class ActivityRecognitionIntentService extends IntentService {
             } else {
                 minTimeSinceLastActivity = (long)(minTimeSinceLastActivity * multiplier);
             }
-            if(timeSinceLastActivity > minTimeSinceLastActivity) {
+            //if(timeSinceLastActivity > minTimeSinceLastActivity) {
                 preferenceManager.saveLastActivityRecognitionTime(System.currentTimeMillis());
                 ActivityRecognitionResult result = ActivityRecognitionResult.extractResult(intent);
                 DetectedActivity mostProbableActivity = result.getMostProbableActivity();
@@ -98,9 +98,9 @@ public class ActivityRecognitionIntentService extends IntentService {
                     Log.d("BackgroundService", "No need to restart LocationService");
                 }
                 unbindFromService();
-            } else {
+            /*} else {
                 Log.d("BackgroundService", "Not enough time elapsed since last activity recognition time");
-            }
+            }*/
         }
     }
 

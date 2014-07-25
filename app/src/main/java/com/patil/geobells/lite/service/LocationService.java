@@ -103,7 +103,7 @@ public class LocationService extends Service implements GooglePlayServicesClient
 
     @Override
     public void onConnected(Bundle bundle) {
-        if(locationClient != null && locationRequest != null) {
+        if (locationClient != null && locationRequest != null) {
             locationClient.requestLocationUpdates(locationRequest, this);
         }
     }
@@ -223,8 +223,6 @@ public class LocationService extends Service implements GooglePlayServicesClient
         }
 
     }
-
-
 
 
     public void handleTrigger(Location currentLocation, int reminderIndex, int placeIndex) {
@@ -416,9 +414,9 @@ public class LocationService extends Service implements GooglePlayServicesClient
             double closestReminderDistance = findClosestReminderDistance(currentLocation);
             int largestProximitySetting = findLargestReminderProximitySetting();
             // If we're 10x the distance from the largest reminder proximity setting
-            // Ex: Largest proximity setting is 1/2 mi, and we're more than 5 miles away
+            // Ex: Largest proximity setting is 1/2 mi, and we're more than 2.5 miles away
             // Don't bother polling location (we're too far away).
-            if (largestProximitySetting * 10 < closestReminderDistance) {
+            if (largestProximitySetting * 5 < closestReminderDistance) {
                 Log.d("BackgroundService", "Far away from reminder");
                 startLocationListening = false;
             }
@@ -468,6 +466,9 @@ public class LocationService extends Service implements GooglePlayServicesClient
                 locationClient.connect();
             }
         } else {
+            if (locationClient != null) {
+                locationClient.removeLocationUpdates(this);
+            }
             Log.d("BackgroundService", "Not starting location listening");
         }
     }
