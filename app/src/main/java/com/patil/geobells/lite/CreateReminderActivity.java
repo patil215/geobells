@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -78,6 +80,7 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
     private RelativeLayout dynamicLayout;
     private RelativeLayout advancedLayout;
     private Button advancedButton;
+    private Button createReminderButton;
     private Spinner proximitySpinner;
 
     private GeobellsPreferenceManager preferenceManager;
@@ -135,6 +138,57 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
         } else {
             reminderIndex = -1;
         }
+
+        addressBox.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int i, int i2, int i3) {
+                if(s.length() == 0) {
+                    if(createReminderButton.getVisibility() == View.VISIBLE) {
+                        createReminderButton.setVisibility(View.GONE);
+                    }
+                } else {
+                    if(createReminderButton.getVisibility() == View.GONE) {
+                        createReminderButton.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        businessBox.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int i, int i2, int i3) {
+                if(s.length() == 0) {
+                    if(createReminderButton.getVisibility() == View.VISIBLE) {
+                        createReminderButton.setVisibility(View.GONE);
+                    }
+                } else {
+                    if(createReminderButton.getVisibility() == View.GONE) {
+                        createReminderButton.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
         getActionBar().setDisplayHomeAsUpEnabled(true);
         setupSpinner();
         setupAutocomplete();
@@ -288,6 +342,7 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
         dynamicLayout = (RelativeLayout) findViewById(R.id.layout_reminder_dynamic);
         advancedLayout = (RelativeLayout) findViewById(R.id.layout_advanced_options);
         advancedButton = (Button) findViewById(R.id.button_advanced_options);
+        createReminderButton = (Button) findViewById(R.id.button_create_reminder);
         transitionRadioGroup = (RadioGroup) findViewById(R.id.radiobutton_group_reminder_transition);
     }
 
@@ -303,6 +358,15 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
             final InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             inputMethodManager.showSoftInput(addressBox, InputMethodManager.SHOW_IMPLICIT);
         }
+        if(addressBox.getText().length() == 0) {
+            if(createReminderButton.getVisibility() == View.VISIBLE) {
+                createReminderButton.setVisibility(View.GONE);
+            }
+        } else {
+            if(createReminderButton.getVisibility() == View.GONE) {
+                createReminderButton.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     public void onTypeDynamicClick(View v) {
@@ -316,6 +380,15 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
             businessBox.requestFocus();
             final InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             inputMethodManager.showSoftInput(businessBox, InputMethodManager.SHOW_IMPLICIT);
+        }
+        if(businessBox.getText().length() == 0) {
+            if(createReminderButton.getVisibility() == View.VISIBLE) {
+                createReminderButton.setVisibility(View.GONE);
+            }
+        } else {
+            if(createReminderButton.getVisibility() == View.GONE) {
+                createReminderButton.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -702,6 +775,10 @@ public class CreateReminderActivity extends Activity implements GooglePlayServic
     @Override
     public void onReverseGeocodeTaskComplete(String address, String method) {
 
+    }
+
+    public void onCreateReminderClick(View view) {
+        createReminder();
     }
 
     private class PlacesAutoCompleteAddressAdapter extends ArrayAdapter<String> implements Filterable {

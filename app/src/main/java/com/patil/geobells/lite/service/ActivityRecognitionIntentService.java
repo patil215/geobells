@@ -33,7 +33,7 @@ public class ActivityRecognitionIntentService extends IntentService {
     };
 
     public void bindToService() {
-        if(!attemptingToBind) {
+        if (!attemptingToBind) {
             attemptingToBind = true;
             bindService(new Intent(this, LocationService.class), connection, Context.BIND_AUTO_CREATE);
         }
@@ -41,8 +41,10 @@ public class ActivityRecognitionIntentService extends IntentService {
 
     public void unbindFromService() {
         attemptingToBind = false;
-        if(bound) {
-            unbindService(connection);
+        if (bound) {
+            if(connection != null) {
+                unbindService(connection);
+            }
             bound = false;
         }
     }
@@ -56,51 +58,51 @@ public class ActivityRecognitionIntentService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         if (ActivityRecognitionResult.hasResult(intent)) {
-            if(preferenceManager == null) {
+            if (preferenceManager == null) {
                 preferenceManager = new GeobellsPreferenceManager(this);
             }
             long timeSinceLastActivity = System.currentTimeMillis() - preferenceManager.getLastActivityRecognitionTime();
             long minTimeSinceLastActivity = Constants.POLLING_INTERVAL_ACTIVITY_RECOGNITION_MINIMUM;
             double multiplier = preferenceManager.getIntervalMultiplier();
             boolean lowPowerEnabled = preferenceManager.isLowPowerEnabled();
-            if(lowPowerEnabled) {
-                minTimeSinceLastActivity = (long)(minTimeSinceLastActivity * multiplier * Constants.MULTIPLIER_LOW_POWER);
+            if (lowPowerEnabled) {
+                minTimeSinceLastActivity = (long) (minTimeSinceLastActivity * multiplier * Constants.MULTIPLIER_LOW_POWER);
             } else {
-                minTimeSinceLastActivity = (long)(minTimeSinceLastActivity * multiplier);
+                minTimeSinceLastActivity = (long) (minTimeSinceLastActivity * multiplier);
             }
             //if(timeSinceLastActivity > minTimeSinceLastActivity) {
-                preferenceManager.saveLastActivityRecognitionTime(System.currentTimeMillis());
-                ActivityRecognitionResult result = ActivityRecognitionResult.extractResult(intent);
-                DetectedActivity mostProbableActivity = result.getMostProbableActivity();
-                int activityType = mostProbableActivity.getType();
+            preferenceManager.saveLastActivityRecognitionTime(System.currentTimeMillis());
+            ActivityRecognitionResult result = ActivityRecognitionResult.extractResult(intent);
+            DetectedActivity mostProbableActivity = result.getMostProbableActivity();
+            int activityType = mostProbableActivity.getType();
 
-                bindToService();
-                int currentActivity = -1;
-                if (locationService != null) {
-                    Log.d("BackgroundService", "LocationService successfully bound to ActivityRecognitionIntentService");
-                    currentActivity = locationService.getActivity();
-                }
-                if (currentActivity == -1) {
-                    Log.d("BackgroundService", "current activity not gotten, restarting LocationService");
-                    Intent locationIntent = new Intent(this, LocationService.class);
-                    locationIntent.putExtra(Constants.EXTRA_ACTIVITY, activityType);
-                    unbindFromService();
-                    stopService(new Intent(this, LocationService.class));
-                    startService(locationIntent);
-                } else if (currentActivity != activityType) {
-                    Log.d("BackgroundService", "current activity different, restarting LocationService");
-                    Intent locationIntent = new Intent(this, LocationService.class);
-                    locationIntent.putExtra(Constants.EXTRA_ACTIVITY, activityType);
-                    unbindFromService();
-                    stopService(new Intent(this, LocationService.class));
-                    startService(locationIntent);
-                } else {
-                    Log.d("BackgroundService", "No need to restart LocationService");
-                }
+            bindToService();
+            int currentActivity = -1;
+            if (locationService != null) {
+                Log.d("BackgroundService", "LocationService successfully bound to ActivityRecognitionIntentService");
+                currentActivity = locationService.getActivity();
+            }
+            if (currentActivity == -1) {
+                Log.d("BackgroundService", "current activity not gotten, restarting LocationService");
+                Intent locationIntent = new Intent(this, LocationService.class);
+                locationIntent.putExtra(Constants.EXTRA_ACTIVITY, activityType);
                 unbindFromService();
-            /*} else {
-                Log.d("BackgroundService", "Not enough time elapsed since last activity recognition time");
-            }*/
+                stopService(new Intent(this, LocationService.class));
+                startService(locationIntent);
+            } else if (currentActivity != activityType) {
+                Log.d("BackgroundService", "current activity different, restarting LocationService");
+                Intent locationIntent = new Intent(this, LocationService.class);
+                locationIntent.putExtra(Constants.EXTRA_ACTIVITY, activityType);
+                unbindFromService();
+                stopService(new Intent(this, LocationService.class));
+                startService(locationIntent);
+            } else {
+                Log.d("BackgroundService", "No need to restart LocationService");
+            }
+            unbindFromService();
+            //} else {
+            //    Log.d("BackgroundService", "Not enough time elapsed since last activity recognition time");
+            //}
         }
     }
 

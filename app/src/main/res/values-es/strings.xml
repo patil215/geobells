@@ -166,5 +166,6 @@
     <string name="content_description_map">Imagen Mapa</string>
     <string name="content_description_colorbox">Color de tecla</string>
     <string name="all_days">todos los días</string>
+    <string name="button_create_reminder">Crear recordatorio</string>
 
 </resources>

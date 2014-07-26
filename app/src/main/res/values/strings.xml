@@ -168,5 +168,6 @@
     <string name="all_days">all days</string>
     <string name="preference_low_power">Enable low power mode</string>
     <string name="preference_low_power_summary">Don\'t use GPS. Battery usage will be dramatically reduced, but so will accuracy</string>
+    <string name="button_create_reminder">Create reminder</string>
 
 </resources>

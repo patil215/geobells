@@ -353,9 +353,9 @@ public class LocationService extends Service implements GooglePlayServicesClient
     }
 
     public int findLargestReminderProximitySetting() {
-        ArrayList<Reminder> reminders = dataManager.getUpcomingReminders();
+        ArrayList<Reminder> remindersList = dataManager.getUpcomingReminders();
         int largestProximity = 0;
-        for (Reminder reminder : reminders) {
+        for (Reminder reminder : remindersList) {
             if (reminder.proximity > largestProximity) {
                 largestProximity = reminder.proximity;
             }
@@ -364,7 +364,7 @@ public class LocationService extends Service implements GooglePlayServicesClient
     }
 
     public double findClosestReminderDistance(Location currentLocation) {
-        ArrayList<Reminder> remindersList = dataManager.getSavedReminders();
+        ArrayList<Reminder> remindersList = dataManager.getUpcomingReminders();
         double closestDistance = Double.MAX_VALUE;
         for (Reminder reminder : remindersList) {
             if (reminder.type == Constants.TYPE_FIXED) {
@@ -416,7 +416,7 @@ public class LocationService extends Service implements GooglePlayServicesClient
             // If we're 10x the distance from the largest reminder proximity setting
             // Ex: Largest proximity setting is 1/2 mi, and we're more than 2.5 miles away
             // Don't bother polling location (we're too far away).
-            if (largestProximitySetting * 5 < closestReminderDistance) {
+            if (largestProximitySetting * 8 < closestReminderDistance) {
                 Log.d("BackgroundService", "Far away from reminder");
                 startLocationListening = false;
             }

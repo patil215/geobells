@@ -200,6 +200,17 @@
             android:text="@string/button_advanced_options"
             android:visibility="gone" />
 
+        <Button
+            android:id="@+id/button_create_reminder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/layout_basic_options"
+            android:layout_marginTop="12dp"
+            android:layout_alignParentRight="true"
+            android:onClick="onCreateReminderClick"
+            android:text="@string/button_create_reminder"
+            android:visibility="gone" />
+
 
         <RelativeLayout
             android:id="@+id/layout_advanced_options"

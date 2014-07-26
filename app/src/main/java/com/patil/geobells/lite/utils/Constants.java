@@ -72,7 +72,7 @@ public class Constants {
     public static final String EXTRA_ACTIVITY = "activity";
 
     // Base polling interval of 12 seconds
-    public static final int BASE_POLLING_INTERVAL = 12000;
+    public static final int BASE_POLLING_INTERVAL = 8000;
     public static final int ACTIVITY_DRIVING = 0;
     public static final int ACTIVITY_BIKING = 1;
     public static final int ACTIVITY_WALKING = 2;
