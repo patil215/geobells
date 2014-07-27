@@ -152,6 +152,7 @@
     <string name="preference_popup_summary_lite">Recordatorios emergentes están deshabilitadas en la versión gratuita</string>
     <string name="dialog_title_upgrade">Actualiza a Geobells Pro</string>
     <string name="dialog_button_upgrade">Mejorar</string>
+    <string name="toast_connect_internet_search">No se pudo iniciar la búsqueda. Asegúrese de que usted todavía conectado a Internet.</string>
     <string name="upgrade_numreminders">Sólo puede tener tres recordatorios concurrentes en la versión gratuita. Tendrá que borrar sus recordatorios completados.\n\no actualizar a Pro y crear recordatorios ilimitadas, así como a tener acceso a otras funciones.</string>
     <string name="upgrade_popupreminders">Recordatorios emergentes están disponibles sólo en la versión Pro.\n\nUpgrade a Pro conseguir esto y otras características!</string>
     <string name="toast_location_error">No se pudo obtener su ubicación. Asegúrese de que tanto el GPS y ubicación de red están habilitados.</string>
