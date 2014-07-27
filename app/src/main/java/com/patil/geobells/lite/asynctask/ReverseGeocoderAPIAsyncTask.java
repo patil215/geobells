@@ -60,8 +60,6 @@ public class ReverseGeocoderAPIAsyncTask extends AsyncTask<Double, String, Strin
             StringBuilder sb = new StringBuilder(Constants.GEOCODE_API_BASE + Constants.GEOCODE_OUT_JSON);
             sb.append("?latlng=" + URLEncoder.encode(latitude + "," + longitude, "utf8"));
 
-            Log.d("GeobellsReverseGeocodeTask", sb.toString());
-
             URL url = new URL(sb.toString());
             conn = (HttpURLConnection) url.openConnection();
             InputStreamReader in = new InputStreamReader(conn.getInputStream());
@@ -83,7 +81,6 @@ public class ReverseGeocoderAPIAsyncTask extends AsyncTask<Double, String, Strin
                 conn.disconnect();
             }
         }
-        Log.d("GeobellsReverseGeocodeTask", jsonResults.toString());
         return jsonResults.toString();
     }
 

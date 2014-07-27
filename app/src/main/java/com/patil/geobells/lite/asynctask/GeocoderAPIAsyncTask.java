@@ -61,8 +61,6 @@ public class GeocoderAPIAsyncTask extends AsyncTask<String, String, Double[]>  {
             StringBuilder sb = new StringBuilder(Constants.GEOCODE_API_BASE + Constants.GEOCODE_OUT_JSON);
             sb.append("?address=" + URLEncoder.encode(address, "utf8"));
 
-            Log.d("GeobellsGeocodeTask", sb.toString());
-
             URL url = new URL(sb.toString());
             conn = (HttpURLConnection) url.openConnection();
             InputStreamReader in = new InputStreamReader(conn.getInputStream());
@@ -84,7 +82,6 @@ public class GeocoderAPIAsyncTask extends AsyncTask<String, String, Double[]>  {
                 conn.disconnect();
             }
         }
-        Log.d("GeobellsGeocodeTask", jsonResults.toString());
         return jsonResults.toString();
     }
 

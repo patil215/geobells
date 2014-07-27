@@ -97,7 +97,6 @@ public class LocationService extends Service implements GooglePlayServicesClient
 
     @Override
     public IBinder onBind(Intent intent) {
-        Log.d("BackgroundService", "onBind of LocationService called");
         return binder;
     }
 
@@ -111,7 +110,6 @@ public class LocationService extends Service implements GooglePlayServicesClient
     @Override
     public void onDestroy() {
         if (locationClient != null) {
-            Log.d("BackgroundService", "LocationClient onDestroy called");
             locationClient.disconnect();
         }
     }
@@ -123,14 +121,10 @@ public class LocationService extends Service implements GooglePlayServicesClient
 
     @Override
     public void onLocationChanged(Location location) {
-        Log.d("BackgroundService", "Making use of new location");
         makeUseOfLocation(location);
         // If we've waited long enough between requests
         if (System.currentTimeMillis() - lastLocationPollingReset > locationRequest.getInterval()) {
-            Log.d("BackgroundService", "Recalibrating location polling intervals");
             startLocationListening();
-        } else {
-            Log.d("BackgroundService", "Not enough time elapsed to recalibrate location polling intervals");
         }
     }
 
@@ -391,7 +385,6 @@ public class LocationService extends Service implements GooglePlayServicesClient
     }
 
     public void startLocationListening() {
-        Log.d("BackgroundService", "Starting location listening");
         lastLocationPollingReset = System.currentTimeMillis();
         boolean lowPowerEnabled = preferenceManager.isLowPowerEnabled(); // Is low power enabled?
         double multiplier = preferenceManager.getIntervalMultiplier();   // Multiplier specified in settings
@@ -401,7 +394,6 @@ public class LocationService extends Service implements GooglePlayServicesClient
         int numReminders = dataManager.getUpcomingReminders().size();
 
         if (numReminders == 0) {
-            Log.d("BackgroundService", "No upcoming reminders");
             startLocationListening = false;
         }
 
@@ -417,7 +409,6 @@ public class LocationService extends Service implements GooglePlayServicesClient
             // Ex: Largest proximity setting is 1/2 mi, and we're more than 2.5 miles away
             // Don't bother polling location (we're too far away).
             if (largestProximitySetting * 8 < closestReminderDistance) {
-                Log.d("BackgroundService", "Far away from reminder");
                 startLocationListening = false;
             }
         }
@@ -426,21 +417,17 @@ public class LocationService extends Service implements GooglePlayServicesClient
 
         interval *= multiplier;
         if (lowPowerEnabled) {
-            Log.d("BackgroundService", "Applying low power");
             interval *= Constants.MULTIPLIER_LOW_POWER;
         }
         // If the activity is actually known
         if (activity >= 0) {
-            Log.d("BackgroundService", "Activity known, applying multiplier for activity " + String.valueOf(activity));
             interval *= Constants.ACTIVITY_MULTIPLIERS[activity];
         } else {
-            Log.d("BackgroundService", "Activity not known, using default activity multiplier");
             interval *= Constants.ACTIVITY_MULTIPLIER_DEFAULT;
         }
 
         // If the interval is negative (can happen because of Constants.ACTIVITY_MULTIPLIERS)
         if (interval <= 0) {
-            Log.d("BackgroundService", "Interval is negative");
             startLocationListening = false;
         }
 
@@ -452,7 +439,6 @@ public class LocationService extends Service implements GooglePlayServicesClient
                 locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
             }
             locationRequest.setInterval(interval);
-            Log.d("BackgroundService", "Starting location listening with interval " + String.valueOf(interval));
             locationRequest.setFastestInterval(interval / 50);
             if (locationClient != null) {
                 locationClient.removeLocationUpdates(this);
@@ -469,7 +455,6 @@ public class LocationService extends Service implements GooglePlayServicesClient
             if (locationClient != null) {
                 locationClient.removeLocationUpdates(this);
             }
-            Log.d("BackgroundService", "Not starting location listening");
         }
     }
 

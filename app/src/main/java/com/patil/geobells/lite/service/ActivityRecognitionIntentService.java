@@ -79,25 +79,20 @@ public class ActivityRecognitionIntentService extends IntentService {
             bindToService();
             int currentActivity = -1;
             if (locationService != null) {
-                Log.d("BackgroundService", "LocationService successfully bound to ActivityRecognitionIntentService");
                 currentActivity = locationService.getActivity();
             }
             if (currentActivity == -1) {
-                Log.d("BackgroundService", "current activity not gotten, restarting LocationService");
                 Intent locationIntent = new Intent(this, LocationService.class);
                 locationIntent.putExtra(Constants.EXTRA_ACTIVITY, activityType);
                 unbindFromService();
                 stopService(new Intent(this, LocationService.class));
                 startService(locationIntent);
             } else if (currentActivity != activityType) {
-                Log.d("BackgroundService", "current activity different, restarting LocationService");
                 Intent locationIntent = new Intent(this, LocationService.class);
                 locationIntent.putExtra(Constants.EXTRA_ACTIVITY, activityType);
                 unbindFromService();
                 stopService(new Intent(this, LocationService.class));
                 startService(locationIntent);
-            } else {
-                Log.d("BackgroundService", "No need to restart LocationService");
             }
             unbindFromService();
             //} else {

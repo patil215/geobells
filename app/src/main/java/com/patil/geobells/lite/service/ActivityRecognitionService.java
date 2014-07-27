@@ -22,12 +22,10 @@ public class ActivityRecognitionService extends Service implements GooglePlaySer
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d("BackgroundService", "onStartCommand for ActivityRecognitionService");
         inProgress = false;
         if (activityRecognitionClient != null) {
             activityRecognitionClient.removeActivityUpdates(activityRecognitionIntent);
         }
-        Log.d("BackgroundService", "Registering activity recognition client");
         activityRecognitionClient = new ActivityRecognitionClient(this, this, this);
         Intent activityIntent = new Intent(this, ActivityRecognitionIntentService.class);
         activityRecognitionIntent = PendingIntent.getService(this, 0, activityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -45,7 +43,6 @@ public class ActivityRecognitionService extends Service implements GooglePlaySer
 
     @Override
     public void onConnected(Bundle bundle) {
-        Log.d("BackgroundService", "Activity recognition client connected");
         if (preferenceManager == null) {
             preferenceManager = new GeobellsPreferenceManager(this);
         }
@@ -67,14 +64,12 @@ public class ActivityRecognitionService extends Service implements GooglePlaySer
 
     @Override
     public void onDisconnected() {
-        Log.d("BackgroundService", "Activity recognition client disconnected");
         inProgress = false;
         activityRecognitionClient = null;
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.d("BackgroundService", "Activity recognition client connection failed");
     }
 
     @Override

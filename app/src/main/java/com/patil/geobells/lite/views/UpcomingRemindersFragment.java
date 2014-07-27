@@ -82,7 +82,6 @@ public class UpcomingRemindersFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d("Dibby", "OnActivityResult called");
         ((MainActivity)getActivity()).refreshUpcoming();
     }
 
