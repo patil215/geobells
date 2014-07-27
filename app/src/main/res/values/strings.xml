@@ -158,7 +158,7 @@
     <string name="dialog_title_airplane_mode">Toggle airplane mode</string>
     <string name="dialog_message_airplane_mode">On devices running Android 4.2 and above, Google has restricted access to airplane mode. Therefore, only Wi-Fi will be toggled.</string>
     <string name="dialog_title_uninstall_lite">Uninstall Geobells Free</string>
-    <string name="dialog_message_uninstall_lite">It looks like you have the Pro version of Geobells. \n\nYou should uninstall the this free version so that the apps don\'t interfere.</string>
+    <string name="dialog_message_uninstall_lite">It looks like you have the Pro version of Geobells. \n\nYou should uninstall this free version so that the apps don\'t interfere.</string>
     <string name="dialog_title_uninstall_pro">Uninstall Geobells Free</string>
     <string name="dialog_message_uninstall_pro">It looks like you\'ve bought the Pro version of Geobells. You should uninstall the free version so the apps don\'t interfere.</string>
     <string name="content_description_ic_launcher">App icon</string>
