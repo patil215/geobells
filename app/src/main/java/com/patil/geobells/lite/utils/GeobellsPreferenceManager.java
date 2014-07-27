@@ -67,4 +67,14 @@ public class GeobellsPreferenceManager {
     public long getLastActivityRecognitionTime() {
         return preferences.getLong("activity_time", 0);
     }
+
+    public boolean isFirstTime() {
+        return preferences.getBoolean("firsttime", true);
+    }
+
+    public void setFirstTime(boolean firstTime) {
+        SharedPreferences.Editor edit = preferences.edit();
+        edit.putBoolean("firsttime", firstTime);
+        edit.commit();
+    }
 }

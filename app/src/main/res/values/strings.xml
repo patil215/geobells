@@ -169,5 +169,12 @@
     <string name="preference_low_power">Enable low power mode</string>
     <string name="preference_low_power_summary">Don\'t use GPS. Battery usage will be dramatically reduced, but so will accuracy</string>
     <string name="button_create_reminder">Create reminder</string>
+    <string name="dialog_unlicensed_title">Unlicensed app</string>
+    <string name="dialog_unlicensed_message">This app is not licensed. Please buy it from the Play Store. \n\nIf you think this is an error, contact geobellstheapp@gmail.com</string>
+    <string name="dialog_button_buy">Buy</string>
+    <string name="dialog_button_exit">Exit</string>
+    <string name="dialog_button_check_again">Check again</string>
+    <string name="dialog_title_license_connection">Connect to the internet</string>
+    <string name="dialog_message_license_connection">For the first time launching Geobells, you need to be connected to the internet. Try connecting to the internet, then opening the app again.</string>
 
 </resources>

@@ -2,6 +2,11 @@ package com.patil.geobells.lite.utils;
 
 
 public class Constants {
+
+    public static final String BASE64_PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzSIFuh8cAYT0m8mtgGKsG/uUudQhaf5s3wqc3Ibs6JjpP+zfXj/B53AsQ1aEXrMoiXeCQK1drjGWO9ebnvQsswmGhU8OPyCJiUYidENDFwJ4tZi1vhyDJWiONnfFork1iLVhE8ptb1gPC+tjbwWKwXhdxYzHEX06mZgE2l8nOa4xffDC9s08lR6wEPtI34ujWFz78P4eUsyz/CDVGYqArhN7+8N8xIatHSFgZpOkYozKvvvwnKOyq0UlqnRnhjbJeXZewLXnN7FoNTV4fBVmBdFkB0C/aHmR9LfHBwTDkTu6CpYDd3C826bkGwa1helBnq/Ja3psuei8WIQk3IhS9QIDAQAB";
+    public static final byte[] SALT = {18, 60, 12, 77, 15, 25, 98, 40, 95, 88, 77, 82, 58, 68, 39, 34, 40, 00, 76, 76};
+
+
     public static final int TRANSITION_ENTER = 0;
     public static final int TRANSITION_EXIT = 1;
     public static final int TRANSITION_ENTER_TO_EXIT = 2;
