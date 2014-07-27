@@ -167,5 +167,13 @@
     <string name="content_description_colorbox">Color de tecla</string>
     <string name="all_days">todos los días</string>
     <string name="button_create_reminder">Crear recordatorio</string>
+    <string name="dialog_unlicensed_title">"Aplicación sin licencia"</string>
+    <string name="dialog_unlicensed_message">"Esta aplicación no está autorizada. Por favor, comprar desde la tienda Play. \ N \ nSi usted piensa que esto es un error, póngase en contacto geobellstheapp@gmail.com"</string>
+    <string name="dialog_button_buy">"Comprar"</string>
+    <string name="dialog_button_exit">"Salida"</string>
+    <string name="dialog_button_check_again">"Compruebe de nuevo"</string>
+    <string name="dialog_title_license_connection">"Conectarse a Internet"</string>
+    <string name="dialog_message_license_connection">"Por primera vez, el lanzamiento de Geobells, es necesario estar conectado a Internet. Trate de conectarse a Internet, a continuación, abrir la aplicación de nuevo."</string>
+
 
 </resources>
