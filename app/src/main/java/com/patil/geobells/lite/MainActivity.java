@@ -100,6 +100,7 @@ public class MainActivity extends Activity
                             finish();
                         }
                     });
+                    builder.create().show();
                 }
             }
         }
