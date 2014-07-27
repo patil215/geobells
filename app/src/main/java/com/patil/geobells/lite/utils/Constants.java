@@ -59,6 +59,9 @@ public class Constants {
 
 
     public static final String MAPS_API_KEY_DEBUG = "AIzaSyAtycxCYF1MvdR2MgxTT3W3EQCiMj4DStQ";
+
+    public static final String MAPS_API_KEY_RELEASE_LITE = "AIzaSyATyb204l0YsDRHqLiFsZavOlgvI0MlPwY";
+    public static final String MAPS_API_KEY_RELEASE_PRO = "AIzaSyAiaxyfDtCYgexpmvj4J60cF1nU_Z2gelg";
     public static final double NO_REMINDER_LATITUDE = -1;
     public static final double INVALID_REMINDER_LATITUDE = -2;
     public static final double NO_REMINDER_LONGITUDE = -1;
