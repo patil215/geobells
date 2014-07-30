@@ -117,7 +117,9 @@ public class LocationService extends Service implements GooglePlayServicesClient
 
     @Override
     public void onLocationChanged(Location location) {
-        makeUseOfLocation(location);
+        if(location != null) {
+            makeUseOfLocation(location);
+        }
         // If we've waited long enough between requests
         if (System.currentTimeMillis() - lastLocationPollingReset > locationRequest.getInterval()) {
             if(preferenceManager != null && preferenceManager.isLowPowerEnabled()) {
