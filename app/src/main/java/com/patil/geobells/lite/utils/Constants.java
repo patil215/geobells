@@ -75,8 +75,6 @@ public class Constants {
     public static final int ACTIVITY_REQUEST_CODE_CREATE_REMINDER = 102;
     public static final int MAP_DEFAULT_ZOOM = 11;
     public static final int ACTIVITY_REQUEST_CODE_SETTINGS = 124;
-    public static final int NOTIFICATION_LISTENING_ID = 12;
-    public static final int POLLING_INTERVAL_DEFAULT = 30000;
     public static final String EXTRA_ACTIVITY = "activity";
 
     // Base polling interval of 12 seconds
@@ -89,10 +87,10 @@ public class Constants {
     public static final int ACTIVITY_TILTING = 5;
     // In order of activity
     public static final int[] ACTIVITY_MULTIPLIERS = new int[] {1, 6, 18, -1, 18, 18};
-    public static final int ACTIVITY_MULTIPLIER_DEFAULT = 18;
-
-
+    public static final int ACTIVITY_MULTIPLIER_DEFAULT = 6;
     public static final double MULTIPLIER_LOW_POWER = 1;
+
+
     public static final int POLLING_INTERVAL_STANDING = 240000; // Actually should be infinite
     public static final int POLLING_INTERVAL_WALKING = 90000;
     public static final int POLLING_INTERVAL_BIKING = 35000;

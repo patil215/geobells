@@ -27252,14 +27252,13 @@ com.patil.geobells.lite.service.ActivityRecognitionIntentService$1 -> ayy:
 com.patil.geobells.lite.service.ActivityRecognitionService -> com.patil.geobells.lite.service.ActivityRecognitionService:
     com.google.android.gms.location.ActivityRecognitionClient activityRecognitionClient -> a
     android.app.PendingIntent activityRecognitionIntent -> b
-    com.patil.geobells.lite.utils.GeobellsPreferenceManager preferenceManager -> c
-    boolean inProgress -> d
-    25:36:int onStartCommand(android.content.Intent,int,int) -> onStartCommand
-    41:41:android.os.IBinder onBind(android.content.Intent) -> onBind
-    46:63:void onConnected(android.os.Bundle) -> onConnected
-    67:69:void onDisconnected() -> onDisconnected
-    73:73:void onConnectionFailed(com.google.android.gms.common.ConnectionResult) -> onConnectionFailed
-    77:81:void onDestroy() -> onDestroy
+    boolean inProgress -> c
+    23:34:int onStartCommand(android.content.Intent,int,int) -> onStartCommand
+    39:39:android.os.IBinder onBind(android.content.Intent) -> onBind
+    44:49:void onConnected(android.os.Bundle) -> onConnected
+    53:55:void onDisconnected() -> onDisconnected
+    59:59:void onConnectionFailed(com.google.android.gms.common.ConnectionResult) -> onConnectionFailed
+    63:67:void onDestroy() -> onDestroy
 com.patil.geobells.lite.service.LocationService -> com.patil.geobells.lite.service.LocationService:
     int activity -> a
     android.os.IBinder binder -> b
@@ -27271,24 +27270,24 @@ com.patil.geobells.lite.service.LocationService -> com.patil.geobells.lite.servi
     long lastLocationPollingReset -> h
     53:53:int getActivity() -> getActivity
     58:81:int onStartCommand(android.content.Intent,int,int) -> onStartCommand
-    100:100:android.os.IBinder onBind(android.content.Intent) -> onBind
-    105:108:void onConnected(android.os.Bundle) -> onConnected
-    112:115:void onDestroy() -> onDestroy
-    119:120:void onDisconnected() -> onDisconnected
-    124:129:void onLocationChanged(android.location.Location) -> onLocationChanged
-    132:141:void makeForegroundNotification(java.lang.String,java.lang.String) -> makeForegroundNotification
-    144:219:void makeUseOfLocation(android.location.Location) -> makeUseOfLocation
-    223:275:void handleTrigger(android.location.Location,int,int) -> handleTrigger
-    279:299:java.lang.String makeSpeakText(java.lang.String,java.lang.String,int) -> makeSpeakText
-    303:308:android.app.PendingIntent getViewReminderIntent(int) -> getViewReminderIntent
-    312:314:android.app.PendingIntent makeDirectionsIntent(android.location.Location,double,double) -> makeDirectionsIntent
-    318:322:void showPopup(int) -> showPopup
-    325:326:void silencePhone() -> silencePhone
-    329:347:void toggleAirplaneMode() -> toggleAirplaneMode
-    350:357:int findLargestReminderProximitySetting() -> findLargestReminderProximitySetting
-    361:384:double findClosestReminderDistance(android.location.Location) -> findClosestReminderDistance
-    388:459:void startLocationListening() -> startLocationListening
-    465:465:void onConnectionFailed(com.google.android.gms.common.ConnectionResult) -> onConnectionFailed
+    96:96:android.os.IBinder onBind(android.content.Intent) -> onBind
+    101:104:void onConnected(android.os.Bundle) -> onConnected
+    108:111:void onDestroy() -> onDestroy
+    115:116:void onDisconnected() -> onDisconnected
+    120:127:void onLocationChanged(android.location.Location) -> onLocationChanged
+    130:139:void makeForegroundNotification(java.lang.String,java.lang.String) -> makeForegroundNotification
+    142:217:void makeUseOfLocation(android.location.Location) -> makeUseOfLocation
+    221:273:void handleTrigger(android.location.Location,int,int) -> handleTrigger
+    277:297:java.lang.String makeSpeakText(java.lang.String,java.lang.String,int) -> makeSpeakText
+    301:306:android.app.PendingIntent getViewReminderIntent(int) -> getViewReminderIntent
+    310:312:android.app.PendingIntent makeDirectionsIntent(android.location.Location,double,double) -> makeDirectionsIntent
+    316:320:void showPopup(int) -> showPopup
+    323:324:void silencePhone() -> silencePhone
+    327:345:void toggleAirplaneMode() -> toggleAirplaneMode
+    348:355:int findLargestReminderProximitySetting() -> findLargestReminderProximitySetting
+    359:382:double findClosestReminderDistance(android.location.Location) -> findClosestReminderDistance
+    386:458:void startLocationListening() -> startLocationListening
+    464:464:void onConnectionFailed(com.google.android.gms.common.ConnectionResult) -> onConnectionFailed
 com.patil.geobells.lite.service.LocationService$LocationBinder -> com.patil.geobells.lite.service.LocationService$LocationBinder:
     com.patil.geobells.lite.service.LocationService this$0 -> a
     89:89:com.patil.geobells.lite.service.LocationService getService() -> a
@@ -27371,8 +27370,6 @@ com.patil.geobells.lite.utils.Constants -> com.patil.geobells.lite.utils.Constan
     int ACTIVITY_REQUEST_CODE_CREATE_REMINDER -> ACTIVITY_REQUEST_CODE_CREATE_REMINDER
     int MAP_DEFAULT_ZOOM -> MAP_DEFAULT_ZOOM
     int ACTIVITY_REQUEST_CODE_SETTINGS -> ACTIVITY_REQUEST_CODE_SETTINGS
-    int NOTIFICATION_LISTENING_ID -> NOTIFICATION_LISTENING_ID
-    int POLLING_INTERVAL_DEFAULT -> POLLING_INTERVAL_DEFAULT
     java.lang.String EXTRA_ACTIVITY -> EXTRA_ACTIVITY
     int BASE_POLLING_INTERVAL -> BASE_POLLING_INTERVAL
     int ACTIVITY_DRIVING -> ACTIVITY_DRIVING

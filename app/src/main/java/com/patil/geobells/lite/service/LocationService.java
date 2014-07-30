@@ -91,10 +91,6 @@ public class LocationService extends Service implements GooglePlayServicesClient
 
     }
 
-    public LocationService() {
-
-    }
-
     @Override
     public IBinder onBind(Intent intent) {
         return binder;
@@ -124,7 +120,9 @@ public class LocationService extends Service implements GooglePlayServicesClient
         makeUseOfLocation(location);
         // If we've waited long enough between requests
         if (System.currentTimeMillis() - lastLocationPollingReset > locationRequest.getInterval()) {
-            startLocationListening();
+            if(preferenceManager != null && preferenceManager.isLowPowerEnabled()) {
+                startLocationListening();
+            }
         }
     }
 
@@ -397,19 +395,20 @@ public class LocationService extends Service implements GooglePlayServicesClient
             startLocationListening = false;
         }
 
-        Location currentLocation = null;
-        if (locationClient != null && locationClient.isConnected()) {
-            currentLocation = locationClient.getLastLocation();
-        }
-
-        if (currentLocation != null) {
-            double closestReminderDistance = findClosestReminderDistance(currentLocation);
-            int largestProximitySetting = findLargestReminderProximitySetting();
-            // If we're 10x the distance from the largest reminder proximity setting
-            // Ex: Largest proximity setting is 1/2 mi, and we're more than 2.5 miles away
-            // Don't bother polling location (we're too far away).
-            if (largestProximitySetting * 8 < closestReminderDistance) {
-                startLocationListening = false;
+        if(lowPowerEnabled) {
+            Location currentLocation = null;
+            if (locationClient != null && locationClient.isConnected()) {
+                currentLocation = locationClient.getLastLocation();
+            }
+            if (currentLocation != null) {
+                double closestReminderDistance = findClosestReminderDistance(currentLocation);
+                int largestProximitySetting = findLargestReminderProximitySetting();
+                // If we're 10x the distance from the largest reminder proximity setting
+                // Ex: Largest proximity setting is 1/2 mi, and we're more than 2.5 miles away
+                // Don't bother polling location (we're too far away).
+                if (largestProximitySetting * 8 < closestReminderDistance) {
+                    startLocationListening = false;
+                }
             }
         }
 

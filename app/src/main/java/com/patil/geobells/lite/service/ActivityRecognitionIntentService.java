@@ -33,7 +33,7 @@ public class ActivityRecognitionIntentService extends IntentService {
     };
 
     public void bindToService() {
-        if (!attemptingToBind) {
+        if (!attemptingToBind && !bound) {
             attemptingToBind = true;
             bindService(new Intent(this, LocationService.class), connection, Context.BIND_AUTO_CREATE);
         }

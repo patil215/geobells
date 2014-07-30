@@ -15373,9 +15373,9 @@ com.patil.geobells.lite.service.ActivityRecognitionService: void onDisconnected(
 com.patil.geobells.lite.service.ActivityRecognitionService: void onConnectionFailed(com.google.android.gms.common.ConnectionResult)
 com.patil.geobells.lite.service.ActivityRecognitionService: void onDestroy()
 com.patil.geobells.lite.service.LocationService
+com.patil.geobells.lite.service.LocationService: LocationService()
 com.patil.geobells.lite.service.LocationService: int getActivity()
 com.patil.geobells.lite.service.LocationService: int onStartCommand(android.content.Intent,int,int)
-com.patil.geobells.lite.service.LocationService: LocationService()
 com.patil.geobells.lite.service.LocationService: android.os.IBinder onBind(android.content.Intent)
 com.patil.geobells.lite.service.LocationService: void onConnected(android.os.Bundle)
 com.patil.geobells.lite.service.LocationService: void onDestroy()
@@ -15473,8 +15473,6 @@ com.patil.geobells.lite.utils.Constants: int ACTIVITY_REQUEST_CODE_PICK_MAP
 com.patil.geobells.lite.utils.Constants: int ACTIVITY_REQUEST_CODE_CREATE_REMINDER
 com.patil.geobells.lite.utils.Constants: int MAP_DEFAULT_ZOOM
 com.patil.geobells.lite.utils.Constants: int ACTIVITY_REQUEST_CODE_SETTINGS
-com.patil.geobells.lite.utils.Constants: int NOTIFICATION_LISTENING_ID
-com.patil.geobells.lite.utils.Constants: int POLLING_INTERVAL_DEFAULT
 com.patil.geobells.lite.utils.Constants: java.lang.String EXTRA_ACTIVITY
 com.patil.geobells.lite.utils.Constants: int BASE_POLLING_INTERVAL
 com.patil.geobells.lite.utils.Constants: int ACTIVITY_DRIVING

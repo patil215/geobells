@@ -5,7 +5,6 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
@@ -17,7 +16,6 @@ public class ActivityRecognitionService extends Service implements GooglePlaySer
 
     private ActivityRecognitionClient activityRecognitionClient;
     private PendingIntent activityRecognitionIntent;
-    private GeobellsPreferenceManager preferenceManager = null;
     private boolean inProgress;
 
     @Override
@@ -43,20 +41,8 @@ public class ActivityRecognitionService extends Service implements GooglePlaySer
 
     @Override
     public void onConnected(Bundle bundle) {
-        if (preferenceManager == null) {
-            preferenceManager = new GeobellsPreferenceManager(this);
-        }
         long interval = Constants.POLLING_INTERVAL_ACTIVITY_RECOGNITION;
-        double multiplier = preferenceManager.getIntervalMultiplier();
-        boolean lowPowerEnabled = preferenceManager.isLowPowerEnabled();
-        if (lowPowerEnabled) {
-            long time = (long) (interval * multiplier * Constants.MULTIPLIER_LOW_POWER);
-            activityRecognitionClient.requestActivityUpdates(time, activityRecognitionIntent);
-        } else {
-            long time = (long) (interval * multiplier);
-            activityRecognitionClient.requestActivityUpdates(time, activityRecognitionIntent);
-
-        }
+        activityRecognitionClient.requestActivityUpdates(interval, activityRecognitionIntent);
         inProgress = false;
         activityRecognitionClient.disconnect();
         stopSelf();
