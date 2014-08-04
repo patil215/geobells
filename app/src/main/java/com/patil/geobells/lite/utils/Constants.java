@@ -101,6 +101,7 @@ public class Constants {
     public static final long POLLING_INTERVAL_ACTIVITY_RECOGNITION = 90000;
     public static int  POLLING_INTERVAL_ACTIVITY_RECOGNITION_MINIMUM = 45000;
 
+    public static final int NOTIFICATION_ID = 7;
 
     public static final int SIZE_IMAGE_PREVIEW_HORIZONTAL = 200;
     public static final int SIZE_IMAGE_PREVIEW_VERTICAL = 200;

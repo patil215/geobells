@@ -57,7 +57,12 @@ public class ViewReminderActivity extends Activity {
         preferenceManager = new GeobellsPreferenceManager(this);
         if (reminderIndex != -1) {
             reminders = dataManager.getSavedReminders();
-            reminder = reminders.get(reminderIndex);
+            if(reminderIndex < reminders.size()) {
+                reminder = reminders.get(reminderIndex);
+            } else {
+                Toast.makeText(this, getString(R.string.toast_error_occurred), Toast.LENGTH_SHORT).show();
+                finish();
+            }
             displayDetails(reminder);
         } else {
             Toast.makeText(this, getString(R.string.toast_error_occurred), Toast.LENGTH_SHORT).show();
@@ -88,11 +93,13 @@ public class ViewReminderActivity extends Activity {
                 daysString += displayDays[i] + ", ";
             }
         }
-        if(daysCount < 7) {
+        if(daysCount < 7 && daysCount > 0) {
             daysString = daysString.substring(0, daysString.length() - 2);
+        } else if(daysCount == 0) {
+            daysString = getString(R.string.no_days);
         } else {
-            daysString = getString(R.string.all_days);
-        }
+                daysString = getString(R.string.all_days);
+            }
         setVolatileText(daysBox, getString(R.string.text_reminds_on) + daysString);
         if (reminder.repeat) {
             setVolatileText(repeatBox, getString(R.string.text_repeats));

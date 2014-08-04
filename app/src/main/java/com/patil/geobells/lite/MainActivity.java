@@ -81,6 +81,8 @@ public class MainActivity extends Activity
         dataManager = new GeobellsDataManager(this);
         preferenceManager = new GeobellsPreferenceManager(this);
 
+
+
         if (new GeobellsPreferenceManager(this).isFirstTime()) {
             if (!Config.IS_LITE_VERSION) {
                 if (new ConnectivityChecker(this).isOnline()) {

@@ -25916,57 +25916,57 @@ com.patil.geobells.lite.MainActivity -> com.patil.geobells.lite.MainActivity:
     com.google.android.vending.licensing.LicenseCheckerCallback licenseCheckerCallback -> h
     boolean checkingLicense -> a
     boolean didCheck -> b
-    78:157:void onCreate(android.os.Bundle) -> onCreate
-    161:164:void onStart() -> onStart
-    168:172:void onStop() -> onStop
-    175:193:void checkGooglePlayServicesEnabled() -> checkGooglePlayServicesEnabled
-    196:204:boolean isAppInstalled(java.lang.String) -> a
-    209:218:void onResume() -> onResume
-    221:258:void checkLocationServicesEnabled() -> checkLocationServicesEnabled
-    261:268:boolean isLocationServiceRunning() -> isLocationServiceRunning
-    272:279:boolean isActivityServiceRunning() -> isActivityServiceRunning
-    285:300:void onNavigationDrawerItemSelected(int) -> onNavigationDrawerItemSelected
-    303:311:void onSectionAttached(int) -> onSectionAttached
-    314:318:void restoreActionBar() -> restoreActionBar
-    323:325:void onActivityResult(int,int,android.content.Intent) -> onActivityResult
-    328:332:void refreshUpcoming() -> refreshUpcoming
-    335:339:void refreshCompleted() -> refreshCompleted
-    342:343:void onCreateReminderClick(android.view.View) -> onCreateReminderClick
-    347:360:void startCreateReminderActivity() -> startCreateReminderActivity
-    364:372:boolean onCreateOptionsMenu(android.view.Menu) -> onCreateOptionsMenu
-    380:401:boolean onOptionsItemSelected(android.view.MenuItem) -> onOptionsItemSelected
-    406:407:void onDestroy() -> onDestroy
-    410:414:void onSettingsClick(android.view.View) -> onSettingsClick
-    417:421:void onAboutClick(android.view.View) -> onAboutClick
-    424:426:void onHelpClick(android.view.View) -> onHelpClick
-    429:433:void onUpgradeClick(android.view.View) -> onUpgradeClick
-    438:443:void doCheck() -> a
-    510:510:android.app.Dialog onCreateDialog(int) -> onCreateDialog
+    78:159:void onCreate(android.os.Bundle) -> onCreate
+    163:166:void onStart() -> onStart
+    170:174:void onStop() -> onStop
+    177:195:void checkGooglePlayServicesEnabled() -> checkGooglePlayServicesEnabled
+    198:206:boolean isAppInstalled(java.lang.String) -> a
+    211:220:void onResume() -> onResume
+    223:260:void checkLocationServicesEnabled() -> checkLocationServicesEnabled
+    263:270:boolean isLocationServiceRunning() -> isLocationServiceRunning
+    274:281:boolean isActivityServiceRunning() -> isActivityServiceRunning
+    287:302:void onNavigationDrawerItemSelected(int) -> onNavigationDrawerItemSelected
+    305:313:void onSectionAttached(int) -> onSectionAttached
+    316:320:void restoreActionBar() -> restoreActionBar
+    325:327:void onActivityResult(int,int,android.content.Intent) -> onActivityResult
+    330:334:void refreshUpcoming() -> refreshUpcoming
+    337:341:void refreshCompleted() -> refreshCompleted
+    344:345:void onCreateReminderClick(android.view.View) -> onCreateReminderClick
+    349:362:void startCreateReminderActivity() -> startCreateReminderActivity
+    366:374:boolean onCreateOptionsMenu(android.view.Menu) -> onCreateOptionsMenu
+    382:403:boolean onOptionsItemSelected(android.view.MenuItem) -> onOptionsItemSelected
+    408:409:void onDestroy() -> onDestroy
+    412:416:void onSettingsClick(android.view.View) -> onSettingsClick
+    419:423:void onAboutClick(android.view.View) -> onAboutClick
+    426:428:void onHelpClick(android.view.View) -> onHelpClick
+    431:435:void onUpgradeClick(android.view.View) -> onUpgradeClick
+    440:445:void doCheck() -> a
+    512:512:android.app.Dialog onCreateDialog(int) -> onCreateDialog
     52:52:void access$100(com.patil.geobells.lite.MainActivity) -> a
 com.patil.geobells.lite.MainActivity$10 -> ayc:
     com.patil.geobells.lite.MainActivity this$0 -> a
-    515:519:void onClick(android.content.DialogInterface,int) -> onClick
+    517:521:void onClick(android.content.DialogInterface,int) -> onClick
 com.patil.geobells.lite.MainActivity$3 -> ayd:
     com.patil.geobells.lite.MainActivity this$0 -> a
-    180:181:void onClick(android.content.DialogInterface,int) -> onClick
+    182:183:void onClick(android.content.DialogInterface,int) -> onClick
 com.patil.geobells.lite.MainActivity$4 -> aye:
     com.patil.geobells.lite.MainActivity this$0 -> a
-    188:189:void onClick(android.content.DialogInterface,int) -> onClick
+    190:191:void onClick(android.content.DialogInterface,int) -> onClick
 com.patil.geobells.lite.MainActivity$5 -> ayf:
     com.patil.geobells.lite.MainActivity this$0 -> a
-    243:246:void onClick(android.content.DialogInterface,int) -> onClick
+    245:248:void onClick(android.content.DialogInterface,int) -> onClick
 com.patil.geobells.lite.MainActivity$6 -> ayg:
     com.patil.geobells.lite.MainActivity this$0 -> a
-    252:253:void onClick(android.content.DialogInterface,int) -> onClick
+    254:255:void onClick(android.content.DialogInterface,int) -> onClick
 com.patil.geobells.lite.MainActivity$7 -> ayh:
     com.patil.geobells.lite.MainActivity this$0 -> a
-    535:537:boolean onKey(android.content.DialogInterface,int,android.view.KeyEvent) -> onKey
+    537:539:boolean onKey(android.content.DialogInterface,int,android.view.KeyEvent) -> onKey
 com.patil.geobells.lite.MainActivity$8 -> ayi:
     com.patil.geobells.lite.MainActivity this$0 -> a
-    528:529:void onClick(android.content.DialogInterface,int) -> onClick
+    530:531:void onClick(android.content.DialogInterface,int) -> onClick
 com.patil.geobells.lite.MainActivity$9 -> ayj:
     com.patil.geobells.lite.MainActivity this$0 -> a
-    523:524:void onClick(android.content.DialogInterface,int) -> onClick
+    525:526:void onClick(android.content.DialogInterface,int) -> onClick
 com.patil.geobells.lite.PopupActivity -> com.patil.geobells.lite.PopupActivity:
     15:17:void onCreate(android.os.Bundle) -> onCreate
     21:24:void onStart() -> onStart
@@ -27274,20 +27274,20 @@ com.patil.geobells.lite.service.LocationService -> com.patil.geobells.lite.servi
     101:104:void onConnected(android.os.Bundle) -> onConnected
     108:111:void onDestroy() -> onDestroy
     115:116:void onDisconnected() -> onDisconnected
-    120:127:void onLocationChanged(android.location.Location) -> onLocationChanged
-    130:139:void makeForegroundNotification(java.lang.String,java.lang.String) -> makeForegroundNotification
-    142:217:void makeUseOfLocation(android.location.Location) -> makeUseOfLocation
-    221:273:void handleTrigger(android.location.Location,int,int) -> handleTrigger
-    277:297:java.lang.String makeSpeakText(java.lang.String,java.lang.String,int) -> makeSpeakText
-    301:306:android.app.PendingIntent getViewReminderIntent(int) -> getViewReminderIntent
-    310:312:android.app.PendingIntent makeDirectionsIntent(android.location.Location,double,double) -> makeDirectionsIntent
-    316:320:void showPopup(int) -> showPopup
-    323:324:void silencePhone() -> silencePhone
-    327:345:void toggleAirplaneMode() -> toggleAirplaneMode
-    348:355:int findLargestReminderProximitySetting() -> findLargestReminderProximitySetting
-    359:382:double findClosestReminderDistance(android.location.Location) -> findClosestReminderDistance
-    386:458:void startLocationListening() -> startLocationListening
-    464:464:void onConnectionFailed(com.google.android.gms.common.ConnectionResult) -> onConnectionFailed
+    120:129:void onLocationChanged(android.location.Location) -> onLocationChanged
+    132:141:void makeForegroundNotification(java.lang.String,java.lang.String) -> makeForegroundNotification
+    144:219:void makeUseOfLocation(android.location.Location) -> makeUseOfLocation
+    223:276:void handleTrigger(android.location.Location,int,int) -> handleTrigger
+    280:300:java.lang.String makeSpeakText(java.lang.String,java.lang.String,int) -> makeSpeakText
+    304:309:android.app.PendingIntent getViewReminderIntent(int) -> getViewReminderIntent
+    313:315:android.app.PendingIntent makeDirectionsIntent(android.location.Location,double,double) -> makeDirectionsIntent
+    319:323:void showPopup(int) -> showPopup
+    326:327:void silencePhone() -> silencePhone
+    330:348:void toggleAirplaneMode() -> toggleAirplaneMode
+    351:358:int findLargestReminderProximitySetting() -> findLargestReminderProximitySetting
+    362:385:double findClosestReminderDistance(android.location.Location) -> findClosestReminderDistance
+    389:461:void startLocationListening() -> startLocationListening
+    467:467:void onConnectionFailed(com.google.android.gms.common.ConnectionResult) -> onConnectionFailed
 com.patil.geobells.lite.service.LocationService$LocationBinder -> com.patil.geobells.lite.service.LocationService$LocationBinder:
     com.patil.geobells.lite.service.LocationService this$0 -> a
     89:89:com.patil.geobells.lite.service.LocationService getService() -> a
@@ -27390,6 +27390,7 @@ com.patil.geobells.lite.utils.Constants -> com.patil.geobells.lite.utils.Constan
     java.lang.String EXTRA_SPEAKTEXT -> EXTRA_SPEAKTEXT
     long POLLING_INTERVAL_ACTIVITY_RECOGNITION -> POLLING_INTERVAL_ACTIVITY_RECOGNITION
     int POLLING_INTERVAL_ACTIVITY_RECOGNITION_MINIMUM -> POLLING_INTERVAL_ACTIVITY_RECOGNITION_MINIMUM
+    int NOTIFICATION_ID -> NOTIFICATION_ID
     int SIZE_IMAGE_PREVIEW_HORIZONTAL -> SIZE_IMAGE_PREVIEW_HORIZONTAL
     int SIZE_IMAGE_PREVIEW_VERTICAL -> SIZE_IMAGE_PREVIEW_VERTICAL
     int SIZE_IMAGE_LARGE_HORIZONTAL -> SIZE_IMAGE_LARGE_HORIZONTAL

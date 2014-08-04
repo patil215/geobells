@@ -15493,6 +15493,7 @@ com.patil.geobells.lite.utils.Constants: int POLLING_INTERVAL_TILTING
 com.patil.geobells.lite.utils.Constants: java.lang.String EXTRA_SPEAKTEXT
 com.patil.geobells.lite.utils.Constants: long POLLING_INTERVAL_ACTIVITY_RECOGNITION
 com.patil.geobells.lite.utils.Constants: int POLLING_INTERVAL_ACTIVITY_RECOGNITION_MINIMUM
+com.patil.geobells.lite.utils.Constants: int NOTIFICATION_ID
 com.patil.geobells.lite.utils.Constants: int SIZE_IMAGE_PREVIEW_HORIZONTAL
 com.patil.geobells.lite.utils.Constants: int SIZE_IMAGE_PREVIEW_VERTICAL
 com.patil.geobells.lite.utils.Constants: int SIZE_IMAGE_LARGE_HORIZONTAL

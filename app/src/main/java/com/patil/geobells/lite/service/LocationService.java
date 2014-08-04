@@ -249,12 +249,13 @@ public class LocationService extends Service implements GooglePlayServicesClient
         builder.setPriority(NotificationCompat.PRIORITY_MAX);
         builder.setSmallIcon(R.drawable.ic_notification);
         builder.setContentTitle(notificationTitle);
+        builder.setAutoCancel(true);
         builder.setContentText(notificationMessage);
         builder.setSound(ringtoneUri);
         builder.setDefaults(-1);
         builder.addAction(R.drawable.ic_action_map, getString(R.string.notification_action_navigate), directionsIntent);
         builder.setContentIntent(getViewReminderIntent(reminderIndex));
-        ((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).notify(7, builder.build());
+        ((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).notify(Constants.NOTIFICATION_ID, builder.build());
 
         if (preferenceManager.isPopupReminderEnabled()) {
             showPopup(reminderIndex);
