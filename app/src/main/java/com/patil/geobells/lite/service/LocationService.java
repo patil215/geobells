@@ -443,8 +443,8 @@ public class LocationService extends Service implements GooglePlayServicesClient
             locationRequest.setInterval(interval);
             locationRequest.setFastestInterval(interval / 50);
             if (locationClient != null) {
-                locationClient.removeLocationUpdates(this);
                 if (locationClient.isConnected()) {
+                    locationClient.removeLocationUpdates(this);
                     locationClient.requestLocationUpdates(locationRequest, LocationService.this);
                 } else {
                     locationClient.connect();
@@ -454,7 +454,7 @@ public class LocationService extends Service implements GooglePlayServicesClient
                 locationClient.connect();
             }
         } else {
-            if (locationClient != null) {
+            if (locationClient != null && locationClient.isConnected()) {
                 locationClient.removeLocationUpdates(this);
             }
         }
