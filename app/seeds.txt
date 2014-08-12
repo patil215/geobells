@@ -15034,6 +15034,7 @@ com.patil.geobells.lite.R$string: int navigation_drawer_open
 com.patil.geobells.lite.R$string: int navigation_help_title
 com.patil.geobells.lite.R$string: int navigation_settings_title
 com.patil.geobells.lite.R$string: int navigation_upgrade_title
+com.patil.geobells.lite.R$string: int no_days
 com.patil.geobells.lite.R$string: int notification_action_navigate
 com.patil.geobells.lite.R$string: int notification_disabled_message
 com.patil.geobells.lite.R$string: int notification_disabled_title

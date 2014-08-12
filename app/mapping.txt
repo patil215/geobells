@@ -26818,6 +26818,7 @@ com.patil.geobells.lite.R$string -> com.patil.geobells.lite.R$string:
     int navigation_help_title -> navigation_help_title
     int navigation_settings_title -> navigation_settings_title
     int navigation_upgrade_title -> navigation_upgrade_title
+    int no_days -> no_days
     int notification_action_navigate -> notification_action_navigate
     int notification_disabled_message -> notification_disabled_message
     int notification_disabled_title -> notification_disabled_title
@@ -27109,17 +27110,17 @@ com.patil.geobells.lite.ViewReminderActivity -> com.patil.geobells.lite.ViewRemi
     java.util.ArrayList reminders -> n
     com.patil.geobells.lite.utils.GeobellsDataManager dataManager -> o
     com.patil.geobells.lite.utils.GeobellsPreferenceManager preferenceManager -> p
-    51:66:void onCreate(android.os.Bundle) -> onCreate
-    69:126:void displayDetails(com.patil.geobells.lite.data.Reminder) -> displayDetails
-    130:143:java.lang.String proximityToWord(int) -> proximityToWord
-    148:153:void setVolatileText(android.widget.TextView,java.lang.String) -> setVolatileText
-    156:165:void setupViews() -> setupViews
-    171:182:boolean onCreateOptionsMenu(android.view.Menu) -> onCreateOptionsMenu
-    187:187:void onBusinessViewPlacesClick(android.view.View) -> onBusinessViewPlacesClick
-    191:194:void onActivityResult(int,int,android.content.Intent) -> onActivityResult
-    198:242:boolean onOptionsItemSelected(android.view.MenuItem) -> onOptionsItemSelected
-    247:250:void onStart() -> onStart
-    254:258:void onStop() -> onStop
+    51:71:void onCreate(android.os.Bundle) -> onCreate
+    74:133:void displayDetails(com.patil.geobells.lite.data.Reminder) -> displayDetails
+    137:150:java.lang.String proximityToWord(int) -> proximityToWord
+    155:160:void setVolatileText(android.widget.TextView,java.lang.String) -> setVolatileText
+    163:172:void setupViews() -> setupViews
+    178:189:boolean onCreateOptionsMenu(android.view.Menu) -> onCreateOptionsMenu
+    194:194:void onBusinessViewPlacesClick(android.view.View) -> onBusinessViewPlacesClick
+    198:201:void onActivityResult(int,int,android.content.Intent) -> onActivityResult
+    205:249:boolean onOptionsItemSelected(android.view.MenuItem) -> onOptionsItemSelected
+    254:257:void onStart() -> onStart
+    261:265:void onStop() -> onStop
 com.patil.geobells.lite.ViewRemindersMapActivity -> com.patil.geobells.lite.ViewRemindersMapActivity:
     com.patil.geobells.lite.utils.GeobellsDataManager dataManager -> a
     com.google.android.gms.maps.GoogleMap mapView -> b
