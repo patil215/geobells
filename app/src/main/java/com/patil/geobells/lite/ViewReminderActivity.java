@@ -59,11 +59,11 @@ public class ViewReminderActivity extends Activity {
             reminders = dataManager.getSavedReminders();
             if(reminderIndex < reminders.size()) {
                 reminder = reminders.get(reminderIndex);
+                displayDetails(reminder);
             } else {
                 Toast.makeText(this, getString(R.string.toast_error_occurred), Toast.LENGTH_SHORT).show();
                 finish();
             }
-            displayDetails(reminder);
         } else {
             Toast.makeText(this, getString(R.string.toast_error_occurred), Toast.LENGTH_SHORT).show();
             finish();
