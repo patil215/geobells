@@ -61,11 +61,11 @@ public class ViewReminderActivity extends Activity {
                 reminder = reminders.get(reminderIndex);
                 displayDetails(reminder);
             } else {
-                Toast.makeText(this, getString(R.string.toast_error_occurred), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.toast_error_occurred_restart_app), Toast.LENGTH_SHORT).show();
                 finish();
             }
         } else {
-            Toast.makeText(this, getString(R.string.toast_error_occurred), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.toast_error_occurred_restart_app), Toast.LENGTH_SHORT).show();
             finish();
         }
     }

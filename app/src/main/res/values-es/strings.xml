@@ -176,5 +176,6 @@
     <string name="dialog_title_license_connection">"Conectarse a Internet"</string>
     <string name="dialog_message_license_connection">"Por primera vez, el lanzamiento de Geobells, es necesario estar conectado a Internet. Trate de conectarse a Internet, a continuación, abrir la aplicación de nuevo."</string>
     <string name="no_days">no día</string>
+    <string name="toast_error_occurred_restart_app">Se ha producido un error. Por favor, intente reiniciar la aplicación.</string>
 
 </resources>

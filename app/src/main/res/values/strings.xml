@@ -177,5 +177,6 @@
     <string name="dialog_title_license_connection">Connect to the internet</string>
     <string name="dialog_message_license_connection">For the first time launching Geobells, you need to be connected to the internet. Try connecting to the internet, then opening the app again.</string>
     <string name="no_days">no days</string>
+    <string name="toast_error_occurred_restart_app">An error occurred. Please try restarting the app.</string>
 
 </resources>
